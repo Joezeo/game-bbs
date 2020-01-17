@@ -53,6 +53,7 @@ public class AuthorizeCotroller {
             user.setBio(githubUser.getBio());
             user.setGmt_create(System.currentTimeMillis());
             user.setGmt_modify(user.getGmt_create());
+            // Github第三方校验完成后，将用户信息存入数据库
             userService.addUser(user);
 
             response.addCookie(new Cookie("token", token));
