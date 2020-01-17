@@ -4,7 +4,7 @@ import com.joezeo.community.pojo.User;
 import com.joezeo.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +15,7 @@ public class IndexController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/")
+    @GetMapping("/")
     public String htmIndex(HttpServletRequest request){
         User user = null;
         Cookie[] cookies = request.getCookies();
