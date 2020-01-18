@@ -10,4 +10,8 @@
         (#{title}, #{description}, #{tag}, #{commentCount}, #{viewCount}, #{likeCount}, #{gmtCreate},
         #{gmtModify}, #{userid})
     </insert>
+
+    <select id="selectAll" resultType="Question">
+        select * from t_question
+    </select>
 </mapper>

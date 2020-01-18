@@ -14,4 +14,6 @@ public interface UserMapper {
     User selectByAccountid(String accountId);
 
     int updateByIdSelective(User user);
+
+    User selectById(Integer userid);
 }

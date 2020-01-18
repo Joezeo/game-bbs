@@ -1,6 +1,6 @@
 create table t_question
 (
-	id int null comment '主键id',
+	id int primary key not null auto_increment comment '主键id',
 	title varchar(100) null comment '问题标题',
 	description varchar(256) null comment '问题描述',
 	tag varchar(256) null comment '问题标签，以英文逗号作为分割',

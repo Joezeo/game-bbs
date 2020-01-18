@@ -20,6 +20,11 @@
         where account_id = #{accountId}
     </select>
 
+    <select id="selectById" resultType="User">
+        select * from t_user
+        where id = #{userid}
+    </select>
+
     <update id="updateByIdSelective" parameterType="User">
         update t_user
         <set>
