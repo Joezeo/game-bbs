@@ -14,4 +14,13 @@
     <select id="selectAll" resultType="Question">
         select * from t_question
     </select>
+
+    <select id="selectCount" resultType="int">
+        select count(1) from t_question
+    </select>
+
+    <select id="selectPage" resultType="Question">
+        select * from t_question
+        limit #{index},#{size}
+    </select>
 </mapper>

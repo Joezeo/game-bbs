@@ -48,6 +48,12 @@
             <artifactId>spring-boot-starter-data-jdbc</artifactId>
         </dependency>
 
+        <!--Springboot 热部署 ctr+F9（MakeProject）进行触发重启服务-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+
         <!--mybatis-->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
