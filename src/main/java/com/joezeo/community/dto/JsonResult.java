@@ -1,5 +1,7 @@
 package com.joezeo.community.dto;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
@@ -10,6 +12,7 @@ import java.io.Serializable;
  * 服务执行后提示消息放置于message中
  * 服务执行后获得的数据封装于data中
  */
+@Data
 public class JsonResult implements Serializable {
     private static final long serialVersionUID = 5426736252370302612L;
 
@@ -34,33 +37,5 @@ public class JsonResult implements Serializable {
     public JsonResult(Exception e){
         this.success = false;
         this.message = e.getMessage();
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public Boolean getSuccess() {
-        return success;
-    }
-
-    public void setSuccess(Boolean success) {
-        this.success = success;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
     }
 }

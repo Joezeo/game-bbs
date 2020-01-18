@@ -6,4 +6,8 @@ public interface UserService {
     void addUser(User user);
 
     User queryUserByToken(String token);
+
+    User queryByAccountid(String accountId);
+
+    void updateUser(User user);
 }

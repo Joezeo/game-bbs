@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
@@ -23,6 +24,7 @@ public class PublishController {
     }
 
     @PostMapping("/publish")
+    @ResponseBody
     public JsonResult publish(Question question, HttpSession session){
         JsonResult result = null;
 
@@ -33,11 +35,11 @@ public class PublishController {
                 return result;
             }
             question.setUserid(user.getId());
-            question.setComment_count(0);
-            question.setLike_count(0);
-            question.setView_count(0);
-            question.setGmt_create(System.currentTimeMillis());
-            question.setGmt_modify(question.getGmt_create());
+            question.setCommentCount(0);
+            question.setLikeCount(0);
+            question.setViewCount(0);
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModify(question.getGmtCreate());
 
             questionService.addQuestion(question);
             result = new JsonResult(true, "Ok");

@@ -32,8 +32,33 @@ public class UserServiceImpl implements UserService {
 
         User user = userMapper.selectByToken(token);
         if(user == null){
-            System.out.println("获取user信息失败");
+            System.out.println("by token, 获取user信息失败");
         }
         return user;
+    }
+
+    @Override
+    public User queryByAccountid(String accountId) {
+        if(accountId == null || "".equals(accountId)){
+            System.out.printf("参数accountId为空");
+        }
+
+        User user = userMapper.selectByAccountid(accountId);
+        if(user == null){
+            System.out.printf("by accountid, 获取user信息失败");
+        }
+        return user;
+    }
+
+    @Override
+    public void updateUser(User user) {
+        if(user == null){
+            System.out.printf("参数user为null");
+        }
+
+        int count = userMapper.updateByIdSelective(user);
+        if(count != 1){
+            System.out.printf("更新用户信息失败");
+        }
     }
 }

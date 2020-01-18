@@ -7,11 +7,38 @@
         insert into t_user
         (name, account_id, token, bio, gmt_create, gmt_modify)
         values
-        (#{name},#{account_id},#{token},#{bio},#{gmt_create},#{gmt_modify})
+        (#{name},#{accountId},#{token},#{bio},#{gmtCreate},#{gmtModify})
     </insert>
 
     <select id="selectByToken" resultType="User">
         select * from t_user
         where token = #{token}
     </select>
+
+    <select id="selectByAccountid" resultType="User">
+        select * from t_user
+        where account_id = #{accountId}
+    </select>
+
+    <update id="updateByIdSelective" parameterType="User">
+        update t_user
+        <set>
+            <if test="name != null and name!=''">
+                name = #{name},
+            </if>
+            <if test="token != null and token!=''">
+                token = #{token},
+            </if>
+            <if test="bio != null and bio!=''">
+                name = #{name},
+            </if>
+            <if test="gmtModify != null">
+                gmt_modify = #{gmtModify},
+            </if>
+            <if test="avatarUrl != null and avatarUrl!=''">
+                avatar_url = #{avatarUrl},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>

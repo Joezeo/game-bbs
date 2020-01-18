@@ -49,12 +49,20 @@ public class AuthorizeCotroller {
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setName(githubUser.getName());
-            user.setAccount_id(githubUser.getId());
+            user.setAccountId(githubUser.getId());
             user.setBio(githubUser.getBio());
-            user.setGmt_create(System.currentTimeMillis());
-            user.setGmt_modify(user.getGmt_create());
-            // Github第三方校验完成后，将用户信息存入数据库
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModify(user.getGmtCreate());
+            user.setAvatarUrl(githubUser.getAvatarUrl());
+
+            // 先进行检查数据库中是否已经有该条github用户数据，如果有则更新信息，没有则存入数据
+            User memUser = userService.queryByAccountid(user.getAccountId());
+            if(memUser == null){ // Github第三方校验完成后，将用户信息存入数据库
             userService.addUser(user);
+            } else { // 已经存在该用户，进行修改操作
+                user.setId(memUser.getId());
+                userService.updateUser(user);
+            }
 
             response.addCookie(new Cookie("token", token));
             return "redirect:/";
