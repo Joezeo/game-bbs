@@ -1,23 +1,23 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Joezeoの自留地</title>
+    <title th:text="${sectionName}+' - Joezeoの自留地'"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/community.css">
-    <script src="jquery/jquery-3.4.1.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <script src="/jquery/jquery-3.4.1.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
 
 <!--导航栏-->
 <div th:replace="navigation :: nav"></div>
 
-<div class="container-fluid main">
+<div class="container-fluid main profile">
     <div class="row">
         <div class="col-lg-9 .col-md-12 .col-sm-12 .col-xs-12">
-            <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> 发现</h2>
+            <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> <span th:text="${sectionName}"></span> </h2>
             <hr>
             <div class="media" th:each="question : ${pagination.questions}">
                 <div class="media-left">
@@ -26,7 +26,7 @@
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading" ><a th:href="@{/question/{id}(id=${question.id})}" th:text="${question.title}"></a></h4>
+                    <h4 class="media-heading" th:text="${question.title}"></h4>
                     <span th:text="${question.description}"></span>
                     <span class="text-desc"> • <span th:text="${question.commentCount}"></span> 个评论 • <span th:text="${question.viewCount}"></span> 次浏览 • <span th:text="${#calendars.format(question.gmtCreate,'dd MMMM yyyy')}"></span></span></span>
                 </div>
@@ -36,23 +36,23 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li th:if="${pagination.hasFirst}">
-                        <a th:href="@{/(page=1)}" aria-label="First">
+                        <a th:href="@{/profile/{action}(page=1, action=${section})}" aria-label="First">
                             <span aria-hidden="true">&lt;&lt;</span>
                         </a>
                     </li>
                     <li th:if="${pagination.hasPrevious}">
-                        <a th:href="@{/(page=${pagination.page}-1)}" aria-label="Previous">
+                        <a th:href="@{/profile/{action}(page=${pagination.page}-1, action=${section})}" aria-label="Previous">
                             <span aria-hidden="true">&lt;</span>
                         </a>
                     </li>
-                    <li th:each="page : ${pagination.pages}" th:class="${page==pagination.page}?'active':''"><a th:href="@{/(page=${page})}" th:text="${page}">1</a></li>
+                    <li th:each="page : ${pagination.pages}" th:class="${page==pagination.page}?'active':''"><a th:href="@{/profile/{action}(page=${page}, action=${section})}" th:text="${page}">1</a></li>
                     <li th:if="${pagination.hasNext}">
-                        <a th:href="@{/(page=${pagination.page}+1)}" aria-label="Next">
+                        <a th:href="@{/profile/{action}(page=${pagination.page}+1, action=${section})}" aria-label="Next">
                             <span aria-hidden="true">&gt;</span>
                         </a>
                     </li>
                     <li th:if="${pagination.hasLast}">
-                        <a th:href="@{/(page=${pagination.totalPage})}" aria-label="Last">
+                        <a th:href="@{/profile/{action}(page=${pagination.totalPage}, action=${section})}" aria-label="Last">
                             <span aria-hidden="true">&gt;&gt;</span>
                         </a>
                     </li>
@@ -61,8 +61,12 @@
 <!--            分页条结束-->
 
         </div>
-
-        <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12"></div>
+        <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
+            <div class="list-group section">
+                <button type="button" class="list-group-item">我的问题 </button>
+                <button type="button" class="list-group-item">最新回复 </button>
+            </div>
+        </div>
     </div>
 </div>
 </body>

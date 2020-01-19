@@ -91,4 +91,59 @@ public class QuestionServiceImpl implements QuestionService {
 
         return paginationDTO;
     }
+
+    @Override
+    public PaginationDTO listPage(Integer userid, Integer page, Integer size) {
+        int count = questionMapper.selectCountByUserid(userid);
+
+        PaginationDTO paginationDTO = new PaginationDTO();
+        paginationDTO.setPagination(page, size, count);
+
+        // 防止页码大于总页数 或者小于1
+        page = paginationDTO.getPage();
+        int index = (page - 1) * size;
+
+        List<Question> questions = questionMapper.selectPageByUserid(userid, index, size);
+        if(questions == null){
+            throw new ServiceException("获取问题数据失败");
+        }
+
+        List<QuestionDTO> list = new ArrayList<>();
+        for (Question question : questions) {
+            User user = userMapper.selectById(question.getUserid());
+            if (user == null) {
+                throw new ServiceException("获取用户失败");
+            }
+
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question, questionDTO);
+            questionDTO.setUser(user);
+            list.add(questionDTO);
+        }
+        paginationDTO.setQuestions(list);
+
+        return paginationDTO;
+    }
+
+    @Override
+    public QuestionDTO queryById(Integer id) {
+        if(id == null || id <= 0){
+            throw new ServiceException("QuestionService-queryById 参数id异常");
+        }
+
+        Question question = questionMapper.selectById(id);
+        if(question == null){
+            throw new ServiceException("获取问题数据失败");
+        }
+        QuestionDTO questionDTO = new QuestionDTO();
+        BeanUtils.copyProperties(question, questionDTO);
+
+        User user = userMapper.selectById(question.getUserid());
+        if(user == null){
+            throw new ServiceException("获取用户数据失败");
+        }
+
+        questionDTO.setUser(user);
+        return questionDTO;
+    }
 }

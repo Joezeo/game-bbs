@@ -12,4 +12,8 @@ public interface QuestionService {
     List<QuestionDTO> list();
 
     PaginationDTO listPage(Integer page, Integer size);
+
+    PaginationDTO listPage(Integer userid, Integer page, Integer size);
+
+    QuestionDTO queryById(Integer id);
 }

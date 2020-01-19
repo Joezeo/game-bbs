@@ -14,14 +14,24 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public void addUser(User user) {
-        if (user == null) {
-            throw new ServiceException("参数user为空");
+    public void createOrUpadate(User user) {
+        if(user == null){
+            throw new ServiceException("参数user异常，=null");
         }
 
-        int count = userMapper.insert(user);
-        if (count != 1) {
-            throw new ServiceException("保存用户失败");
+        User memUser = userMapper.selectByAccountid(user.getAccountId());
+
+        if(memUser == null){ // 执行插入操作
+            int count = userMapper.insert(user);
+            if (count != 1) {
+                throw new ServiceException("保存用户失败");
+            }
+        } else { // 执行更新操作
+            user.setId(memUser.getId());
+            int count = userMapper.updateByIdSelective(user);
+            if (count != 1) {
+                throw new ServiceException("更新用户信息失败");
+            }
         }
     }
 
@@ -49,17 +59,5 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("by accountid, 获取user信息失败");
         }
         return user;
-    }
-
-    @Override
-    public void updateUser(User user) {
-        if (user == null) {
-            throw new ServiceException("参数user为空");
-        }
-
-        int count = userMapper.updateByIdSelective(user);
-        if (count != 1) {
-            throw new ServiceException("更新用户信息失败");
-        }
     }
 }

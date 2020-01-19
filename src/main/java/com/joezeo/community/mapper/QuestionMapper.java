@@ -18,4 +18,10 @@ public interface QuestionMapper {
     int selectCount();
 
     List<Question> selectPage(@Param("index") int index, @Param("size") Integer size);
+
+    int selectCountByUserid(Integer userid);
+
+    List<Question> selectPageByUserid(@Param("userid") Integer userid, @Param("index") int index, @Param("size") Integer size);
+
+    Question selectById(Integer id);
 }

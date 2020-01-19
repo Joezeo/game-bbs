@@ -31,19 +31,6 @@ public class IndexController {
                            @RequestParam(name = "page", defaultValue = "1") Integer page,
                            @RequestParam(name = "size", defaultValue = "2") Integer size){
         try{
-            User user = null;
-            Cookie[] cookies = request.getCookies();
-            if(cookies != null){
-                for(Cookie cookie : cookies){
-                    if("token".equals(cookie.getName())){
-                        user = userService.queryUserByToken(cookie.getValue());
-                    }
-                }
-            }
-            if(user != null){
-                request.getSession().setAttribute("user", user);
-            }
-
             // 查询问题
             PaginationDTO paginationDTO = questionService.listPage(page, size);
 

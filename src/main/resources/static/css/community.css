@@ -3,7 +3,9 @@ body{
 }
 
 .main{
-    margin: 30px;
+    margin-top: 30px;
+    margin-left: 100px;
+    margin-right: 100px;
     background-color: white;
 }
 
@@ -25,4 +27,32 @@ body{
 
 .btn-question{
     margin-top: 7px;
+}
+
+.profile .section{
+    margin-top: 20px;
+}
+
+.community-menu {
+    font-size: 12px;
+    color: #999;
+    font-family: candara,"Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","WenQuanYi Micro Hei","Microsoft Yahei",sans-serif, -apple-system;
+    -webkit-font-smoothing: antialiased;
+}
+
+.question-desc{
+    font-family: candara,"Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","WenQuanYi Micro Hei","Microsoft Yahei",sans-serif, -apple-system;
+    -webkit-font-smoothing: antialiased;
+    color: #333;
+}
+
+.question-title{
+    font-family: candara,"Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","WenQuanYi Micro Hei","Microsoft Yahei",sans-serif, -apple-system;
+    -webkit-font-smoothing: antialiased;
+    color: #333;
+}
+
+.question-option{
+    color: #999;
+    font-size: 12px;
 }

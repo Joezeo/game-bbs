@@ -23,4 +23,20 @@
         select * from t_question
         limit #{index},#{size}
     </select>
+
+    <select id="selectCountByUserid" resultType="int">
+        select count(1) from t_question
+        where userid = #{userid}
+    </select>
+
+    <select id="selectPageByUserid" resultType="Question">
+        select * from t_question
+        where userid = #{userid}
+        limit #{index},#{size}
+    </select>
+
+    <select id="selectById" resultType="Question">
+        select * from t_question
+        where id = #{id}
+    </select>
 </mapper>
