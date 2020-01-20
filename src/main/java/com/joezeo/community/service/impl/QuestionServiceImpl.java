@@ -25,18 +25,6 @@ public class QuestionServiceImpl implements QuestionService {
     private UserMapper userMapper;
 
     @Override
-    public void addQuestion(Question question) {
-        if (question == null) {
-            throw new RuntimeException("参数question不可为null");
-        }
-
-        int count = questionMapper.insert(question);
-        if (count != 1) {
-            throw new RuntimeException("发布新问题失败");
-        }
-    }
-
-    @Override
     public List<QuestionDTO> list() {
         List<Question> questions = questionMapper.selectAll();
         if (questions == null) {
@@ -71,7 +59,7 @@ public class QuestionServiceImpl implements QuestionService {
         int index = (page - 1) * size;
 
         List<Question> questions = questionMapper.selectPage(index, size);
-        if(questions == null){
+        if (questions == null) {
             throw new ServiceException("获取问题数据失败");
         }
 
@@ -104,7 +92,7 @@ public class QuestionServiceImpl implements QuestionService {
         int index = (page - 1) * size;
 
         List<Question> questions = questionMapper.selectPageByUserid(userid, index, size);
-        if(questions == null){
+        if (questions == null) {
             throw new ServiceException("获取问题数据失败");
         }
 
@@ -127,23 +115,51 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public QuestionDTO queryById(Integer id) {
-        if(id == null || id <= 0){
+        if (id == null || id <= 0) {
             throw new ServiceException("QuestionService-queryById 参数id异常");
         }
 
         Question question = questionMapper.selectById(id);
-        if(question == null){
+        if (question == null) {
             throw new ServiceException("获取问题数据失败");
         }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
 
         User user = userMapper.selectById(question.getUserid());
-        if(user == null){
+        if (user == null) {
             throw new ServiceException("获取用户数据失败");
         }
 
         questionDTO.setUser(user);
         return questionDTO;
+    }
+
+    @Override
+    public void createOrUpdate(Question question) {
+        if (question == null) {
+            throw new RuntimeException("参数question不可为null");
+        }
+
+        if(question.getId() == null){ // 进行新增问题操作
+            question.setCommentCount(0);
+            question.setLikeCount(0);
+            question.setViewCount(0);
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModify(question.getGmtCreate());
+
+            int count = questionMapper.insert(question);
+            if (count != 1) {
+                throw new RuntimeException("发布新问题失败");
+            }
+        } else { // 进行更新问题操作
+            question.setGmtModify(System.currentTimeMillis());
+
+            int count = questionMapper.update(question);
+            if (count != 1) {
+                throw new RuntimeException("编辑问题失败");
+            }
+        }
+
     }
 }

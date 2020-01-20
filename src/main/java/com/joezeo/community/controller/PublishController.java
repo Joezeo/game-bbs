@@ -1,12 +1,15 @@
 package com.joezeo.community.controller;
 
 import com.joezeo.community.dto.JsonResult;
+import com.joezeo.community.dto.QuestionDTO;
 import com.joezeo.community.pojo.Question;
 import com.joezeo.community.pojo.User;
 import com.joezeo.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -23,6 +26,17 @@ public class PublishController {
         return "publish";
     }
 
+    @GetMapping("/publish/{id}")
+    public String edit(@PathVariable(name = "id") Integer id,
+                       Model model){
+        QuestionDTO questionDTO = questionService.queryById(id);
+        model.addAttribute("title", questionDTO.getTitle());
+        model.addAttribute("description", questionDTO.getDescription());
+        model.addAttribute("tag", questionDTO.getTag());
+        model.addAttribute("id", questionDTO.getId());
+        return "publish";
+    }
+
     @PostMapping("/publish")
     @ResponseBody
     public JsonResult publish(Question question, HttpSession session){
@@ -35,13 +49,8 @@ public class PublishController {
                 return result;
             }
             question.setUserid(user.getId());
-            question.setCommentCount(0);
-            question.setLikeCount(0);
-            question.setViewCount(0);
-            question.setGmtCreate(System.currentTimeMillis());
-            question.setGmtModify(question.getGmtCreate());
 
-            questionService.addQuestion(question);
+            questionService.createOrUpdate(question);
             result = new JsonResult(true, "Ok");
         } catch (Exception e){
             e.printStackTrace();

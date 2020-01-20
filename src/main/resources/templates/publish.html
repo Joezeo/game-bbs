@@ -3,12 +3,12 @@
 <head>
     <title>发起问题 - Joezeoの自留地</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/community.css">
-    <script src="jquery/jquery-3.4.1.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/publish.js"></script>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <script src="/jquery/jquery-3.4.1.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/publish.js"></script>
 </head>
 <body>
 
@@ -22,9 +22,10 @@
             <hr>
 
             <form id="publish-form">
+                <input type="hidden" th:value="${id}" name="id" id="id">
                 <div class="form-group">
                     <label for="title"> 问题标题（简明扼要）：</label>
-                    <input type="email" class="form-control" id="title" name="title" placeholder="问题标题...">
+                    <input th:value="${title}" type="email" class="form-control" id="title" name="title" placeholder="问题标题...">
                     <div id="title-warning" class="alert alert-warning" role="alert" style="display: none">
                        问题标题不可为空，请输入
                     </div>
@@ -32,7 +33,7 @@
 
                 <div class="form-group">
                     <label for="description"> 问题描述（详细描述）：</label>
-                    <textarea class="form-control" name="description" id="description" cols="30" rows="10"></textarea>
+                    <textarea th:text="${description}" class="form-control" name="description" id="description" cols="30" rows="10"></textarea>
                     <div id="des-warning" class="alert alert-warning" role="alert" style="display: none">
                         问题描述不可为空，请输入
                     </div>
@@ -40,7 +41,7 @@
                 <br>
                 <div class="form-group">
                     <label for="tag"> 添加标签：</label>
-                    <input type="email" class="form-control" id="tag" name="tag" placeholder="输入标签，以,分隔">
+                    <input th:value="tag" type="email" class="form-control" id="tag" name="tag" placeholder="输入标签，以,分隔">
                     <div id="tag-warning" class="alert alert-warning" role="alert" style="display: none">
                         问题标签不可为空，请输入
                     </div>

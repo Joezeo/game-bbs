@@ -34,6 +34,7 @@ function doPublish() {
     var title = $("#title").val();
     var description = $("#description").val();
     var tag = $("#tag").val();
+    var id = $("#id").val();
 
     var flag = doCheckValue(title, description, tag);
     if(!flag){ // flag为 false 说明有数据为空
@@ -42,7 +43,7 @@ function doPublish() {
     $.ajax({
         url: '/publish',
         dataType: 'json',
-        data: {title:title, description:description, tag: tag},
+        data: {title:title, description:description, tag: tag, id: id},
         type: 'post',
         success: function (jsonResult) {
             if(jsonResult.success){

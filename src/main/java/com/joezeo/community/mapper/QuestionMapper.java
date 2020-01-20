@@ -24,4 +24,6 @@ public interface QuestionMapper {
     List<Question> selectPageByUserid(@Param("userid") Integer userid, @Param("index") int index, @Param("size") Integer size);
 
     Question selectById(Integer id);
+
+    int update(Question question);
 }

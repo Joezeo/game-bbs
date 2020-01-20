@@ -39,4 +39,33 @@
         select * from t_question
         where id = #{id}
     </select>
+
+    <update id="update" parameterType="Question">
+        update t_question
+        <set>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="tag != null and tag != ''">
+                tag = #{tag},
+            </if>
+            <if test="commentCount != null">
+                comment_count = #{commentCount},
+            </if>
+            <if test="viewCount != null">
+                view_count = #{viewCount},
+            </if>
+            <if test="likeCount != null">
+                like_count = #{likeCount},
+            </if>
+            <if test="gmtModify != null">
+                gmt_modify = #{gmtModify},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>

@@ -7,8 +7,6 @@ import com.joezeo.community.pojo.Question;
 import java.util.List;
 
 public interface QuestionService {
-    void addQuestion(Question question);
-
     List<QuestionDTO> list();
 
     PaginationDTO listPage(Integer page, Integer size);
@@ -16,4 +14,6 @@ public interface QuestionService {
     PaginationDTO listPage(Integer userid, Integer page, Integer size);
 
     QuestionDTO queryById(Integer id);
+
+    void createOrUpdate(Question question);
 }
