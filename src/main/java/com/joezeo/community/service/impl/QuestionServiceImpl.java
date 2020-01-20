@@ -2,6 +2,9 @@ package com.joezeo.community.service.impl;
 
 import com.joezeo.community.dto.PaginationDTO;
 import com.joezeo.community.dto.QuestionDTO;
+import com.joezeo.community.exception.CustomizeErrorCode;
+import com.joezeo.community.exception.CustomizeException;
+import com.joezeo.community.exception.IExceptionErrorCode;
 import com.joezeo.community.exception.ServiceException;
 import com.joezeo.community.mapper.QuestionMapper;
 import com.joezeo.community.mapper.UserMapper;
@@ -33,7 +36,7 @@ public class QuestionServiceImpl implements QuestionService {
         questionExample.createCriteria().andIdIsNotNull();
         List<Question> questions = questionMapper.selectByExample(questionExample);
         if (questions == null) {
-            throw new ServiceException("获取问题失败");
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
 
         List<QuestionDTO> list = new ArrayList<>();
@@ -68,7 +71,7 @@ public class QuestionServiceImpl implements QuestionService {
         RowBounds rowBounds = new RowBounds(index, size);
         List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, rowBounds);
         if (questions == null) {
-            throw new ServiceException("获取问题数据失败");
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
 
         List<QuestionDTO> list = new ArrayList<>();
@@ -104,7 +107,7 @@ public class QuestionServiceImpl implements QuestionService {
         RowBounds rowBounds = new RowBounds(index, size);
         List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, rowBounds);
         if (questions == null) {
-            throw new ServiceException("获取问题数据失败");
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
 
         List<QuestionDTO> list = new ArrayList<>();
@@ -132,7 +135,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         Question question = questionMapper.selectByPrimaryKey(id);
         if (question == null) {
-            throw new ServiceException("获取问题数据失败");
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
