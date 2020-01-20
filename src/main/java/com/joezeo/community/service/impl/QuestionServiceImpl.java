@@ -6,8 +6,10 @@ import com.joezeo.community.exception.ServiceException;
 import com.joezeo.community.mapper.QuestionMapper;
 import com.joezeo.community.mapper.UserMapper;
 import com.joezeo.community.pojo.Question;
+import com.joezeo.community.pojo.QuestionExample;
 import com.joezeo.community.pojo.User;
 import com.joezeo.community.service.QuestionService;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
 public class QuestionServiceImpl implements QuestionService {
 
@@ -26,14 +29,16 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<QuestionDTO> list() {
-        List<Question> questions = questionMapper.selectAll();
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria().andIdIsNotNull();
+        List<Question> questions = questionMapper.selectByExample(questionExample);
         if (questions == null) {
             throw new ServiceException("获取问题失败");
         }
 
         List<QuestionDTO> list = new ArrayList<>();
         for (Question question : questions) {
-            User user = userMapper.selectById(question.getUserid());
+            User user = userMapper.selectByPrimaryKey(question.getUserid());
             if (user == null) {
                 throw new ServiceException("获取用户失败");
             }
@@ -49,7 +54,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public PaginationDTO listPage(Integer page, Integer size) {
-        int count = questionMapper.selectCount();
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria().andIdIsNotNull();
+        int count = (int) questionMapper.countByExample(questionExample);
 
         PaginationDTO paginationDTO = new PaginationDTO();
         paginationDTO.setPagination(page, size, count);
@@ -58,14 +65,15 @@ public class QuestionServiceImpl implements QuestionService {
         page = paginationDTO.getPage();
         int index = (page - 1) * size;
 
-        List<Question> questions = questionMapper.selectPage(index, size);
+        RowBounds rowBounds = new RowBounds(index, size);
+        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, rowBounds);
         if (questions == null) {
             throw new ServiceException("获取问题数据失败");
         }
 
         List<QuestionDTO> list = new ArrayList<>();
         for (Question question : questions) {
-            User user = userMapper.selectById(question.getUserid());
+            User user = userMapper.selectByPrimaryKey(question.getUserid());
             if (user == null) {
                 throw new ServiceException("获取用户失败");
             }
@@ -82,7 +90,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public PaginationDTO listPage(Integer userid, Integer page, Integer size) {
-        int count = questionMapper.selectCountByUserid(userid);
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria().andUseridEqualTo(userid);
+        int count = (int) questionMapper.countByExample(questionExample);
 
         PaginationDTO paginationDTO = new PaginationDTO();
         paginationDTO.setPagination(page, size, count);
@@ -91,14 +101,15 @@ public class QuestionServiceImpl implements QuestionService {
         page = paginationDTO.getPage();
         int index = (page - 1) * size;
 
-        List<Question> questions = questionMapper.selectPageByUserid(userid, index, size);
+        RowBounds rowBounds = new RowBounds(index, size);
+        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, rowBounds);
         if (questions == null) {
             throw new ServiceException("获取问题数据失败");
         }
 
         List<QuestionDTO> list = new ArrayList<>();
         for (Question question : questions) {
-            User user = userMapper.selectById(question.getUserid());
+            User user = userMapper.selectByPrimaryKey(question.getUserid());
             if (user == null) {
                 throw new ServiceException("获取用户失败");
             }
@@ -119,14 +130,14 @@ public class QuestionServiceImpl implements QuestionService {
             throw new ServiceException("QuestionService-queryById 参数id异常");
         }
 
-        Question question = questionMapper.selectById(id);
+        Question question = questionMapper.selectByPrimaryKey(id);
         if (question == null) {
             throw new ServiceException("获取问题数据失败");
         }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
 
-        User user = userMapper.selectById(question.getUserid());
+        User user = userMapper.selectByPrimaryKey(question.getUserid());
         if (user == null) {
             throw new ServiceException("获取用户数据失败");
         }
@@ -155,7 +166,7 @@ public class QuestionServiceImpl implements QuestionService {
         } else { // 进行更新问题操作
             question.setGmtModify(System.currentTimeMillis());
 
-            int count = questionMapper.update(question);
+            int count = questionMapper.updateByPrimaryKeySelective(question);
             if (count != 1) {
                 throw new RuntimeException("编辑问题失败");
             }

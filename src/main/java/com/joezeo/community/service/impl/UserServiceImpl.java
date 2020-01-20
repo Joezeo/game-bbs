@@ -3,10 +3,14 @@ package com.joezeo.community.service.impl;
 import com.joezeo.community.exception.ServiceException;
 import com.joezeo.community.mapper.UserMapper;
 import com.joezeo.community.pojo.User;
+import com.joezeo.community.pojo.UserExample;
 import com.joezeo.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -19,7 +23,9 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("参数user异常，=null");
         }
 
-        User memUser = userMapper.selectByAccountid(user.getAccountId());
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andAccountIdEqualTo(user.getAccountId());
+        List<User> memUser = userMapper.selectByExample(userExample);
 
         if(memUser == null){ // 执行插入操作
             int count = userMapper.insert(user);
@@ -27,8 +33,8 @@ public class UserServiceImpl implements UserService {
                 throw new ServiceException("保存用户失败");
             }
         } else { // 执行更新操作
-            user.setId(memUser.getId());
-            int count = userMapper.updateByIdSelective(user);
+            user.setId(memUser.get(0).getId());
+            int count = userMapper.updateByPrimaryKeySelective(user);
             if (count != 1) {
                 throw new ServiceException("更新用户信息失败");
             }
@@ -41,11 +47,13 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("参数token为空");
         }
 
-        User user = userMapper.selectByToken(token);
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andTokenEqualTo(token);
+        List<User> user = userMapper.selectByExample(userExample);
         if (user == null) {
             throw new ServiceException("by token, 获取user信息失败");
         }
-        return user;
+        return user.get(0);
     }
 
     @Override
@@ -54,10 +62,12 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("参数accountId为空");
         }
 
-        User user = userMapper.selectByAccountid(accountId);
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andAccountIdEqualTo(accountId);
+        List<User> user = userMapper.selectByExample(userExample);
         if (user == null) {
             throw new ServiceException("by accountid, 获取user信息失败");
         }
-        return user;
+        return user.get(0);
     }
 }

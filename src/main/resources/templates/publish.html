@@ -41,7 +41,7 @@
                 <br>
                 <div class="form-group">
                     <label for="tag"> 添加标签：</label>
-                    <input th:value="tag" type="email" class="form-control" id="tag" name="tag" placeholder="输入标签，以,分隔">
+                    <input th:value="${tag}" type="email" class="form-control" id="tag" name="tag" placeholder="输入标签，以,分隔">
                     <div id="tag-warning" class="alert alert-warning" role="alert" style="display: none">
                         问题标签不可为空，请输入
                     </div>
