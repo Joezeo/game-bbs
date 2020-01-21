@@ -28,7 +28,11 @@ public class CustomizeErrorController implements ErrorController {
         HttpStatus status = getStatus(request);
         ModelAndView modelAndView = new ModelAndView("error");
         if(status.is4xxClientError()){
-            modelAndView.addObject("message", "浏览器太累了，请稍后重试！");
+            if (status.equals(HttpStatus.NOT_FOUND)){
+                modelAndView.addObject("message", "404：你来到了一片没有知识的荒野！");
+            } else {
+                modelAndView.addObject("message", "浏览器太累了，请稍后重试！");
+            }
         } else if(status.is5xxServerError()){
             modelAndView.addObject("message", "服务器冒烟了，请稍后重试！");
         }

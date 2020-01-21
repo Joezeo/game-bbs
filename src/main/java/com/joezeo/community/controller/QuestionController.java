@@ -17,8 +17,14 @@ public class QuestionController {
     @GetMapping("/question/{id}")
     public String question(@PathVariable(name = "id") Integer id,
                            Model model){
-        QuestionDTO questionDTO = questionService.queryById(id);
-        model.addAttribute("question", questionDTO);
+        try {
+            QuestionDTO questionDTO = questionService.queryById(id);
+            // 累加阅读数
+            questionService.incVie(questionDTO.getId());
+            model.addAttribute("question", questionDTO);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         return "question";
     }
 }

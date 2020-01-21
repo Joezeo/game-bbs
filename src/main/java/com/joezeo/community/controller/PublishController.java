@@ -29,11 +29,15 @@ public class PublishController {
     @GetMapping("/publish/{id}")
     public String edit(@PathVariable(name = "id") Integer id,
                        Model model){
-        QuestionDTO questionDTO = questionService.queryById(id);
-        model.addAttribute("title", questionDTO.getTitle());
-        model.addAttribute("description", questionDTO.getDescription());
-        model.addAttribute("tag", questionDTO.getTag());
-        model.addAttribute("id", questionDTO.getId());
+        try{
+            QuestionDTO questionDTO = questionService.queryById(id);
+            model.addAttribute("title", questionDTO.getTitle());
+            model.addAttribute("description", questionDTO.getDescription());
+            model.addAttribute("tag", questionDTO.getTag());
+            model.addAttribute("id", questionDTO.getId());
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         return "publish";
     }
 

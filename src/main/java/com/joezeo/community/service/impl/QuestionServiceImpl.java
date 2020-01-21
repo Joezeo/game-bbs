@@ -4,8 +4,8 @@ import com.joezeo.community.dto.PaginationDTO;
 import com.joezeo.community.dto.QuestionDTO;
 import com.joezeo.community.exception.CustomizeErrorCode;
 import com.joezeo.community.exception.CustomizeException;
-import com.joezeo.community.exception.IExceptionErrorCode;
 import com.joezeo.community.exception.ServiceException;
+import com.joezeo.community.mapper.QuestionExtMapper;
 import com.joezeo.community.mapper.QuestionMapper;
 import com.joezeo.community.mapper.UserMapper;
 import com.joezeo.community.pojo.Question;
@@ -26,6 +26,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Autowired
     private QuestionMapper questionMapper;
+
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     @Autowired
     private UserMapper userMapper;
@@ -175,5 +178,20 @@ public class QuestionServiceImpl implements QuestionService {
             }
         }
 
+    }
+
+    @Override
+    public void incVie(Integer id) {
+        if(id == null || id <= 0){
+            throw new ServiceException("传入id值异常");
+        }
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+
+        int count = questionExtMapper.incView(question);
+        if(count != 1){
+            throw new ServiceException("累加阅读数失败");
+        }
     }
 }
