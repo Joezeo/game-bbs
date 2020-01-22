@@ -56,3 +56,23 @@ body{
     color: #999;
     font-size: 12px;
 }
+
+.comment-head h2{
+    margin-top: 40px;
+    margin-left: 20px;
+    font-size: 20px;
+}
+
+.comment-user-name{
+    padding-top:15px;
+}
+
+.form-control{
+    margin-top: 10px;
+}
+
+#btn-comment-reply {
+    float: right;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
