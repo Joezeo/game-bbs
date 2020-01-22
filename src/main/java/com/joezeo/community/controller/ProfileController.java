@@ -24,20 +24,16 @@ public class ProfileController {
                           @RequestParam(name = "size", defaultValue = "2") Integer size,
                           Model model,
                           HttpSession session) {
-        try{
-            if ("questions".equals(action)) {
-                model.addAttribute("section", "questions");
-                model.addAttribute("sectionName", "我的问题");
-            }
-
-            // 查询问题
-            User user = (User) session.getAttribute("user");
-            PaginationDTO paginationDTO = questionService.listPage(user.getId(), page, size);
-
-            model.addAttribute("pagination", paginationDTO);
-        } catch (Exception e){
-            e.printStackTrace();
+        if ("questions".equals(action)) {
+            model.addAttribute("section", "questions");
+            model.addAttribute("sectionName", "我的问题");
         }
+
+        // 查询问题
+        User user = (User) session.getAttribute("user");
+        PaginationDTO paginationDTO = questionService.listPage(user.getId(), page, size);
+
+        model.addAttribute("pagination", paginationDTO);
         return "profile";
     }
 }

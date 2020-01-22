@@ -1,5 +1,7 @@
 package com.joezeo.community.dto;
 
+import com.joezeo.community.exception.CustomizeException;
+import com.joezeo.community.exception.IExceptionErrorCode;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,26 +18,35 @@ import java.io.Serializable;
 public class JsonResult implements Serializable {
     private static final long serialVersionUID = 5426736252370302612L;
 
+    private Integer code;
     private Boolean success;
     private String message;
     private Object data;
 
-    public JsonResult() {
+    private JsonResult() {
     }
 
-    public JsonResult(Boolean success, String message) {
-        this.success = success;
-        this.message = message;
+    public static JsonResult errorOf(IExceptionErrorCode errorCode){
+        JsonResult jsonResult = new JsonResult();
+        jsonResult.setMessage(errorCode.getMessage());
+        jsonResult.setCode(errorCode.getCode());
+        jsonResult.setSuccess(false);
+        return jsonResult;
     }
 
-    public JsonResult(Object data) {
-        this.success = true;
-        this.message = "OK";
-        this.data = data;
+    public static JsonResult okOf(Object data){
+        JsonResult jsonResult = new JsonResult();
+        jsonResult.setSuccess(true);
+        jsonResult.setMessage("OK");
+        jsonResult.setData(data);
+        return jsonResult;
     }
 
-    public JsonResult(Exception e){
-        this.success = false;
-        this.message = e.getMessage();
+    public static JsonResult errorOf(CustomizeException ex) {
+        JsonResult jsonResult = new JsonResult();
+        jsonResult.setSuccess(false);
+        jsonResult.setMessage(ex.getMessage());
+        jsonResult.setCode(ex.getCode());
+        return jsonResult;
     }
 }

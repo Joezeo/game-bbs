@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Data
 public class QuestionDTO implements Serializable {
     private static final long serialVersionUID = -8402925568651851428L;
-    private Integer id;
+    private Long id;
     private String title;
     private String description;
     private String tag;
@@ -21,7 +21,7 @@ public class QuestionDTO implements Serializable {
     private Integer likeCount;
     private Long gmtCreate;
     private Long gmtModify;
-    private Integer userid;
+    private Long userid;
 
     private User user;
 }

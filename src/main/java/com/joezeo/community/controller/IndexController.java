@@ -20,15 +20,11 @@ public class IndexController {
     public String htmIndex(HttpServletRequest request,
                            Model model,
                            @RequestParam(name = "page", defaultValue = "1") Integer page,
-                           @RequestParam(name = "size", defaultValue = "2") Integer size){
-        try{
-            // 查询问题
-            PaginationDTO paginationDTO = questionService.listPage(page, size);
+                           @RequestParam(name = "size", defaultValue = "2") Integer size) {
+        // 查询问题
+        PaginationDTO paginationDTO = questionService.listPage(page, size);
 
-            model.addAttribute("pagination", paginationDTO);
-        } catch (Exception se){
-            se.printStackTrace();
-        }
+        model.addAttribute("pagination", paginationDTO);
         return "index";
     }
 }

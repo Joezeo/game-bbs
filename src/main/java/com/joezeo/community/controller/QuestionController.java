@@ -15,16 +15,12 @@ public class QuestionController {
     QuestionService questionService;
 
     @GetMapping("/question/{id}")
-    public String question(@PathVariable(name = "id") Integer id,
-                           Model model){
-        try {
-            QuestionDTO questionDTO = questionService.queryById(id);
-            // 累加阅读数
-            questionService.incVie(questionDTO.getId());
-            model.addAttribute("question", questionDTO);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+    public String question(@PathVariable(name = "id") Long id,
+                           Model model) {
+        QuestionDTO questionDTO = questionService.queryById(id);
+        // 累加阅读数
+        questionService.incVie(questionDTO.getId());
+        model.addAttribute("question", questionDTO);
         return "question";
     }
 }

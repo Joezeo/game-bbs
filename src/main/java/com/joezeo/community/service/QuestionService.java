@@ -11,11 +11,11 @@ public interface QuestionService {
 
     PaginationDTO listPage(Integer page, Integer size);
 
-    PaginationDTO listPage(Integer userid, Integer page, Integer size);
+    PaginationDTO listPage(Long userid, Integer page, Integer size);
 
-    QuestionDTO queryById(Integer id);
+    QuestionDTO queryById(Long id);
 
     void createOrUpdate(Question question);
 
-    void incVie(Integer id);
+    void incVie(Long id);
 }

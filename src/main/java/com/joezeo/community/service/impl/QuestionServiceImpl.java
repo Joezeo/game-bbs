@@ -95,7 +95,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public PaginationDTO listPage(Integer userid, Integer page, Integer size) {
+    public PaginationDTO listPage(Long userid, Integer page, Integer size) {
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria().andUseridEqualTo(userid);
         int count = (int) questionMapper.countByExample(questionExample);
@@ -131,7 +131,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public QuestionDTO queryById(Integer id) {
+    public QuestionDTO queryById(Long id) {
         if (id == null || id <= 0) {
             throw new ServiceException("QuestionService-queryById 参数id异常");
         }
@@ -181,7 +181,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void incVie(Integer id) {
+    public void incVie(Long id) {
         if(id == null || id <= 0){
             throw new ServiceException("传入id值异常");
         }

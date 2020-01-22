@@ -108,7 +108,7 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>6.1.4</version>
                 <configuration>
-                    <url>jdbc:mysql://localhost:3306/community?serverTimezone=Hongkong</url>
+                    <url>jdbc:mysql://localhost:3306/community?serverTimezone=gmt</url>
                     <user>root</user>
                     <password>root</password>
                 </configuration>

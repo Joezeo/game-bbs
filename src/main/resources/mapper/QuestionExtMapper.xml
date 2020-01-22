@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.joezeo.community.mapper.QuestionExtMapper">
- <update id="incView" parameterType="com.joezeo.community.pojo.Question">
+    <update id="incView" parameterType="com.joezeo.community.pojo.Question">
     update t_question
     set
       view_count = view_count + #{viewCount,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+    <update id="incComment" parameterType="com.joezeo.community.pojo.Question">
+    update t_question
+    set
+      comment_count = comment_count + #{commentCount,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

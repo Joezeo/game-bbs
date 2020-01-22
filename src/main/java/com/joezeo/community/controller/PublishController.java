@@ -2,6 +2,7 @@ package com.joezeo.community.controller;
 
 import com.joezeo.community.dto.JsonResult;
 import com.joezeo.community.dto.QuestionDTO;
+import com.joezeo.community.exception.CustomizeErrorCode;
 import com.joezeo.community.pojo.Question;
 import com.joezeo.community.pojo.User;
 import com.joezeo.community.service.QuestionService;
@@ -22,45 +23,32 @@ public class PublishController {
     private QuestionService questionService;
 
     @GetMapping("/publish")
-    public String publish(){
+    public String publish() {
         return "publish";
     }
 
     @GetMapping("/publish/{id}")
-    public String edit(@PathVariable(name = "id") Integer id,
-                       Model model){
-        try{
-            QuestionDTO questionDTO = questionService.queryById(id);
-            model.addAttribute("title", questionDTO.getTitle());
-            model.addAttribute("description", questionDTO.getDescription());
-            model.addAttribute("tag", questionDTO.getTag());
-            model.addAttribute("id", questionDTO.getId());
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+    public String edit(@PathVariable(name = "id") Long id,
+                       Model model) {
+        QuestionDTO questionDTO = questionService.queryById(id);
+        model.addAttribute("title", questionDTO.getTitle());
+        model.addAttribute("description", questionDTO.getDescription());
+        model.addAttribute("tag", questionDTO.getTag());
+        model.addAttribute("id", questionDTO.getId());
         return "publish";
     }
 
     @PostMapping("/publish")
     @ResponseBody
-    public JsonResult publish(Question question, HttpSession session){
-        JsonResult result = null;
-
-        try{
-            User user = (User) session.getAttribute("user");
-            if(user == null){
-                result = new JsonResult(false, "用户未登录");
-                return result;
-            }
-            question.setUserid(user.getId());
-
-            questionService.createOrUpdate(question);
-            result = new JsonResult(true, "Ok");
-        } catch (Exception e){
-            e.printStackTrace();
-            result = new JsonResult(e);
+    public JsonResult publish(Question question, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return JsonResult.errorOf(CustomizeErrorCode.USER_NOT_LOGIN);
         }
+        question.setUserid(user.getId());
 
-        return result;
+        questionService.createOrUpdate(question);
+
+        return JsonResult.okOf(null);
     }
 }
