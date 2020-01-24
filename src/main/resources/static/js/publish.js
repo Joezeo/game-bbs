@@ -47,7 +47,7 @@ function doPublish() {
         type: 'post',
         success: function (jsonResult) {
             if(jsonResult.success){
-                location.href = "/";
+                location.href = "/question/" + id;
             } else {
                 alert(jsonResult.message);
             }

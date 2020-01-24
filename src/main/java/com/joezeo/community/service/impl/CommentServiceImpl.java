@@ -8,12 +8,17 @@ import com.joezeo.community.exception.ServiceException;
 import com.joezeo.community.mapper.CommentMapper;
 import com.joezeo.community.mapper.QuestionExtMapper;
 import com.joezeo.community.mapper.QuestionMapper;
-import com.joezeo.community.pojo.Comment;
-import com.joezeo.community.pojo.Question;
+import com.joezeo.community.mapper.UserMapper;
+import com.joezeo.community.pojo.*;
 import com.joezeo.community.service.CommentService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
@@ -27,6 +32,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private QuestionExtMapper questionExtMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public void addComment(CommentDTO commentDTO, Long userid) {
@@ -76,5 +84,37 @@ public class CommentServiceImpl implements CommentService {
         if (count != 1) {
             throw new CustomizeException(CustomizeErrorCode.COMMENT_FAILD);
         }
+    }
+
+    @Override
+    public List<CommentDTO> listByQuestionid(Long questionid) {
+        // 查询评论
+        CommentExample example = new CommentExample();
+        example.createCriteria().andParentIdEqualTo(questionid)
+                .andParentTypeEqualTo(CommentTypeEnum.QUESTION.getType()); // 根据父类型是question， 父id为questionid来查询所有评论
+        List<Comment> comments = commentMapper.selectByExample(example);
+
+        // 如果没有评论直接返回一个空的集合
+        if(comments == null || comments.size() == 0){
+            return new ArrayList<>();
+        }
+
+        // 获取所有评论的评论者id，并且去重
+        List<Long> userids = comments.stream().map(c -> c.getUserid()).distinct().collect(Collectors.toList());
+
+        // 根据评论者id所有评论者数据，并放入map中
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andIdIn(userids);
+        List<User> users = userMapper.selectByExample(userExample);
+        Map<Long, User> userMap = users.stream().collect(Collectors.toMap(user -> user.getId(), user -> user));
+
+        // 将 Comment 转化为 CommentDto 并且放入user
+        List<CommentDTO> commentDTOS = comments.stream().map(comment -> {
+            CommentDTO commentDTO = new CommentDTO();
+            BeanUtils.copyProperties(comment, commentDTO);
+            commentDTO.setUser(userMap.get(comment.getUserid()));
+            return commentDTO;
+        }).collect(Collectors.toList());
+        return commentDTOS;
     }
 }

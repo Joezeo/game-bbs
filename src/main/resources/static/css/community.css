@@ -76,3 +76,37 @@ body{
     margin-top: 15px;
     margin-bottom: 15px;
 }
+
+.comment-cotent{
+    padding-left: 50px;
+    margin-top: -20px;
+}
+
+.comment-head .comment-div{
+    margin-top: 45px;
+    margin-bottom: 45px;
+    border-bottom: 1px solid #eee;
+}
+
+.comment-head .comment-icon {
+    margin-left: 50px;
+    margin-top: 5px;
+    height: 28px;
+    color: #999999;
+    line-height: 28px;
+    text-decoration: none;
+    padding-bottom: 5px;
+}
+
+.comment-head .comment-icon a{
+    color: #999999;
+    padding-right: 8px;
+}
+
+.comment-head .comment-icon a:hover{
+    color:#499ef3;
+}
+
+.comment-icon .comment-date{
+    float: right;
+}
