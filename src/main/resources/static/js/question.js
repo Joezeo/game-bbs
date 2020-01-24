@@ -16,6 +16,7 @@ $(function () {
 function autoLogin() {
     window.localStorage.setItem("closable", true);
     window.open("https://github.com/login/oauth/authorize?client_id=332735b1b85bfbb88779&scope=user&state=1");
+    // 当完成github第三方验证后，关闭主页，取出localStorage中的closable，刷新当前页面
     window.setInterval(function () {
         if (!window.localStorage.getItem("closable"))
             window.location.reload();

@@ -20,7 +20,7 @@ public class IndexController {
     public String htmIndex(HttpServletRequest request,
                            Model model,
                            @RequestParam(name = "page", defaultValue = "1") Integer page,
-                           @RequestParam(name = "size", defaultValue = "2") Integer size) {
+                           @RequestParam(name = "size", defaultValue = "5") Integer size) {
         // 查询问题
         PaginationDTO paginationDTO = questionService.listPage(page, size);
 

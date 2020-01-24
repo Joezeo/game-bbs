@@ -21,7 +21,7 @@ public class ProfileController {
     @GetMapping("/profile/{action}")
     public String profile(@PathVariable(name = "action") String action,
                           @RequestParam(name = "page", defaultValue = "1") Integer page,
-                          @RequestParam(name = "size", defaultValue = "2") Integer size,
+                          @RequestParam(name = "size", defaultValue = "5") Integer size,
                           Model model,
                           HttpSession session) {
         if ("questions".equals(action)) {

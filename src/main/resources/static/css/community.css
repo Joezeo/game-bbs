@@ -44,6 +44,7 @@ body{
     font-family: candara,"Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","WenQuanYi Micro Hei","Microsoft Yahei",sans-serif, -apple-system;
     -webkit-font-smoothing: antialiased;
     color: #333;
+    margin-left: 20px;
 }
 
 .question-title{
@@ -58,6 +59,12 @@ body{
 }
 
 .comment-head h2{
+    margin-top: 40px;
+    margin-left: 20px;
+    font-size: 20px;
+}
+
+.comment-body h2{
     margin-top: 40px;
     margin-left: 20px;
     font-size: 20px;
