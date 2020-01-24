@@ -2,6 +2,7 @@ package com.joezeo.community.controller;
 
 import com.joezeo.community.dto.CommentDTO;
 import com.joezeo.community.dto.QuestionDTO;
+import com.joezeo.community.enums.CommentTypeEnum;
 import com.joezeo.community.service.CommentService;
 import com.joezeo.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class QuestionController {
         QuestionDTO questionDTO = questionService.queryById(id);
 
         // 查询当前id问题的全部评论
-        List<CommentDTO> commentDTOS = commentService.listByQuestionid(id);
+        List<CommentDTO> commentDTOS = commentService.listByParentId(id, CommentTypeEnum.QUESTION);
 
         // 累加阅读数
         questionService.incVie(questionDTO.getId());

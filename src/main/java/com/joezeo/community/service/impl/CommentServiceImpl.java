@@ -5,10 +5,7 @@ import com.joezeo.community.enums.CommentTypeEnum;
 import com.joezeo.community.exception.CustomizeErrorCode;
 import com.joezeo.community.exception.CustomizeException;
 import com.joezeo.community.exception.ServiceException;
-import com.joezeo.community.mapper.CommentMapper;
-import com.joezeo.community.mapper.QuestionExtMapper;
-import com.joezeo.community.mapper.QuestionMapper;
-import com.joezeo.community.mapper.UserMapper;
+import com.joezeo.community.mapper.*;
 import com.joezeo.community.pojo.*;
 import com.joezeo.community.service.CommentService;
 import org.springframework.beans.BeanUtils;
@@ -26,6 +23,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private CommentMapper commentMapper;
+
+    @Autowired
+    private CommentExtMapper commentExtMapper;
 
     @Autowired
     private QuestionMapper questionMapper;
@@ -59,9 +59,10 @@ public class CommentServiceImpl implements CommentService {
         comment.setLikeCount(0);
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setGmtModify(comment.getGmtCreate());
+        comment.setCommentCount(0);
 
         // 判断当前评论是评论问题，还是回复评论的
-        if(comment.getParentType() == CommentTypeEnum.QUESTION.getType()){
+        if(comment.getParentType() == CommentTypeEnum.QUESTION.getType()){ // 回复问题
             Question question = questionMapper.selectByPrimaryKey(commentDTO.getParentId());
             if(question == null){
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
@@ -73,10 +74,17 @@ public class CommentServiceImpl implements CommentService {
             if(count != 1){
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_FAILD);
             }
-        } else {
-            Comment memCommet = commentMapper.selectByPrimaryKey(commentDTO.getParentId());
-            if(memCommet == null){
+        } else { // 回复评论
+            Comment memComment = commentMapper.selectByPrimaryKey(commentDTO.getParentId());
+            if(memComment == null){
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
+            }
+
+            // 累加二级评论数
+            memComment.setCommentCount(1);
+            int count = commentExtMapper.incComment(memComment);
+            if(count != 1){
+                throw new CustomizeException(CustomizeErrorCode.COMMENT_FAILD);
             }
         }
 
@@ -87,11 +95,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDTO> listByQuestionid(Long questionid) {
+    public List<CommentDTO> listByParentId(Long parentId, CommentTypeEnum typeEnum) {
         // 查询评论
         CommentExample example = new CommentExample();
-        example.createCriteria().andParentIdEqualTo(questionid)
-                .andParentTypeEqualTo(CommentTypeEnum.QUESTION.getType()); // 根据父类型是question， 父id为questionid来查询所有评论
+        example.createCriteria().andParentIdEqualTo(parentId)
+                .andParentTypeEqualTo(typeEnum.getType()); // 根据父类型以及父类型id 来查询所有评论
         List<Comment> comments = commentMapper.selectByExample(example);
 
         // 如果没有评论直接返回一个空的集合

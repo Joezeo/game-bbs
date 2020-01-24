@@ -53,21 +53,34 @@
 
                         <div th:text="${comment.content}" class="comment-cotent"></div>
 
+                        <!-- 评论的点赞，回复，时间图标 -->
                         <div class="comment-icon">
-                            <a href="">
+                            <a>
                                 <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
                                 <span th:text="${comment.likeCount}"></span>
                             </a>
-                            <a href="">
+                            <a th:data-id="${comment.id}" class="reply-comment">
                                 <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
                                 <span th:text="${comment.commentCount}"></span>
                             </a>
-                            <span class="comment-date" th:text="${#calendars.format(comment.gmtCreate,'yyyy-MM-dd')}"></span>
+                            <span class="comment-date"
+                                  th:text="${#calendars.format(comment.gmtCreate,'yyyy-MM-dd')}"></span>
+                        </div>
+                        <!-- 二级评论 -->
+                        <div class="sub-comment collapse" th:id="'subcomment-' + ${comment.id}">
+                            <div th:id="'data-load-div-' + ${comment.id}"></div>
+                            <div>
+                                <input type="email" class="form-control" th:id="'subcomment-content-' + ${comment.id}" placeholder="评论一下...">
+                            </div>
+                            <div style="text-align: right">
+                                <button type="button" class="btn btn-default btn-sm btn-success reply">回复</button>
+                                <button type="button" class="btn btn-default btn-sm back">取消</button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="comment-body"> <!-- 需要被隐藏的部分 -->
+                <div class="comment-body" th:if="${session.user != null}"> <!-- 需要被隐藏的部分 -->
                     <hr>
                     <div class="media">
                         <div class="media-left">
@@ -83,6 +96,10 @@
                     <textarea class="form-control" name="content" id="content" cols="30" rows="10"></textarea>
 
                     <button id="btn-comment-reply" type="button" class="btn btn-success">回复</button>
+                </div>
+                <div th:if="${session.user == null}" style="text-align: center; margin-bottom: 20px">
+                    <hr>
+                    <a id="auto-login">需登录后才能回复，点击此处自动登录</a>
                 </div>
             </div>
         </div>

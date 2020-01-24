@@ -110,3 +110,26 @@ body{
 .comment-icon .comment-date{
     float: right;
 }
+
+.isShowSubComment {
+    color: #499ef3;
+}
+
+.sub-comment{
+    position: relative;
+    margin: 10px 40px;
+    border: 1px solid #e6e6e6;
+    background-color: #fff;
+}
+
+.sub-comment input{
+    /*margin-top: -30px;*/
+    margin-left: 2.5%;
+    width: 95%;
+    overflow: hidden; overflow-wrap: break-word; resize: none; height: 34px;
+}
+
+.sub-comment button{
+    margin: 10px 5px;
+}
+

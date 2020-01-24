@@ -15,13 +15,13 @@ import java.io.Serializable;
  * 服务执行后获得的数据封装于data中
  */
 @Data
-public class JsonResult implements Serializable {
+public class JsonResult<T> implements Serializable {
     private static final long serialVersionUID = 5426736252370302612L;
 
     private Integer code;
     private Boolean success;
     private String message;
-    private Object data;
+    private T data;
 
     private JsonResult() {
     }
@@ -34,14 +34,6 @@ public class JsonResult implements Serializable {
         return jsonResult;
     }
 
-    public static JsonResult okOf(Object data){
-        JsonResult jsonResult = new JsonResult();
-        jsonResult.setSuccess(true);
-        jsonResult.setMessage("OK");
-        jsonResult.setData(data);
-        return jsonResult;
-    }
-
     public static JsonResult errorOf(CustomizeException ex) {
         JsonResult jsonResult = new JsonResult();
         jsonResult.setSuccess(false);
@@ -49,4 +41,13 @@ public class JsonResult implements Serializable {
         jsonResult.setCode(ex.getCode());
         return jsonResult;
     }
+
+    public static <T>JsonResult okOf(T data){
+        JsonResult jsonResult = new JsonResult();
+        jsonResult.setSuccess(true);
+        jsonResult.setMessage("OK");
+        jsonResult.setData(data);
+        return jsonResult;
+    }
+
 }
