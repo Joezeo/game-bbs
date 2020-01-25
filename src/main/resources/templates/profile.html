@@ -26,9 +26,9 @@
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading" th:text="${question.title}"></h4>
+                    <h4 class="media-heading" ><a th:href="@{/question/{id}(id=${question.id})}" th:text="${question.title}"></a></h4>
                     <span th:text="${question.description}"></span>
-                    <span class="text-desc"> • <span th:text="${question.commentCount}"></span> 个评论 • <span th:text="${question.viewCount}"></span> 次浏览 • <span th:text="${#calendars.format(question.gmtCreate,'dd MMMM yyyy')}"></span></span></span>
+                    <span class="text-desc"> • <span th:text="${question.commentCount}"></span> 个评论 • <span th:text="${question.viewCount}"></span> 次浏览 • <span th:text="${#calendars.format(question.gmtCreate,'yyyy-MM-dd')}"></span></span></span>
                 </div>
             </div>
 

@@ -109,6 +109,7 @@ public class QuestionServiceImpl implements QuestionService {
         int index = (page - 1) * size;
 
         RowBounds rowBounds = new RowBounds(index, size);
+        questionExample.setOrderByClause("gmt_create desc");
         List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, rowBounds);
         if (questions == null) {
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
