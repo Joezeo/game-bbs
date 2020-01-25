@@ -72,6 +72,7 @@ public class QuestionServiceImpl implements QuestionService {
         int index = (page - 1) * size;
 
         RowBounds rowBounds = new RowBounds(index, size);
+        questionExample.setOrderByClause("gmt_create desc");
         List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, rowBounds);
         if (questions == null) {
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
@@ -136,6 +137,7 @@ public class QuestionServiceImpl implements QuestionService {
             throw new ServiceException("QuestionService-queryById 参数id异常");
         }
 
+        // 获取指定id问题
         Question question = questionMapper.selectByPrimaryKey(id);
         if (question == null) {
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
@@ -143,12 +145,22 @@ public class QuestionServiceImpl implements QuestionService {
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
 
+        // 获取当前问题的提问人
         User user = userMapper.selectByPrimaryKey(question.getUserid());
         if (user == null) {
             throw new ServiceException("获取用户数据失败");
         }
-
         questionDTO.setUser(user);
+
+        // 获取当前问题的相关问题
+        String tagRegex = questionDTO.getTag().replaceAll(",", "|");
+        List<Question> related = questionExtMapper.selectRelated(questionDTO.getId(), tagRegex);
+        if(related == null || related.size() == 0){
+            // 如果没有获取到相关问题直接设置一个空集合
+            questionDTO.setRelateds(new ArrayList<>());
+        }
+        questionDTO.setRelateds(related);
+
         return questionDTO;
     }
 

@@ -6,27 +6,27 @@ $(function () {
 function doCheckValue(title, description, tag) {
     var falg = true;
 
-    if(title === ""){
+    if (title === "") {
         $("#title-warning").show();
         falg = false;
     } else {
         $("#title-warning").hide();
     }
 
-    if(description === ""){
+    if (description === "") {
         $("#des-warning").show();
         falg = false;
     } else {
         $("#des-warning").hide();
     }
 
-    if(tag === ""){
+    if (tag === "") {
         $("#tag-warning").show();
         falg = false;
     } else {
         $("#tag-warning").hide();
     }
-     return falg;
+    return falg;
 }
 
 function doPublish() {
@@ -37,17 +37,23 @@ function doPublish() {
     var id = $("#id").val();
 
     var flag = doCheckValue(title, description, tag);
-    if(!flag){ // flag为 false 说明有数据为空
+    if (!flag) { // flag为 false 说明有数据为空
         return false;
     }
     $.ajax({
         url: '/publish',
         dataType: 'json',
-        data: {title:title, description:description, tag: tag, id: id},
+        data: {title: title, description: description, tag: tag, id: id},
         type: 'post',
         success: function (jsonResult) {
-            if(jsonResult.success){
-                location.href = "/question/" + id;
+            debugger;
+            if (jsonResult.success) {
+                if (id != null && id != ""){
+                    location.href = "/question/" + id;
+                }
+                else{
+                    location.href = "/";
+                }
             } else {
                 alert(jsonResult.message);
             }

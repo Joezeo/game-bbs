@@ -1,9 +1,11 @@
 package com.joezeo.community.dto;
 
+import com.joezeo.community.pojo.Question;
 import com.joezeo.community.pojo.User;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Question 数据传输对象
@@ -24,4 +26,5 @@ public class QuestionDTO implements Serializable {
     private Long userid;
 
     private User user;
+    private List<Question> relateds;
 }

@@ -15,4 +15,8 @@
       comment_count = comment_count + #{commentCount,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+    <select id="selectRelated" resultType="Question">
+        select * from t_question where id != #{curId} and tag regexp #{tagRegex}
+    </select>
 </mapper>
