@@ -48,6 +48,10 @@ function doComment() {
                     if (flag) {
                         window.open("https://github.com/login/oauth/authorize?client_id=332735b1b85bfbb88779&scope=user&state=1");
                         window.localStorage.setItem("closable", true);
+                        window.setInterval(function () {
+                            if (!window.localStorage.getItem("closable"))
+                                window.location.reload();
+                        }, 200);
                     }
                 } else {
                     alert(jsonResult.message);
