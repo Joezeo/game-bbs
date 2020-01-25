@@ -140,3 +140,8 @@ body{
     margin: 10px 5px;
 }
 
+.label-span{
+    white-space: normal;
+    margin: 5px 5px;
+    display: inline-block;
+}

@@ -30,5 +30,6 @@
         <table tableName="t_user" domainObjectName="User" ></table>
         <table tableName="t_question" domainObjectName="Question" ></table>
         <table tableName="t_comment" domainObjectName="Comment" ></table>
+        <table tableName="t_tag" domainObjectName="Tag" ></table>
     </context>
 </generatorConfiguration>

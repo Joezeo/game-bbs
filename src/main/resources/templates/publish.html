@@ -25,25 +25,54 @@
                 <input type="hidden" th:value="${id}" name="id" id="id">
                 <div class="form-group">
                     <label for="title"> 问题标题（简明扼要）：</label>
-                    <input th:value="${title}" type="email" class="form-control" id="title" name="title" placeholder="问题标题...">
+                    <input th:value="${title}" type="email" class="form-control" id="title" name="title"
+                           placeholder="问题标题...">
                     <div id="title-warning" class="alert alert-warning" role="alert" style="display: none">
-                       问题标题不可为空，请输入
+                        问题标题不可为空，请输入
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="description"> 问题描述（详细描述）：</label>
-                    <textarea th:text="${description}" class="form-control" name="description" id="description" cols="30" rows="10"></textarea>
+                    <textarea th:text="${description}" class="form-control" name="description" id="description"
+                              cols="30" rows="10"></textarea>
                     <div id="des-warning" class="alert alert-warning" role="alert" style="display: none">
                         问题描述不可为空，请输入
                     </div>
                 </div>
                 <br>
+
+                <!--                标签选择-->
                 <div class="form-group">
                     <label for="tag"> 添加标签：</label>
-                    <input th:value="${tag}" type="email" class="form-control" id="tag" name="tag" placeholder="输入标签，以,分隔">
+                    <input th:value="${tag}" type="email" class="form-control" id="tag" name="tag" autocomplete="off"
+                           placeholder="输入标签，以,分隔">
                     <div id="tag-warning" class="alert alert-warning" role="alert" style="display: none">
-                        问题标签不可为空，请输入
+                        问题标签不可为空，请选择合适的标签
+                    </div>
+                    <div class="panel panel-default tag-panel" style="display: none;">
+                        <div>
+                            <div class="panel-head" style="margin: 10px 10px;">
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" th:each="tagDTO,tagDTOStat : ${tagDTOS}" th:class="${tagDTOStat.first?'active':''}"><a aria-controls="home"
+                                                                                             role="tab"
+                                                                                             data-toggle="tab"
+                                                                                             th:href="${'#'+tagDTO.category}"
+                                                                                             th:text="${tagDTO.category}"></a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="panel-body tab-content" style="margin: 10px 10px;">
+                                <div role="tabpanel" th:class="${tagdtoStat.first?'tab-pane active':'tab-pane'}"
+                                     th:id="${tagdto.category}" th:each="tagdto,tagdtoStat : ${tagDTOS}">
+                                    <span class="label label-warning label-span" th:data-tag="${tag.name}" th:each="tag : ${tagdto.tags}">
+                                        <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                                        <span th:text="'&nbsp;&nbsp;' + ${tag.name}"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <button id="publish-btn" type="button" class="btn btn-success btn-publish">发布</button>

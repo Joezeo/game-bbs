@@ -42,11 +42,21 @@ public class JsonResult<T> implements Serializable {
         return jsonResult;
     }
 
+    public static <T>JsonResult errorOf(T data){
+        JsonResult jsonResult = new JsonResult();
+        jsonResult.setSuccess(false);
+        jsonResult.setMessage("标签存在非法项");
+        jsonResult.setData(data);
+        jsonResult.setCode(2006);
+        return jsonResult;
+    }
+
     public static <T>JsonResult okOf(T data){
         JsonResult jsonResult = new JsonResult();
         jsonResult.setSuccess(true);
         jsonResult.setMessage("OK");
         jsonResult.setData(data);
+        jsonResult.setCode(200);
         return jsonResult;
     }
 

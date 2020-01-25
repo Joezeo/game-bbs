@@ -1,5 +1,14 @@
 $(function () {
     $("#publish-btn").click(doPublish);
+
+    // 点击标签输入框弹出标签选择面板
+    $("#tag").click(loadTagPanel);
+
+    // 标签选择面板失去焦点时关闭
+    $(".tag-panel").blur(closeTagPanel);
+
+    // 点击标签时在输入框中输出
+    $(".label-span").click(addTag);
 });
 
 // 进行数据非空校验
@@ -46,12 +55,10 @@ function doPublish() {
         data: {title: title, description: description, tag: tag, id: id},
         type: 'post',
         success: function (jsonResult) {
-            debugger;
             if (jsonResult.success) {
-                if (id != null && id != ""){
+                if (id != null && id != "") {
                     location.href = "/question/" + id;
-                }
-                else{
+                } else {
                     location.href = "/";
                 }
             } else {
@@ -66,9 +73,47 @@ function doPublish() {
                         }, 200);
                     }
                 } else {
-                    alert(jsonResult.message);
+                    if (jsonResult.code == 2006) { // 标签存在非法项目
+                        var msg = "存在非法的标签：[";
+                        for (var i = 0; i < jsonResult.data.length; i++) {
+                            if (i != jsonResult.data.length - 1)
+                                msg += jsonResult.data[i] + "，";
+                            else
+                                msg += jsonResult.data[i] + "]";
+                        }
+                        alert(msg);
+                    } else {
+                        alert(jsonResult.message);
+                    }
                 }
             }
         }
     });
+}
+
+function loadTagPanel() {
+    $(".tag-panel").show();
+}
+
+function closeTagPanel() {
+    $(".tag-panel").hide();
+}
+
+function addTag() {
+    var tag = $(this).data("tag");
+
+    var content = $("#tag").val();
+
+    if (content) { // 如果不为空
+        // 判断是否重复
+        if (content.indexOf(tag) == -1) { // 不重复
+            content = content + ',' + tag;
+        } else {
+            return false;
+        }
+    } else {
+        content += tag;
+    }
+
+    $("#tag").val(content);
 }

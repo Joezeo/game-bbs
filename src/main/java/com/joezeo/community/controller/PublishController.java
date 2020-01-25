@@ -1,5 +1,6 @@
 package com.joezeo.community.controller;
 
+import com.joezeo.community.cache.TagCache;
 import com.joezeo.community.dto.JsonResult;
 import com.joezeo.community.dto.QuestionDTO;
 import com.joezeo.community.exception.CustomizeErrorCode;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 public class PublishController {
@@ -22,8 +24,12 @@ public class PublishController {
     @Autowired
     private QuestionService questionService;
 
+    @Autowired
+    private TagCache tagCache;
+
     @GetMapping("/publish")
-    public String publish() {
+    public String publish(Model model) {
+        model.addAttribute("tagDTOS", tagCache.get());
         return "publish";
     }
 
@@ -35,6 +41,7 @@ public class PublishController {
         model.addAttribute("description", questionDTO.getDescription());
         model.addAttribute("tag", questionDTO.getTag());
         model.addAttribute("id", questionDTO.getId());
+        model.addAttribute("tagDTOS", tagCache.get());
         return "publish";
     }
 
@@ -46,6 +53,12 @@ public class PublishController {
             return JsonResult.errorOf(CustomizeErrorCode.USER_NOT_LOGIN);
         }
         question.setUserid(user.getId());
+
+        // 判断标签是否存在非法项
+        List<String> illegal = tagCache.check(question.getTag());
+        if(illegal.size() != 0){ // 存在非法项
+            return JsonResult.errorOf(illegal);
+        }
 
         questionService.createOrUpdate(question);
 

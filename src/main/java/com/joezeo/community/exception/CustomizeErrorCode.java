@@ -7,6 +7,7 @@ public enum CustomizeErrorCode implements IExceptionErrorCode{
     PARENT_TYPR_ILEEAGUE(2003, "非法的评论"),
     USER_NOT_LOGIN(2004, "当前操作需要登录后进行，请登录"),
     COMMENT_FAILD(2005, "评论失败，请稍后重试！"),
+    ILLEGAL_TAG(2006, "存在非法标签！"),
     SERVER_ERROR(5001, "服务器出现异常了，请稍后重试")
     ;
 
