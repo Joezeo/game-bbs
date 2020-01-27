@@ -62,10 +62,14 @@ public class TagCache {
     public List<String> check(String tags){
         List<TagDTO> tagDTOS = get();
         // 通过流取出所有Tag的name，生成List
-        List<String> tagNames = tagDTOS.stream().flatMap(tagDTO -> tagDTO.getTags().stream()).map(tag -> tag.getName()).collect(Collectors.toList());
+        List<String> tagNames = tagDTOS.stream().flatMap(tagDTO -> tagDTO.getTags().stream())
+                .map(tag -> tag.getName())
+                .collect(Collectors.toList());
 
         // 找出tagNames中没有的非法项，生成list
-        List<String> tagList = Arrays.stream(tags.split(",")).filter(tag -> !tagNames.contains(tag)).collect(Collectors.toList());
+        List<String> tagList = Arrays.stream(tags.split(","))
+                .filter(tag -> !tagNames.contains(tag))
+                .collect(Collectors.toList());
         return tagList;
     }
 }

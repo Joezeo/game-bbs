@@ -31,7 +31,7 @@ public class CommentController {
             return JsonResult.errorOf(CustomizeErrorCode.USER_NOT_LOGIN);
         }
 
-        commentService.addComment(commentDTO, user.getId());
+        commentService.addComment(commentDTO, user);
 
         return JsonResult.okOf(null);
     }
@@ -47,7 +47,7 @@ public class CommentController {
             return JsonResult.errorOf(CustomizeErrorCode.USER_NOT_LOGIN);
         }
 
-        commentService.addComment(commentDTO, user.getId());
+        commentService.addComment(commentDTO, user);
 
         return JsonResult.okOf(null);
     }

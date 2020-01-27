@@ -35,7 +35,7 @@ function doComment() {
 
     $.ajax({
         url: '/comment',
-        data: JSON.stringify({content: content, parentId: id, parentType: type}),
+        data: JSON.stringify({content: content, parentId: id, parentType: type, questionid: id}),
         dataType: 'json',
         contentType: 'application/json',
         type: 'post',
@@ -131,9 +131,10 @@ function doSubcomment() {
         alert("回复内容不可为空，请输入！");
         return false;
     }
+    var questionid = $("#quesitonId").val();
     $.ajax({
         url: '/subComment',
-        data: JSON.stringify({parentId: commentId, parentType: 1, content: content}),
+        data: JSON.stringify({parentId: commentId, parentType: 1, content: content, questionid: questionid}),
         contentType: 'application/json',
         dataType: 'json',
         type: 'post',

@@ -90,7 +90,7 @@ public class QuestionServiceImpl implements QuestionService {
             questionDTO.setUser(user);
             list.add(questionDTO);
         }
-        paginationDTO.setQuestions(list);
+        paginationDTO.setDatas(list);
 
         return paginationDTO;
     }
@@ -127,7 +127,7 @@ public class QuestionServiceImpl implements QuestionService {
             questionDTO.setUser(user);
             list.add(questionDTO);
         }
-        paginationDTO.setQuestions(list);
+        paginationDTO.setDatas(list);
 
         return paginationDTO;
     }

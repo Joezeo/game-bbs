@@ -2,6 +2,7 @@ package com.joezeo.community.service.impl;
 
 import com.joezeo.community.dto.CommentDTO;
 import com.joezeo.community.enums.CommentTypeEnum;
+import com.joezeo.community.enums.NotificationTypeEnum;
 import com.joezeo.community.exception.CustomizeErrorCode;
 import com.joezeo.community.exception.CustomizeException;
 import com.joezeo.community.exception.ServiceException;
@@ -36,13 +37,20 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private NotificationMapper notificationMapper;
+
     @Override
-    public void addComment(CommentDTO commentDTO, Long userid) {
+    public void addComment(CommentDTO commentDTO, User notifier) {
         if (commentDTO == null) {
             throw new ServiceException("参数commentDTO异常，=null");
         }
-        if (userid == null || userid <= 0) {
+        if (notifier.getId() == null || notifier.getId() <= 0) {
             throw new ServiceException("参数userid异常");
+        }
+
+        if(commentDTO.getQuestionid() == null || commentDTO.getQuestionid() <= 0){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_ID_NOT_TRANSFER);
         }
 
         if (commentDTO.getParentId() == null || commentDTO.getParentId() <= 0) {
@@ -50,12 +58,12 @@ public class CommentServiceImpl implements CommentService {
         }
 
         if (commentDTO.getParentType() == null || !CommentTypeEnum.isExist(commentDTO.getParentType())) {
-            throw new CustomizeException(CustomizeErrorCode.PARENT_TYPR_ILEEAGUE);
+            throw new CustomizeException(CustomizeErrorCode.PARENT_TYPE_ILEEAGUE);
         }
 
         Comment comment = new Comment();
         BeanUtils.copyProperties(commentDTO, comment);
-        comment.setUserid(userid);
+        comment.setUserid(notifier.getId());
         comment.setLikeCount(0);
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setGmtModify(comment.getGmtCreate());
@@ -74,6 +82,9 @@ public class CommentServiceImpl implements CommentService {
             if(count != 1){
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_FAILD);
             }
+
+            // 创建新通知
+            createNotify(notifier.getId(), question.getUserid(), question.getId(), NotificationTypeEnum.QUESTION, notifier.getName(), question.getTitle(), commentDTO.getQuestionid());
         } else { // 回复评论
             Comment memComment = commentMapper.selectByPrimaryKey(commentDTO.getParentId());
             if(memComment == null){
@@ -86,12 +97,29 @@ public class CommentServiceImpl implements CommentService {
             if(count != 1){
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_FAILD);
             }
+
+            // 创建新通知
+            createNotify(notifier.getId(), comment.getUserid(), memComment.getId(), NotificationTypeEnum.COMMENT, notifier.getName(), memComment.getContent(), commentDTO.getQuestionid());
         }
 
         int count = commentMapper.insertSelective(comment);
         if (count != 1) {
             throw new CustomizeException(CustomizeErrorCode.COMMENT_FAILD);
         }
+    }
+
+    private void createNotify(Long notifier, Long receiver, Long id, NotificationTypeEnum typeEnum, String notifierName, String relatedName, Long questionid) {
+        Notification notification = new Notification();
+        notification.setNotifier(notifier);
+        notification.setReceiver(receiver);
+        notification.setRelatedid(id);
+        notification.setRelatedtype(typeEnum.getType());
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setGmtModify(notification.getGmtCreate());
+        notification.setNotifiername(notifierName);
+        notification.setRelatedname(relatedName);
+        notification.setQuestionid(questionid);
+        notificationMapper.insertSelective(notification);
     }
 
     @Override

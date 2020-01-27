@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class PaginationDTO implements Serializable {
+public class PaginationDTO<T> implements Serializable {
 
     private static final long serialVersionUID = 3659016553387318138L;
 
-    private List<QuestionDTO> questions; // 根据分页信息获取到的相应页数的问题数据
+    private List<T> datas; // 根据分页信息获取到的相应页数的问题数据
     private Boolean hasNext; // 判断是否展示上一页按钮
     private Boolean hasPrevious; // 判断是否展示下一页按钮
     private Boolean hasFirst; // 判断是否展示转到第一页按钮

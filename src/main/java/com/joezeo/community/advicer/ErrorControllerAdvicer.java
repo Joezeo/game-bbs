@@ -38,12 +38,12 @@ public class ErrorControllerAdvicer{
                 e.printStackTrace();
             }
             return null;
-        } else {
+        } else { // 以get请求的方式访问服务器
             ModelAndView modelAndView = new ModelAndView("error");
 
             if(ex instanceof CustomizeException){
                 modelAndView.addObject("message", ex.getMessage());
-            } else { // 处理包括 ServiceException 在内的异常情况
+            } else { // 处理包括 ServiceException 在内的异常情况，不包括根目录下的异常
                 ex.printStackTrace(); // 此处异常是系统异常，需打印异常信息排查错误
                 modelAndView.addObject("message", "服务器冒烟啦，请稍后重试！");
             }
