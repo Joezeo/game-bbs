@@ -15,7 +15,8 @@ $(function () {
         width: "100%",
         height: 400,
         path: "/editor/lib/",
-        watch: false
+        watch: false,
+        placeholder: '请输入详细的问题描述'
     });
 });
 

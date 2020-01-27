@@ -74,7 +74,7 @@ body{
     padding-top:15px;
 }
 
-.form-control{
+#publish-form .form-control{
     margin-top: 10px;
 }
 
