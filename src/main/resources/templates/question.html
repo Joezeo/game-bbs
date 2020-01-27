@@ -6,9 +6,13 @@
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/community.css">
+    <link rel="stylesheet" href="/editor/css/editormd.preview.min.css">
     <script src="/jquery/jquery-3.4.1.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script src="/js/question.js"></script>
+    <script src="/editor/js/editormd.min.js"></script>
+    <script src="/editor/lib/marked.min.js"></script>
+    <script src="/editor/lib/prettify.min.js"></script>
 </head>
 <body>
 
@@ -32,7 +36,9 @@
 
             <!--           问题描述 -->
             <hr>
-            <div class="question-desc" th:text="${question.description}"></div>
+            <div id="question-markdown-view" class="question-desc">
+                <textarea style="display: none;" th:text="${question.description}"></textarea>
+            </div>
 
             <!--           标签-->
             <hr>

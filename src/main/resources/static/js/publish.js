@@ -9,6 +9,14 @@ $(function () {
 
     // 点击标签时在输入框中输出
     $(".label-span").click(addTag);
+
+    // 加载md编辑器
+    var editor = editormd("question-editor", {
+        width: "100%",
+        height: 400,
+        path: "/editor/lib/",
+        watch: false
+    });
 });
 
 // 进行数据非空校验

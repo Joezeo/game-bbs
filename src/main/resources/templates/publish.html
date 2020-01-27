@@ -6,9 +6,11 @@
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/community.css">
+    <link rel="stylesheet" href="/editor/css/editormd.min.css">
     <script src="/jquery/jquery-3.4.1.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script src="/js/publish.js"></script>
+    <script src="/editor/js/editormd.min.js"></script>
 </head>
 <body>
 
@@ -32,10 +34,10 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="description"> 问题描述（详细描述）：</label>
+                <label for="description"> 问题描述（详细描述）：</label>
+                <div class="form-group" id="question-editor">
                     <textarea th:text="${description}" class="form-control" name="description" id="description"
-                              cols="30" rows="10"></textarea>
+                              cols="30" rows="10" style="display: none"></textarea>
                     <div id="des-warning" class="alert alert-warning" role="alert" style="display: none">
                         问题描述不可为空，请输入
                     </div>
@@ -54,11 +56,12 @@
                         <div>
                             <div class="panel-head" style="margin: 10px 10px;">
                                 <ul class="nav nav-tabs" role="tablist">
-                                    <li role="presentation" th:each="tagDTO,tagDTOStat : ${tagDTOS}" th:class="${tagDTOStat.first?'active':''}"><a aria-controls="home"
-                                                                                             role="tab"
-                                                                                             data-toggle="tab"
-                                                                                             th:href="${'#'+tagDTO.category}"
-                                                                                             th:text="${tagDTO.category}"></a>
+                                    <li role="presentation" th:each="tagDTO,tagDTOStat : ${tagDTOS}"
+                                        th:class="${tagDTOStat.first?'active':''}"><a aria-controls="home"
+                                                                                      role="tab"
+                                                                                      data-toggle="tab"
+                                                                                      th:href="${'#'+tagDTO.category}"
+                                                                                      th:text="${tagDTO.category}"></a>
                                     </li>
                                 </ul>
                             </div>
@@ -66,7 +69,8 @@
                             <div class="panel-body tab-content" style="margin: 10px 10px;">
                                 <div role="tabpanel" th:class="${tagdtoStat.first?'tab-pane active':'tab-pane'}"
                                      th:id="${tagdto.category}" th:each="tagdto,tagdtoStat : ${tagDTOS}">
-                                    <span class="label label-warning label-span" th:data-tag="${tag.name}" th:each="tag : ${tagdto.tags}">
+                                    <span class="label label-warning label-span" th:data-tag="${tag.name}"
+                                          th:each="tag : ${tagdto.tags}">
                                         <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
                                         <span th:text="'&nbsp;&nbsp;' + ${tag.name}"></span>
                                     </span>

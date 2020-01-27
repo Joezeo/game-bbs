@@ -11,6 +11,13 @@ $(function () {
 
     // 如未登录点击链接自动登录
     $("#auto-login").click(autoLogin);
+
+    // 加载markdown预览
+    var testView = editormd.markdownToHTML("question-markdown-view", {
+        // markdown : "[TOC]\n### Hello world!\n## Heading 2", // Also, you can dynamic set Markdown text
+        // htmlDecode : true,  // Enable / disable HTML tag encode.
+        // htmlDecode : "style,script,iframe",  // Note: If enabled, you should filter some dangerous HTML tags for website security.
+    });
 });
 
 function autoLogin() {
