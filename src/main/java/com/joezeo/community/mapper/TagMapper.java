@@ -60,6 +60,7 @@ public interface TagMapper {
      * This method corresponds to the database table t_tag
      *
      * @mbg.generated Mon Jan 27 15:33:05 CST 2020
+     * @return
      */
     List<Tag> selectByExample(TagExample example);
 

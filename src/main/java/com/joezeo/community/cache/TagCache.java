@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class TagCache {
-    // 这里由于还未引入Redis，暂时使用mysql存储标签数据
     @Autowired
     private TagService tagService;
 

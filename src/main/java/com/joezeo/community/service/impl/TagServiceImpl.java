@@ -4,6 +4,7 @@ import com.joezeo.community.exception.ServiceException;
 import com.joezeo.community.mapper.TagMapper;
 import com.joezeo.community.pojo.Tag;
 import com.joezeo.community.pojo.TagExample;
+import com.joezeo.community.redis.RedisUtils;
 import com.joezeo.community.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,15 +19,30 @@ public class TagServiceImpl implements TagService {
     @Autowired
     private TagMapper tagMapper;
 
+    @Autowired
+    private RedisUtils redisUtils;
+
     @Override
     public List<Tag> listTagsByCategory(Integer index) {
         if(index == null || index <= 0){
             throw new ServiceException("参数index异常");
         }
-
-        TagExample example = new TagExample();
-        example.createCriteria().andCategoryEqualTo(index);
-        List<Tag> tags = tagMapper.selectByExample(example);
+        List<Tag> tags;
+        // 先从redis中获取
+        String key = "tag" + index.toString();
+        if(redisUtils.hasKey(key)){
+            List<Object> list = redisUtils.lGet(key, 0 , -1);
+            tags = new ArrayList<>();
+            for (Object o : list) {
+                tags.add((Tag)o);
+            }
+        } else {
+            TagExample example = new TagExample();
+            example.createCriteria().andCategoryEqualTo(index);
+            tags = tagMapper.selectByExample(example);
+            // 存入redis中
+            redisUtils.lSet(key, tags);
+        }
         if(tags == null || tags.size()==0){
             // 没有数据，返回一个空的list
             return new ArrayList<>();
