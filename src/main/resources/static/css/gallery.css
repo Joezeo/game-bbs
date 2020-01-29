@@ -1,0 +1,18 @@
+img{
+    margin-left: 32%;
+    margin-top: -7px;
+    width: 45%;
+}
+
+.panel-body{
+    width: 90%;
+    height: 450px;
+}
+
+.panel-footer{
+    height: 70px;
+}
+
+.imgsrc-input{
+    width: 300px
+}

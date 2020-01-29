@@ -23,6 +23,14 @@
                 </div>
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>
+
+            <ul class="nav navbar-nav navbar-default">
+                <li>
+                    <!-- 图床 -->
+                    <a href="/gallery"><span class="glyphicon glyphicon-sd-video" aria-hidden="true"></span> 图床</a>
+                </li>
+            </ul>
+
             <ul class="nav navbar-nav navbar-right">
 
                 <li th:if="${session.user == null}">

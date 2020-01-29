@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Joezeoの图床</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <link rel="stylesheet" href="/css/gallery.css">
+    <script src="/jquery/jquery-3.4.1.js"></script>
+    <script src="/jquery/jquery-form.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/gallery.js"></script>
+</head>
+<body>
+<!--导航栏-->
+<div th:replace="navigation :: nav"></div>
+
+<div class="container-fluid main profile">
+    <div class="row">
+        <div class="col-lg-12 .col-md-12 .col-sm-12 .col-xs-12">
+            <h2><span class="glyphicon glyphicon-sd-video" aria-hidden="true"></span> 图床</h2>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <img id="pic-view" class="img-thumbnail" src="/imgs/default-white.png" alt="Joezeoの图床"/>
+                </div>
+
+                <div class="panel-footer">
+                    <form enctype="multipart/form-data" method="post" id="pic-form">
+                        <div class="col-lg-11">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="请选择图片上传..." disabled>
+                                <span class="input-group-btn">
+                                <button id="img-select" class="btn btn-default" type="button">
+                                    <span  class="glyphicon glyphicon-folder-open"
+                                          aria-hidden="true"></span>
+                                    &nbsp;&nbsp;选择图片
+                                </button>
+                            </span>
+                                <input type="file" style="display: none" id="file-input" name="pic-name">
+                            </div><!-- /input-group -->
+                        </div><!-- /.col-lg-11 -->
+                    </form>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+</div>
+</body>
+</html>
