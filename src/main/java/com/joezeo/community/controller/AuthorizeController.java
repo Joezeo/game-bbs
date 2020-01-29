@@ -57,7 +57,7 @@ public class AuthorizeController {
             user.setAvatarUrl(githubUser.getAvatarUrl());
 
             // 先进行检查数据库中是否已经有该条github用户数据，如果有则更新信息，没有则存入数据
-                userService.createOrUpadate(user);
+            userService.createOrUpadate(user);
 
             response.addCookie(new Cookie("token", token));
             return "redirect:/";

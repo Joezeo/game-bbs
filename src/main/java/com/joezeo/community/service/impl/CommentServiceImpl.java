@@ -99,7 +99,7 @@ public class CommentServiceImpl implements CommentService {
             }
 
             // 创建新通知
-            createNotify(notifier.getId(), comment.getUserid(), memComment.getId(), NotificationTypeEnum.COMMENT, notifier.getName(), memComment.getContent(), commentDTO.getQuestionid());
+            createNotify(notifier.getId(), memComment.getUserid(), memComment.getId(), NotificationTypeEnum.COMMENT, notifier.getName(), memComment.getContent(), commentDTO.getQuestionid());
         }
 
         int count = commentMapper.insertSelective(comment);
@@ -109,6 +109,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private void createNotify(Long notifier, Long receiver, Long id, NotificationTypeEnum typeEnum, String notifierName, String relatedName, Long questionid) {
+        if(notifier == receiver){ // 自己回复自己不创建通知
+            return ;
+        }
         Notification notification = new Notification();
         notification.setNotifier(notifier);
         notification.setReceiver(receiver);
@@ -128,6 +131,7 @@ public class CommentServiceImpl implements CommentService {
         CommentExample example = new CommentExample();
         example.createCriteria().andParentIdEqualTo(parentId)
                 .andParentTypeEqualTo(typeEnum.getType()); // 根据父类型以及父类型id 来查询所有评论
+        example.setOrderByClause("gmt_create");
         List<Comment> comments = commentMapper.selectByExample(example);
 
         // 如果没有评论直接返回一个空的集合

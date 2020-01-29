@@ -16,7 +16,10 @@ $(function () {
         height: 400,
         path: "/editor/lib/",
         watch: false,
-        placeholder: '请输入详细的问题描述'
+        placeholder: '请输入详细的问题描述',
+        imageUpload    : true,
+        imageFormats   : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+        imageUploadURL : "/file/imgUpload"
     });
 });
 

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/community.css">
     <script src="/jquery/jquery-3.4.1.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/profile.js"></script>
 </head>
 <body>
 
@@ -17,9 +18,19 @@
 <div class="container-fluid main profile">
     <div class="row">
         <div class="col-lg-9 .col-md-12 .col-sm-12 .col-xs-12">
-            <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> <span
-                    th:text="${sectionName}"></span></h2>
-            <hr>
+            <div class="row" style="margin-bottom: 15px;">
+
+                <div class="col-lg-9 .col-md-9 .col-sm-9 .col-xs-9">
+                    <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                        <span th:text="${sectionName}"></span></h2>
+                </div>
+
+                <div class="col-lg-3 .col-md-3 .col-sm-3 .col-xs-3">
+                    <button type="button" class="btn btn-success btn-allread" th:if="${section=='notify'}">全部已读
+                    </button>
+                </div>
+                <hr>
+            </div>
 
             <!--            我的问题-->
             <div th:if="${section == 'questions'}">

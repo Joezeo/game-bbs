@@ -43,6 +43,8 @@ public class ProfileController {
             PaginationDTO paginationDTO = questionService.listPage(user.getId(), page, size);
             model.addAttribute("pagination", paginationDTO);
         } else if ("notify".equals(action)) {
+            // 最新回复页面：每页显示十条数据
+            size = 10;
             model.addAttribute("section", "notify");
             model.addAttribute("sectionName", "最新回复");
 

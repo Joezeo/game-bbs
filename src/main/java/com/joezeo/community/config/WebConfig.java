@@ -1,5 +1,6 @@
-package com.joezeo.community.interceptor;
+package com.joezeo.community.config;
 
+import com.joezeo.community.interceptor.SessionInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

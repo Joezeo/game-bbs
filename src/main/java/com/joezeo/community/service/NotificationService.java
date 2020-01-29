@@ -8,4 +8,6 @@ public interface NotificationService {
     int countUnread(Long id);
 
     Long readNotification(Long notificationID, Long userID);
+
+    void readAll(Long id);
 }

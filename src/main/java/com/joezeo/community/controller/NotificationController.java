@@ -1,5 +1,6 @@
 package com.joezeo.community.controller;
 
+import com.joezeo.community.dto.JsonResult;
 import com.joezeo.community.exception.CustomizeErrorCode;
 import com.joezeo.community.exception.CustomizeException;
 import com.joezeo.community.pojo.User;
@@ -8,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -28,5 +32,17 @@ public class NotificationController {
         Long questionid = notificationService.readNotification(id, user.getId());
 
         return "redirect:/question/" + questionid;
+    }
+
+    @PostMapping("/notification/allRead")
+    @ResponseBody
+    public JsonResult allRead(HttpSession session){
+        User user = (User) session.getAttribute("user");
+        if(user == null){
+            throw new CustomizeException(CustomizeErrorCode.USER_NOT_LOGIN);
+        }
+
+        notificationService.readAll(user.getId());
+        return JsonResult.okOf(null);
     }
 }

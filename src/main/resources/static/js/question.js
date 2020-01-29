@@ -149,6 +149,11 @@ function doSubcomment() {
             if (jsonResult.success) {
                 // 回复成功清空回复框的内容
                 $("#subcomment-content-" + commentId).val("");
+
+                // 静态地使页面的评论回复数增加
+                var count = $("#subcomment-count"+commentId).html();
+                $("#subcomment-count"+commentId).html(parseInt(count)+1);
+
                 // 重新加载二级评论
                 var subcomment = $("#subcomment-" + commentId);
                 subcomment.removeClass("in");

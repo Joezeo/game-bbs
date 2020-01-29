@@ -11,8 +11,9 @@ public enum CustomizeErrorCode implements IExceptionErrorCode{
     SERVER_ERROR(5001, "服务器出现异常了，请稍后重试"),
     READ_NOTIFICATION_FAILED(2007, "读取消息通知异常，请稍后重试"),
     NOTIFICATION_NOT_FOUND(2008, "消息通知不在了，请换一个试试"),
-    QUESTION_ID_NOT_TRANSFER(2009, "该条评论所属问题不见了")
-    ;
+    QUESTION_ID_NOT_TRANSFER(2009, "该条评论所属问题不见了"),
+    UPLOAD_IMG_FIILED(2010, "上传图片失败"),
+    READ_ALL_FIALED(2011, "已读所有通知失败，请稍后重试");
 
     private Integer code;
     private String message;

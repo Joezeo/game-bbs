@@ -84,6 +84,13 @@
             <version>1.18.10</version>
         </dependency>
 
+        <!-- UCloud sdk -->
+        <dependency>
+            <groupId>cn.ucloud.ufile</groupId>
+            <artifactId>ufile-client-java</artifactId>
+            <version>2.4.1</version>
+        </dependency>
+
         <!-- redis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

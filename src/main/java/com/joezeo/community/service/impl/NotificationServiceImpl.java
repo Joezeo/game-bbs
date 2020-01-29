@@ -107,4 +107,20 @@ public class NotificationServiceImpl implements NotificationService {
 
         return notification.getQuestionid();
     }
+
+    @Override
+    public void readAll(Long id) {
+        if(id == null || id<=0){
+            throw new ServiceException("参数id异常");
+        }
+
+        Notification notification = new Notification();
+        notification.setStatus(1);
+        NotificationExample notificationExample = new NotificationExample();
+        notificationExample.createCriteria().andReceiverEqualTo(id);
+        int count = notificationMapper.updateByExampleSelective(notification, notificationExample);
+        if(count < 0){
+            throw new CustomizeException(CustomizeErrorCode.READ_ALL_FIALED);
+        }
+    }
 }

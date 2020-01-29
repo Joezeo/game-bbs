@@ -4,7 +4,7 @@ import com.joezeo.community.exception.ServiceException;
 import com.joezeo.community.mapper.TagMapper;
 import com.joezeo.community.pojo.Tag;
 import com.joezeo.community.pojo.TagExample;
-import com.joezeo.community.redis.RedisUtils;
+import com.joezeo.community.dao.RedisUtils;
 import com.joezeo.community.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,14 +34,16 @@ public class TagServiceImpl implements TagService {
             List<Object> list = redisUtils.lGet(key, 0 , -1);
             tags = new ArrayList<>();
             for (Object o : list) {
-                tags.add((Tag)o);
+                tags.add((Tag) o);
             }
-        } else {
+        } else { // redis中没有数据再从mysql数据库中获取
             TagExample example = new TagExample();
             example.createCriteria().andCategoryEqualTo(index);
             tags = tagMapper.selectByExample(example);
             // 存入redis中
-            redisUtils.lSet(key, tags);
+            for (Tag tag : tags) {
+                redisUtils.lSet(key, tag);
+            }
         }
         if(tags == null || tags.size()==0){
             // 没有数据，返回一个空的list

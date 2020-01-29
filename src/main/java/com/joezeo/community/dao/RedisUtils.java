@@ -1,4 +1,4 @@
-package com.joezeo.community.redis;
+package com.joezeo.community.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

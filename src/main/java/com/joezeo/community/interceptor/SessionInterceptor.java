@@ -42,9 +42,11 @@ public class SessionInterceptor implements HandlerInterceptor {
                 request.getSession().setAttribute("user", user);
             }
         }
-        // 加载该用户未阅读消息的数量
-        int unreadCount = notificationService.countUnread(user.getId());
-        request.getSession().setAttribute("unreadCount", unreadCount);
+        if(user != null){
+            // 加载该用户未阅读消息的数量
+            int unreadCount = notificationService.countUnread(user.getId());
+            request.getSession().setAttribute("unreadCount", unreadCount);
+        }
         return true;
     }
 }

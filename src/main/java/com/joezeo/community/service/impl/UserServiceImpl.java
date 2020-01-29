@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
         userExample.createCriteria().andAccountIdEqualTo(user.getAccountId());
         List<User> memUser = userMapper.selectByExample(userExample);
 
-        if(memUser == null){ // 执行插入操作
+        if(memUser == null || memUser.size() == 0){ // 执行插入操作
             int count = userMapper.insert(user);
             if (count != 1) {
                 throw new ServiceException("保存用户失败");

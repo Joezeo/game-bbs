@@ -83,7 +83,7 @@
                             </a>
                             <a th:data-id="${comment.id}" class="reply-comment">
                                 <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-                                <span th:text="${comment.commentCount}"></span>
+                                <span th:id="'subcomment-count'+${comment.id}" th:text="${comment.commentCount}"></span>
                             </a>
                             <span class="comment-date"
                                   th:text="${#calendars.format(comment.gmtCreate,'yyyy-MM-dd')}"></span>
@@ -109,11 +109,11 @@
                     <div class="media">
                         <div class="media-left">
                             <a href="#">
-                                <img class="media-object head-img" th:src="@{${question.user.avatarUrl}}" alt="用户头像">
+                                <img class="media-object head-img" th:src="@{${session.user.avatarUrl}}" alt="用户头像">
                             </a>
                         </div>
                         <div class="media-body comment-user-name">
-                            <h6 class="media-heading"><a href="#" th:text="${question.user.name}"></a></h6>
+                            <h6 class="media-heading"><a href="#" th:text="${session.user.name}"></a></h6>
                         </div>
                     </div>
 
