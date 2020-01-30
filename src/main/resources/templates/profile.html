@@ -29,11 +29,11 @@
                     <button type="button" class="btn btn-success btn-allread" th:if="${section=='notify'}">全部已读
                     </button>
                 </div>
-                <hr>
             </div>
 
             <!--            我的问题-->
             <div th:if="${section == 'questions'}">
+                <hr>
                 <div class="media" th:each="question : ${pagination.datas}">
                     <div class="media-left">
                         <a href="#">
@@ -54,6 +54,7 @@
 
             <!--            最新回复-->
             <div th:if="${section == 'notify'}">
+                <hr>
                 <div th:each="notify : ${pagination.datas}">
                     <p>
                         <a href="#" th:text="${notify.notifiername}"></a>
