@@ -23,7 +23,7 @@
             <div class="media" th:each="question : ${pagination.datas}">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object head-img" th:src="@{${question.user.avatarUrl}}" alt="用户头像">
+                        <img class="media-object head-img img-thumbnail" th:src="@{${question.user.avatarUrl}}" alt="用户头像">
                     </a>
                 </div>
                 <div class="media-body">

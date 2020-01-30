@@ -1,8 +1,14 @@
 img{
-    margin-left: 32%;
+    margin-left: 25.5%;
     margin-top: -7px;
-    width: 45%;
+    width: 700px;
+    height: 430px;
+    display: block;
+    background-size:cover;
+    border: 4px solid gray;
+    border-radius: 15px;
 }
+
 
 .panel-body{
     width: 90%;

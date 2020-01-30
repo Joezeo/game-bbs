@@ -13,6 +13,7 @@ function uploadFile() {
         success: function (jsonResult) {
             if (jsonResult.success) {
                 $("#pic-view").attr("src", jsonResult.data);
+                $("#pic-src").val(jsonResult.data);
             } else {
                 if (jsonResult.code == 2004) { // 未登录
                     var flag = confirm("当前操作需用户登录后进行，点击确定自动登录");

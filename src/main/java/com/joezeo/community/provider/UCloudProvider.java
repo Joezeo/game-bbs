@@ -28,12 +28,12 @@ public class UCloudProvider {
     @Value("${ucloud-ufile-bucketname}")
     private String bucketname;
 
-    public String uploadImg(InputStream fileInputStream, String mimeType, String fileName){
+    public String uploadImg(InputStream fileInputStream, String mimeType, String fileName) {
         String[] split = fileName.split("\\.");
-        if(split.length <= 1){
+        if (split.length <= 1) {
             throw new CustomizeException(CustomizeErrorCode.UPLOAD_IMG_FIILED);
         }
-        String generatedNmae = UUID.randomUUID().toString() + "." + split[split.length-1];
+        String generatedNmae = UUID.randomUUID().toString() + "." + split[split.length - 1];
 
         try {
             PutObjectResultBean response = UfileClient.object(objectAuthorization, objectConfig)
@@ -42,10 +42,10 @@ public class UCloudProvider {
                     .toBucket(bucketname)
                     .execute();
 
-                    String url = UfileClient.object(objectAuthorization, objectConfig)
+            String url = UfileClient.object(objectAuthorization, objectConfig)
                     .getDownloadUrlFromPublicBucket(generatedNmae, bucketname)
                     .createUrl();
-                    return url;
+            return url;
         } catch (UfileClientException e) {
             e.printStackTrace();
             throw new CustomizeException(CustomizeErrorCode.UPLOAD_IMG_FIILED);

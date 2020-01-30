@@ -22,14 +22,14 @@
             <h2><span class="glyphicon glyphicon-sd-video" aria-hidden="true"></span> 图床</h2>
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <img id="pic-view" class="img-thumbnail" src="/imgs/default-white.png" alt="Joezeoの图床"/>
+                    <img id="pic-view" class="" src="/imgs/default-white.png" alt="Joezeoの图床"/>
                 </div>
 
                 <div class="panel-footer">
                     <form enctype="multipart/form-data" method="post" id="pic-form">
                         <div class="col-lg-11">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="请选择图片上传..." disabled>
+                                <input id="pic-src" type="text" class="form-control" placeholder="请选择图片上传，上传后图片地址会显示到这里" readonly>
                                 <span class="input-group-btn">
                                 <button id="img-select" class="btn btn-default" type="button">
                                     <span  class="glyphicon glyphicon-folder-open"
