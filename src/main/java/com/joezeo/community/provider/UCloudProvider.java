@@ -54,4 +54,25 @@ public class UCloudProvider {
             throw new CustomizeException(CustomizeErrorCode.UPLOAD_IMG_FIILED);
         }
     }
+
+    public String uploadAvatar(InputStream inputStream, String mimetype, String filename) {
+        try {
+            PutObjectResultBean response = UfileClient.object(objectAuthorization, objectConfig)
+                    .putObject(inputStream, mimetype)
+                    .nameAs(filename)
+                    .toBucket(bucketname)
+                    .execute();
+
+            String url = UfileClient.object(objectAuthorization, objectConfig)
+                    .getDownloadUrlFromPublicBucket(filename, bucketname)
+                    .createUrl();
+            return url;
+        } catch (UfileClientException e) {
+            e.printStackTrace();
+            throw new CustomizeException(CustomizeErrorCode.UPLOAD_IMG_FIILED);
+        } catch (UfileServerException e) {
+            e.printStackTrace();
+            throw new CustomizeException(CustomizeErrorCode.UPLOAD_IMG_FIILED);
+        }
+    }
 }

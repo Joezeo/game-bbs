@@ -4,7 +4,10 @@ import com.joezeo.community.dto.AccessTokenDTO;
 import com.joezeo.community.dto.GithubUser;
 import com.joezeo.community.pojo.User;
 import com.joezeo.community.provider.GithubProvider;
+import com.joezeo.community.provider.UCloudProvider;
 import com.joezeo.community.service.UserService;
+import com.joezeo.community.utils.AvatarGenerator;
+import org.opencv.core.Core;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.InputStream;
 import java.util.UUID;
 
 @Controller
@@ -21,6 +25,8 @@ public class AuthorizeController {
 
     @Autowired
     private GithubProvider githubProvider;
+    @Autowired
+    private UCloudProvider uCloudProvider;
     @Autowired
     private UserService userService;
 
@@ -30,6 +36,7 @@ public class AuthorizeController {
     private String clientSecret;
     @Value("${github.redirect.uri}")
     private String redirectUri;
+
 
     @GetMapping("callback")
     public String callback(@RequestParam("code") String code,
@@ -44,6 +51,7 @@ public class AuthorizeController {
 
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getGithubUser(accessToken);
+
         if (githubUser != null) {
             User user = new User();
             // 生成token令牌，用于判断用户是否已登录
@@ -54,7 +62,6 @@ public class AuthorizeController {
             user.setBio(githubUser.getBio());
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModify(user.getGmtCreate());
-            user.setAvatarUrl(githubUser.getAvatarUrl());
 
             // 先进行检查数据库中是否已经有该条github用户数据，如果有则更新信息，没有则存入数据
             userService.createOrUpadate(user);

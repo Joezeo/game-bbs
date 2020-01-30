@@ -7,5 +7,4 @@ public class GithubUser {
     private String name;
     private String id;
     private String bio;
-    private String avatarUrl;
 }

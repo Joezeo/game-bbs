@@ -36,7 +36,7 @@
             <ul class="nav navbar-nav navbar-right">
 
                 <li th:if="${session.user == null}">
-                    <a href="https://github.com/login/oauth/authorize?client_id=332735b1b85bfbb88779&scope=user&state=1">登录</a>
+                    <a href="https://github.com/login/oauth/authorize?client_id=332735b1b85bfbb88779&scope=user&state=1" style="font-weight: bold;">登录</a>
                 </li>
 
                 <li th:if="${session.user != null}">

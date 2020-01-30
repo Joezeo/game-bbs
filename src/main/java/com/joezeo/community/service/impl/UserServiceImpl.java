@@ -4,18 +4,25 @@ import com.joezeo.community.exception.ServiceException;
 import com.joezeo.community.mapper.UserMapper;
 import com.joezeo.community.pojo.User;
 import com.joezeo.community.pojo.UserExample;
+import com.joezeo.community.provider.UCloudProvider;
 import com.joezeo.community.service.UserService;
+import com.joezeo.community.utils.AvatarGenerator;
+import org.opencv.core.Core;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.InputStream;
 import java.util.List;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
 public class UserServiceImpl implements UserService {
+    @Autowired
+    private UCloudProvider uCloudProvider;
 
     @Autowired
     private UserMapper userMapper;
+
 
     @Override
     public void createOrUpadate(User user) {
@@ -28,6 +35,11 @@ public class UserServiceImpl implements UserService {
         List<User> memUser = userMapper.selectByExample(userExample);
 
         if(memUser == null || memUser.size() == 0){ // 执行插入操作
+            // 随机生成头像
+            InputStream avatar = new AvatarGenerator().getARandomAvatar();
+            String avatarUrl = uCloudProvider.uploadAvatar(avatar, "image/jpeg", "avatar-" + user.getAccountId() + ".jpg");
+            user.setAvatarUrl(avatarUrl);
+
             int count = userMapper.insert(user);
             if (count != 1) {
                 throw new ServiceException("保存用户失败");
