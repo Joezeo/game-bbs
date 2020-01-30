@@ -4,7 +4,7 @@ package com.joezeo.community.enums;
  * 通知的类型
  */
 public enum NotificationTypeEnum {
-    QUESTION(1, "回复了问题"),
+    QUESTION(1, "回复了帖子"),
     COMMENT(2, "回复了评论")
     ;
     private Integer type;

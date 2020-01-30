@@ -2,18 +2,15 @@ package com.joezeo.community.controller;
 
 import com.joezeo.community.cache.TagCache;
 import com.joezeo.community.dto.JsonResult;
-import com.joezeo.community.dto.QuestionDTO;
+import com.joezeo.community.dto.TopicDTO;
 import com.joezeo.community.exception.CustomizeErrorCode;
-import com.joezeo.community.pojo.Question;
+import com.joezeo.community.pojo.Topic;
 import com.joezeo.community.pojo.User;
-import com.joezeo.community.service.QuestionService;
+import com.joezeo.community.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -22,7 +19,7 @@ import java.util.List;
 public class PublishController {
 
     @Autowired
-    private QuestionService questionService;
+    private TopicService topicService;
 
     @Autowired
     private TagCache tagCache;
@@ -36,31 +33,31 @@ public class PublishController {
     @GetMapping("/publish/{id}")
     public String edit(@PathVariable(name = "id") Long id,
                        Model model) {
-        QuestionDTO questionDTO = questionService.queryById(id);
-        model.addAttribute("title", questionDTO.getTitle());
-        model.addAttribute("description", questionDTO.getDescription());
-        model.addAttribute("tag", questionDTO.getTag());
-        model.addAttribute("id", questionDTO.getId());
+        TopicDTO topicDTO = topicService.queryById(id);
+        model.addAttribute("title", topicDTO.getTitle());
+        model.addAttribute("description", topicDTO.getDescription());
+        model.addAttribute("tag", topicDTO.getTag());
+        model.addAttribute("id", topicDTO.getId());
         model.addAttribute("tagDTOS", tagCache.get());
         return "publish";
     }
 
     @PostMapping("/publish")
     @ResponseBody
-    public JsonResult publish(Question question, HttpSession session) {
+    public JsonResult publish(@RequestBody Topic topic, HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             return JsonResult.errorOf(CustomizeErrorCode.USER_NOT_LOGIN);
         }
-        question.setUserid(user.getId());
+        topic.setUserid(user.getId());
 
         // 判断标签是否存在非法项
-        List<String> illegal = tagCache.check(question.getTag());
+        List<String> illegal = tagCache.check(topic.getTag());
         if(illegal.size() != 0){ // 存在非法项
             return JsonResult.errorOf(illegal);
         }
 
-        questionService.createOrUpdate(question);
+        topicService.createOrUpdate(topic);
 
         return JsonResult.okOf(null);
     }

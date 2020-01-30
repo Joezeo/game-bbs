@@ -11,12 +11,12 @@ $(function () {
     $(".label-span").click(addTag);
 
     // 加载md编辑器
-    var editor = editormd("question-editor", {
+    var editor = editormd("topic-editor", {
         width: "100%",
         height: 400,
         path: "/editor/lib/",
         watch: false,
-        placeholder: '请输入详细的问题描述',
+        placeholder: '请输入详细的帖子内容',
         imageUpload    : true,
         imageFormats   : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
         imageUploadURL : "/file/imgUpload"
@@ -56,7 +56,7 @@ function doPublish() {
     var description = $("#description").val();
     var tag = $("#tag").val();
     var id = $("#id").val();
-
+    var topicType = $("#topicType").val();
     var flag = doCheckValue(title, description, tag);
     if (!flag) { // flag为 false 说明有数据为空
         return false;
@@ -64,12 +64,13 @@ function doPublish() {
     $.ajax({
         url: '/publish',
         dataType: 'json',
-        data: {title: title, description: description, tag: tag, id: id},
+        contentType: 'application/json',
+        data: JSON.stringify({title: title, description: description, tag: tag, id: id, topicType: topicType}),
         type: 'post',
         success: function (jsonResult) {
             if (jsonResult.success) {
                 if (id != null && id != "") {
-                    location.href = "/question/" + id;
+                    location.href = "/topic/" + id;
                 } else {
                     location.href = "/";
                 }

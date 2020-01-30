@@ -28,10 +28,10 @@ public class NotificationController {
             throw new CustomizeException(CustomizeErrorCode.USER_NOT_LOGIN);
         }
 
-        // 读取该条通知 , 修改通知status、获取该条通知所属问题id
-        Long questionid = notificationService.readNotification(id, user.getId());
+        // 读取该条通知 , 修改通知status、获取该条通知所属帖子id
+        Long topicid = notificationService.readNotification(id, user.getId());
 
-        return "redirect:/question/" + questionid;
+        return "redirect:/topic/" + topicid;
     }
 
     @PostMapping("/notification/allRead")

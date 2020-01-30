@@ -1,39 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.joezeo.community.mapper.QuestionExtMapper">
-    <update id="incView" parameterType="com.joezeo.community.pojo.Question">
-    update t_question
+<mapper namespace="com.joezeo.community.mapper.TopicExtMapper">
+    <update id="incView" parameterType="com.joezeo.community.pojo.Topic">
+    update t_topic
     set
       view_count = view_count + #{viewCount,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
 
-    <update id="incComment" parameterType="com.joezeo.community.pojo.Question">
-    update t_question
+    <update id="incComment" parameterType="com.joezeo.community.pojo.Topic">
+    update t_topic
     set
       comment_count = comment_count + #{commentCount,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
-    <select id="selectRelated" resultType="Question">
-        select * from t_question where id != #{curId} and tag regexp #{tagRegex}
+    <select id="selectRelated" resultType="Topic">
+        select * from t_topic where id != #{curId} and tag regexp #{tagRegex}
     </select>
 
     <select id="countSearch" resultType="int">
-        select count(*) from t_question
+        select count(*) from t_topic
         <where>
             <if test="condition != null and condition!=''">
                 and title regexp #{condition}
             </if>
+            <if test="type != 0">
+                and topic_type = #{type}
+            </if>
         </where>
     </select>
 
-    <select id="selectSearch" resultType="Question">
-        select * from t_question
+    <select id="selectSearch" resultType="Topic">
+        select * from t_topic
         <where>
             <if test="condition != null and condition != ''">
                 and title regexp #{condition}
+            </if>
+            <if test="type != 0">
+                and topic_type = #{type}
             </if>
         </where>
         order by gmt_create desc

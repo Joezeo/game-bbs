@@ -7,27 +7,29 @@
 <body>
 
 <nav class="navbar navbar-default" th:fragment="nav">
-    <div class="container-fluid">
+    <div class="container-fluid" style="background-color: white">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                     data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Joezeoの自留地</span>
+                <span class="sr-only" style="color:black;font-weight: bold">JOEF</span>
             </button>
-            <a class="navbar-brand" href="/">Joezeoの自留地</a>
+            <a class="navbar-brand" href="/" style="color:black;font-weight: bold;font-size: 35px;font-family: Lucida Console;letter-spacing: -3px;">JOEF</a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <form class="navbar-form navbar-left" action="/" method="get">
                 <div class="form-group">
-                    <input name="condition" type="text" class="form-control" placeholder="搜索问题">
+                    <input name="condition" type="text" class="form-control" placeholder="搜索帖子" style="font-weight: bold;">
                 </div>
-                <button type="submit" class="btn btn-default">搜索</button>
+                <button type="submit" class="btn btn-default" style="background: white;font-weight: bold;">搜索</button>
             </form>
 
-            <ul class="nav navbar-nav navbar-default">
-                <li>
+            <ul class="nav navbar-nav">
+                <li style="font-size: 17px;">
                     <!-- 图床 -->
-                    <a href="/gallery"><span class="glyphicon glyphicon-sd-video" aria-hidden="true"></span> 图床</a>
+                    <a href="/gallery" class="navbar-link" style="font-weight: bold;color: black;">
+                        <span class="glyphicon glyphicon-sd-video" aria-hidden="true" style="background: white;color: black;"></span>
+                        图床</a>
                 </li>
             </ul>
 
@@ -38,23 +40,23 @@
                 </li>
 
                 <li th:if="${session.user != null}">
-                    <a href="/profile/notify">通知 <span class="badge" th:text="${session.unreadCount}"></span></a>
+                    <a href="/profile/notify" style="color: black;font-weight: bold;">通知 <span class="badge" th:text="${session.unreadCount}"></span></a>
                 </li>
 
                 <li class="dropdown" th:if="${session.user != null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">
-                        <span th:text="${session.user.getName()}"></span>
+                       aria-expanded="false" style="color: black;">
+                        <span th:text="${session.user.getName()}" style="font-weight: bold;"></span>
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="/profile/questions">个人中心 </a></li>
+                        <li><a href="/profile/topics">个人中心 </a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="/logout">退出登录 </a></li>
                     </ul>
                 </li>
-                <a class="btn btn-default btn-question" href="/publish" role="button"
-                   th:if="${session.user != null}">发起问题</a>
+                <a class="btn btn-default btn-topic" href="/publish" role="button"
+                   th:if="${session.user != null}" style="background: white;font-weight: bold;">创作新主题</a>
             </ul>
         </div>
     </div>

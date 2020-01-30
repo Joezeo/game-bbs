@@ -1,0 +1,1 @@
+alter table t_notification change questionid topicid bigint not null comment '该条通知所属帖子的id';

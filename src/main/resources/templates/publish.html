@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>发起问题 - Joezeoの自留地</title>
+    <title>发起问题 - JOEF</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
@@ -27,22 +27,32 @@
             <form id="publish-form">
                 <input type="hidden" th:value="${id}" name="id" id="id">
                 <div class="form-group">
-                    <label for="title"> 问题标题（简明扼要）：</label>
+                    <label for="title"> 帖子标题（简明扼要）：</label>
                     <input th:value="${title}" type="email" class="form-control" id="title" name="title"
-                           placeholder="问题标题...">
+                           placeholder="帖子标题...">
                     <div id="title-warning" class="alert alert-warning" role="alert" style="display: none">
-                        问题标题不可为空，请输入
+                        帖子标题不可为空，请输入
                     </div>
                 </div>
 
-                <label for="description"> 问题描述（详细描述）：</label>
-                <div class="form-group" id="question-editor">
+                <label for="description"> 帖子内容（详细描述）：</label>
+                <div class="form-group" id="topic-editor">
                     <textarea th:text="${description}" class="form-control" name="description" id="description"
                               cols="30" rows="10" style="display: none"></textarea>
-                    <div id="des-warning" class="alert alert-warning" role="alert" style="display: none">
-                        问题描述不可为空，请输入
-                    </div>
                 </div>
+                <div id="des-warning" class="alert alert-warning" role="alert" style="display: none">
+                    帖子内容不可为空，请输入
+                </div>
+                <br>
+
+<!--                帖子主题选择-->
+                <label for="topicType"> 主题选择：</label>
+                <select class="form-control" id="topicType" name="topicType">
+                    <option value="1">问题</option>
+                    <option value="2">技术</option>
+                    <option value="3">创意</option>
+                    <option value="4">好玩</option>
+                </select>
                 <br>
 
                 <!--                标签选择-->
@@ -51,7 +61,7 @@
                     <input th:value="${tag}" type="email" class="form-control" id="tag" name="tag" autocomplete="off"
                            placeholder="输入标签，以,分隔">
                     <div id="tag-warning" class="alert alert-warning" role="alert" style="display: none">
-                        问题标签不可为空，请选择合适的标签
+                        主题标签不可为空，请选择合适的标签
                     </div>
                     <div class="panel panel-default tag-panel" style="display: none;">
                         <div>
@@ -85,8 +95,8 @@
         </div>
 
         <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
-            <h3 class="question-title" style="margin-top: 35px;">问题发起指南</h3>
-            <div class="question-desc">
+            <h3 class="topic-title" style="margin-top: 35px;">问题发起指南</h3>
+            <div class="topic-desc">
                 • 问题标题: 请用精简的语言描述您发布的问题，不超过25字 <br>
                 • 问题补充: 详细补充您的问题内容，并确保问题描述清晰直观, 并提供一些相关的资料<br>
                 • 选择标签: 选择一个或者多个合适的标签，用逗号隔开，每个标签不超过10个字<br>

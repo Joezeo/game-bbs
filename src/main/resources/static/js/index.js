@@ -5,5 +5,9 @@ $(function () {
         window.localStorage.removeItem("closable");
         window.close();
     }
+
+    $("#Tabs a").click(changeTab);
 });
 
+function changeTab() {
+}

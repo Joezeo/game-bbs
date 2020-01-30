@@ -11,7 +11,7 @@ public class PaginationDTO<T> implements Serializable {
 
     private static final long serialVersionUID = 3659016553387318138L;
 
-    private List<T> datas; // 根据分页信息获取到的相应页数的问题数据
+    private List<T> datas; // 根据分页信息获取到的相应页数的帖子数据
     private Boolean hasNext; // 判断是否展示上一页按钮
     private Boolean hasPrevious; // 判断是否展示下一页按钮
     private Boolean hasFirst; // 判断是否展示转到第一页按钮
@@ -27,7 +27,7 @@ public class PaginationDTO<T> implements Serializable {
         if (page < 1) {
             page = 1;
         }
-        if (page > totalPage){
+        if (page > totalPage && totalPage!=0){
             page = totalPage;
         }
 

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${sectionName}+' - Joezeoの自留地'"></title>
+    <title th:text="${sectionName}+' - JOEF'"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
@@ -31,22 +31,21 @@
                 </div>
             </div>
 
-            <!--            我的问题-->
-            <div th:if="${section == 'questions'}">
+            <!--            我的帖子-->
+            <div th:if="${section == 'topics'}">
                 <hr>
-                <div class="media" th:each="question : ${pagination.datas}">
+                <div class="media" th:each="topic : ${pagination.datas}">
                     <div class="media-left">
                         <a href="#">
-                            <img class="media-object head-img img-thumbnail" th:src="@{${question.user.avatarUrl}}" alt="用户头像">
+                            <img class="media-object head-img img-thumbnail" th:src="@{${topic.user.avatarUrl}}" alt="用户头像">
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading"><a th:href="@{/question/{id}(id=${question.id})}"
-                                                     th:text="${question.title}"></a></h4>
-                        <span th:text="${question.description}"></span>
-                        <span class="text-desc"> • <span th:text="${question.commentCount}"></span> 个评论 • <span
-                                th:text="${question.viewCount}"></span> 次浏览 • <span
-                                th:text="${#calendars.format(question.gmtCreate,'yyyy-MM-dd')}"></span></span></span>
+                        <h4 class="media-heading"><a th:href="@{/topic/{id}(id=${topic.id})}" style="color: black;padding-top: 10px;font-size: 16px;"
+                                                     th:text="${topic.title}"></a></h4>
+                        <span class="text-desc"><span th:text="${topic.commentCount}"></span> 个评论 • <span
+                                th:text="${topic.viewCount}"></span> 次浏览 • <span
+                                th:text="${#calendars.format(topic.gmtCreate,'yyyy-MM-dd')}"></span></span></span>
                     </div>
                     <hr>
                 </div>
@@ -100,7 +99,7 @@
         </div>
         <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
             <div class="list-group section">
-                <a href="/profile/questions" type="button" class="list-group-item">我的问题</a>
+                <a href="/profile/topics" type="button" class="list-group-item">我的问题</a>
                 <a href="/profile/notify" type="button" class="list-group-item">
                     最新回复
                     <span class="badge" th:text="${session.unreadCount}"></span>

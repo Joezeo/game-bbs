@@ -50,8 +50,8 @@ public class UserServiceImpl implements UserService {
         UserExample userExample = new UserExample();
         userExample.createCriteria().andTokenEqualTo(token);
         List<User> user = userMapper.selectByExample(userExample);
-        if (user == null) {
-            throw new ServiceException("by token, 获取user信息失败");
+        if (user == null || user.size() == 0) {
+            return null;
         }
         return user.get(0);
     }

@@ -28,7 +28,7 @@
         </javaClientGenerator>
 
         <table tableName="t_user" domainObjectName="User" ></table>
-        <table tableName="t_question" domainObjectName="Question" ></table>
+        <table tableName="t_topic" domainObjectName="Topic" ></table>
         <table tableName="t_comment" domainObjectName="Comment" ></table>
         <table tableName="t_tag" domainObjectName="Tag" ></table>
         <table tableName="t_notification" domainObjectName="Notification" ></table>

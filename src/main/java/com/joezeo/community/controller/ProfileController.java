@@ -5,7 +5,7 @@ import com.joezeo.community.exception.CustomizeErrorCode;
 import com.joezeo.community.exception.CustomizeException;
 import com.joezeo.community.pojo.User;
 import com.joezeo.community.service.NotificationService;
-import com.joezeo.community.service.QuestionService;
+import com.joezeo.community.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 public class ProfileController {
 
     @Autowired
-    private QuestionService questionService;
+    private TopicService topicService;
 
     @Autowired
     private NotificationService notificationService;
@@ -35,12 +35,12 @@ public class ProfileController {
             throw new CustomizeException(CustomizeErrorCode.USER_NOT_LOGIN);
         }
 
-        if ("questions".equals(action)) {
-            model.addAttribute("section", "questions");
-            model.addAttribute("sectionName", "我的问题");
+        if ("topics".equals(action)) {
+            model.addAttribute("section", "topics");
+            model.addAttribute("sectionName", "我的帖子");
 
-            // 查询问题
-            PaginationDTO paginationDTO = questionService.listPage(user.getId(), page, size);
+            // 查询帖子
+            PaginationDTO paginationDTO = topicService.listPage(user.getId(), page, size);
             model.addAttribute("pagination", paginationDTO);
         } else if ("notify".equals(action)) {
             // 最新回复页面：每页显示十条数据

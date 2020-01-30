@@ -29,10 +29,10 @@ public class CommentServiceImpl implements CommentService {
     private CommentExtMapper commentExtMapper;
 
     @Autowired
-    private QuestionMapper questionMapper;
+    private TopicMapper topicMapper;
 
     @Autowired
-    private QuestionExtMapper questionExtMapper;
+    private TopicExtMapper topicExtMapper;
 
     @Autowired
     private UserMapper userMapper;
@@ -69,22 +69,22 @@ public class CommentServiceImpl implements CommentService {
         comment.setGmtModify(comment.getGmtCreate());
         comment.setCommentCount(0);
 
-        // 判断当前评论是评论问题，还是回复评论的
-        if(comment.getParentType() == CommentTypeEnum.QUESTION.getType()){ // 回复问题
-            Question question = questionMapper.selectByPrimaryKey(commentDTO.getParentId());
-            if(question == null){
+        // 判断当前评论是评论帖子，还是回复评论的
+        if(comment.getParentType() == CommentTypeEnum.QUESTION.getType()){ // 回复帖子
+            Topic topic = topicMapper.selectByPrimaryKey(commentDTO.getParentId());
+            if(topic == null){
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
 
             // 累加评论数
-            question.setCommentCount(1);
-            int count = questionExtMapper.incComment(question);
+            topic.setCommentCount(1);
+            int count = topicExtMapper.incComment(topic);
             if(count != 1){
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_FAILD);
             }
 
             // 创建新通知
-            createNotify(notifier.getId(), question.getUserid(), question.getId(), NotificationTypeEnum.QUESTION, notifier.getName(), question.getTitle(), commentDTO.getQuestionid());
+            createNotify(notifier.getId(), topic.getUserid(), topic.getId(), NotificationTypeEnum.QUESTION, notifier.getName(), topic.getTitle(), commentDTO.getQuestionid());
         } else { // 回复评论
             Comment memComment = commentMapper.selectByPrimaryKey(commentDTO.getParentId());
             if(memComment == null){
@@ -108,7 +108,7 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
-    private void createNotify(Long notifier, Long receiver, Long id, NotificationTypeEnum typeEnum, String notifierName, String relatedName, Long questionid) {
+    private void createNotify(Long notifier, Long receiver, Long id, NotificationTypeEnum typeEnum, String notifierName, String relatedName, Long topicid) {
         if(notifier == receiver){ // 自己回复自己不创建通知
             return ;
         }
@@ -121,7 +121,7 @@ public class CommentServiceImpl implements CommentService {
         notification.setGmtModify(notification.getGmtCreate());
         notification.setNotifiername(notifierName);
         notification.setRelatedname(relatedName);
-        notification.setQuestionid(questionid);
+        notification.setTopicid(topicid);
         notificationMapper.insertSelective(notification);
     }
 

@@ -105,7 +105,7 @@ public class NotificationServiceImpl implements NotificationService {
             throw new CustomizeException(CustomizeErrorCode.READ_NOTIFICATION_FAILED);
         }
 
-        return notification.getQuestionid();
+        return notification.getTopicid();
     }
 
     @Override
