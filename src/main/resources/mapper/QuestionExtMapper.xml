@@ -19,4 +19,24 @@
     <select id="selectRelated" resultType="Question">
         select * from t_question where id != #{curId} and tag regexp #{tagRegex}
     </select>
+
+    <select id="countSearch" resultType="int">
+        select count(*) from t_question
+        <where>
+            <if test="condition != null and condition!=''">
+                and title regexp #{condition}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectSearch" resultType="Question">
+        select * from t_question
+        <where>
+            <if test="condition != null and condition != ''">
+                and title regexp #{condition}
+            </if>
+        </where>
+        order by gmt_create desc
+        limit #{index},#{size}
+    </select>
 </mapper>

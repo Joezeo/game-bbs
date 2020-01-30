@@ -57,7 +57,7 @@
             </div>
 
             <!--            评论区-->
-            <div>
+            <div style="margin-top: 60px;">
                 <div class="comment-head">
                     <h2><span th:text="${question.commentCount}"></span>个回复</h2>
 
@@ -106,7 +106,7 @@
                 <div class="comment-body" th:if="${session.user != null}"> <!-- 需要被隐藏的部分 -->
                     <h2>回复</h2>
                     <hr>
-                    <div class="media">
+                    <div class="media" style="margin-bottom: 10px;">
                         <div class="media-left">
                             <a href="#">
                                 <img class="media-object head-img img-thumbnail" th:src="@{${session.user.avatarUrl}}" alt="用户头像">

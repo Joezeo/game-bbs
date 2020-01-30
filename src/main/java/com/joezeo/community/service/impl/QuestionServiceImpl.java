@@ -18,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
@@ -59,10 +61,14 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public PaginationDTO listPage(Integer page, Integer size) {
-        QuestionExample questionExample = new QuestionExample();
-        questionExample.createCriteria().andIdIsNotNull();
-        int count = (int) questionMapper.countByExample(questionExample);
+    public PaginationDTO listPage(Integer page, Integer size, String condition) {
+        // 判断搜索条件是否为空
+        if (condition != null && !"".equals(condition)) {
+            String[] conds = condition.split(" ");
+            condition = Arrays.stream(conds).collect(Collectors.joining("|"));
+        }
+
+        int count = questionExtMapper.countSearch(condition);
 
         PaginationDTO paginationDTO = new PaginationDTO();
         paginationDTO.setPagination(page, size, count);
@@ -71,9 +77,11 @@ public class QuestionServiceImpl implements QuestionService {
         page = paginationDTO.getPage();
         int index = (page - 1) * size;
 
-        RowBounds rowBounds = new RowBounds(index, size);
-        questionExample.setOrderByClause("gmt_create desc");
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, rowBounds);
+//        QuestionExample questionExample = new QuestionExample();
+//        questionExample.setOrderByClause("gmt_create desc");
+//        RowBounds rowBounds = new RowBounds(index, size);
+//        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, rowBounds);
+        List<Question> questions = questionExtMapper.selectSearch(index, size, condition);
         if (questions == null) {
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
@@ -156,7 +164,7 @@ public class QuestionServiceImpl implements QuestionService {
         // 获取当前问题的相关问题
         String tagRegex = questionDTO.getTag().replaceAll(",", "|");
         List<Question> related = questionExtMapper.selectRelated(questionDTO.getId(), tagRegex);
-        if(related == null || related.size() == 0){
+        if (related == null || related.size() == 0) {
             // 如果没有获取到相关问题直接设置一个空集合
             questionDTO.setRelateds(new ArrayList<>());
         }
@@ -171,7 +179,7 @@ public class QuestionServiceImpl implements QuestionService {
             throw new RuntimeException("参数question不可为null");
         }
 
-        if(question.getId() == null){ // 进行新增问题操作
+        if (question.getId() == null) { // 进行新增问题操作
             question.setCommentCount(0);
             question.setLikeCount(0);
             question.setViewCount(0);
@@ -195,7 +203,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void incVie(Long id) {
-        if(id == null || id <= 0){
+        if (id == null || id <= 0) {
             throw new ServiceException("传入id值异常");
         }
         Question question = new Question();
@@ -203,7 +211,7 @@ public class QuestionServiceImpl implements QuestionService {
         question.setViewCount(1);
 
         int count = questionExtMapper.incView(question);
-        if(count != 1){
+        if (count != 1) {
             throw new ServiceException("累加阅读数失败");
         }
     }

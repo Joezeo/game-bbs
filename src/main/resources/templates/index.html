@@ -38,23 +38,25 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li th:if="${pagination.hasFirst}">
-                        <a th:href="@{/(page=1)}" aria-label="First">
+                        <a th:href="@{/(page=1,condition=${condition})}" aria-label="First">
                             <span aria-hidden="true">&lt;&lt;</span>
                         </a>
                     </li>
                     <li th:if="${pagination.hasPrevious}">
-                        <a th:href="@{/(page=${pagination.page}-1)}" aria-label="Previous">
+                        <a th:href="@{/(page=${pagination.page}-1,condition=${condition})}" aria-label="Previous">
                             <span aria-hidden="true">&lt;</span>
                         </a>
                     </li>
-                    <li th:each="page : ${pagination.pages}" th:class="${page==pagination.page}?'active':''"><a th:href="@{/(page=${page})}" th:text="${page}">1</a></li>
+
+                    <li th:each="page : ${pagination.pages}" th:class="${page==pagination.page}?'active':''"><a th:href="@{/(page=${page},condition=${condition})}" th:text="${page}">1</a></li>
+
                     <li th:if="${pagination.hasNext}">
-                        <a th:href="@{/(page=${pagination.page}+1)}" aria-label="Next">
+                        <a th:href="@{/(page=${pagination.page}+1,condition=${condition})}" aria-label="Next">
                             <span aria-hidden="true">&gt;</span>
                         </a>
                     </li>
                     <li th:if="${pagination.hasLast}">
-                        <a th:href="@{/(page=${pagination.totalPage})}" aria-label="Last">
+                        <a th:href="@{/(page=${pagination.totalPage},condition=${condition})}" aria-label="Last">
                             <span aria-hidden="true">&gt;&gt;</span>
                         </a>
                     </li>
