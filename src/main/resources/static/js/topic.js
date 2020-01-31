@@ -114,7 +114,7 @@ function loadSubcomment(comments) {
         content += " <div class=\"media comment-div\" style='margin-top:20px; margin-left: 20px; margin-right: 20px'>\n" +
             "                                <div class=\"media-left\" style='margin-bottom: 15px'>\n" +
             "                                    <a href=\"#\">\n" +
-            "                                        <img class=\"media-object head-img\" src='" + comments[i].user.avatarUrl + "' alt=\"用户头像\">\n" +
+            "                                        <img class=\"media-object head-img\" src='" + comments[i].user.avatarUrl + "' alt=\"用户头像\" style='border-radius: 8px;'>\n" +
             "                                    </a>\n" +
             "                                </div>\n" +
             "                                <div class=\"media-body\" style='margin-bottom: 15px'>\n" +
