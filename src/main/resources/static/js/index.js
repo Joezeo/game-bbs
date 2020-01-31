@@ -20,9 +20,13 @@ var vue = new Vue({
                 window.close();
             }
         },
-        list: function (page) {
-            var url = "/list?page=" + page;
-            axios.get(url).then(function (response) {
+        list: function (page,tab) {
+            var url = "/list";
+            var params = {
+                page: page,
+                tab: tab
+            };
+            axios.get(url,{params}).then(function (response) {
                 var indexdto = response.data.data;
                 vue.pagination = indexdto.pagination;
                 vue.condition = indexdto.condition;

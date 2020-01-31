@@ -45,7 +45,7 @@ public class PaginationDTO<T> implements Serializable {
             }
         }
 
-        hasNext = page != totalPage;
+        hasNext = page != totalPage && totalPage!=0;
         hasPrevious = page != 1;
         hasFirst = (page>=5);
         hasLast = (page<=totalPage-4);

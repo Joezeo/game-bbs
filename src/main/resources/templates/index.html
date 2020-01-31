@@ -25,10 +25,10 @@
                 </div>
                 <div class="col-lg-10 .col-md-12 .col-sm-12 .col-xs-12">
                     <div class="inner" id="Tabs">
-                        <a href="/?tab=question" :class="[tab=='question'?'selectedTab':'tab']">问题</a>
-                        <a href="/?tab=tech" :class="[tab=='tech'?'selectedTab':'tab']">技术</a>
-                        <a href="/?tab=creative" :class="[tab=='creative'?'selectedTab':'tab']">创意</a>
-                        <a href="/?tab=play" :class="[tab=='play'?'selectedTab':'tab']">好玩</a>
+                        <a @click="list(1,'question')" :class="tab=='question'?'selectedTab':'tab'">问题</a>
+                        <a @click="list(1,'tech')" :class="tab=='tech'?'selectedTab':'tab'">技术</a>
+                        <a @click="list(1,'creative')" :class="tab=='creative'?'selectedTab':'tab'">创意</a>
+                        <a @click="list(1,'play')" :class="tab=='play'?'selectedTab':'tab'">好玩</a>
                     </div>
                 </div>
             </div>
@@ -64,27 +64,27 @@
             <nav aria-label="Page navigation">
                 <template v-if="loaded">
                     <ul class="pagination">
-                        <li :if="pagination.hasFirst">
-                            <a :href="'/topic?page=1&condition='+condition" aria-label="First">
+                        <li v-if="pagination.hasFirst">
+                            <a @click="list(1,tab)" aria-label="First">
                                 <span aria-hidden="true">&lt;&lt;</span>
                             </a>
                         </li>
-                        <li :if="pagination.hasPrevious">
-                            <a :href="'/topic?page='+pagination.page-1+'&condition='+condition" aria-label="Previous">
+                        <li v-if="pagination.hasPrevious">
+                            <a @click="list(pagination.page-1,tab)" aria-label="Previous">
                                 <span aria-hidden="true">&lt;</span>
                             </a>
                         </li>
 
                         <li v-for="page in pagination.pages" :class="[page==pagination.page?'active':'']"><a
-                                :href="'/topic?page='+page+'&condition='+condition" v-text="page"></a></li>
+                                @click="list(page,tab)" v-text="page"></a></li>
 
-                        <li :if="pagination.hasNext">
-                            <a :href="'/topic?page='+pagination.page+1+'&condition='+condition" aria-label="Next">
+                        <li v-if="pagination.hasNext">
+                            <a @click="list(pagination.page+1,tab)" aria-label="Next">
                                 <span aria-hidden="true">&gt;</span>
                             </a>
                         </li>
-                        <li :if="pagination.hasLast">
-                            <a :href="'/topic?page='+pagination.totalPage+'&condition='+condition" aria-label="Last">
+                        <li v-if="pagination.hasLast">
+                            <a @click="list(pagination.totalPage,tab)" aria-label="Last">
                                 <span aria-hidden="true">&gt;&gt;</span>
                             </a>
                         </li>
