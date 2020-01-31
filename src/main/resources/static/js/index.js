@@ -27,10 +27,10 @@ var vue = new Vue({
                 tab: tab
             };
             axios.get(url,{params}).then(function (response) {
-                var indexdto = response.data.data;
-                vue.pagination = indexdto.pagination;
-                vue.condition = indexdto.condition;
-                vue.tab = indexdto.tab;
+                var jsonResult = response.data.data;
+                vue.pagination = jsonResult.pagination;
+                vue.condition = jsonResult.condition;
+                vue.tab = jsonResult.tab;
                 vue.loaded = true;
             })
         }

@@ -1,15 +1,4 @@
 $(function () {
-    $("#publish-btn").click(doPublish);
-
-    // 点击标签输入框弹出标签选择面板
-    $("#tag").click(loadTagPanel);
-
-    // 标签选择面板失去焦点时关闭
-    $(".tag-panel").blur(closeTagPanel);
-
-    // 点击标签时在输入框中输出
-    $(".label-span").click(addTag);
-
     // 加载md编辑器
     var editor = editormd("topic-editor", {
         width: "100%",
@@ -17,91 +6,137 @@ $(function () {
         path: "/editor/lib/",
         watch: false,
         placeholder: '请输入详细的帖子内容',
-        imageUpload    : true,
-        imageFormats   : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-        imageUploadURL : "/file/imgUpload"
+        saveHTMLToTextarea: true,
+        imageUpload: true,
+        imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+        imageUploadURL: "/file/imgUpload"
     });
 });
 
-// 进行数据非空校验
-function doCheckValue(title, description, tag) {
-    var falg = true;
+var path = window.location.href;
+var pathid = path.substr(path.lastIndexOf("/") + 1);
 
-    if (title === "") {
-        $("#title-warning").show();
-        falg = false;
-    } else {
-        $("#title-warning").hide();
-    }
+var tagDTOS = {};
+var topicDTO = {
+    id: isNaN(pathid)?null:pathid,
+    tag: "",
+    topicType: 1 // 帖子类型默认为问题
+};
 
-    if (description === "") {
-        $("#des-warning").show();
-        falg = false;
-    } else {
-        $("#des-warning").hide();
+var vue = new Vue({
+    el: "#publish",
+    data: {
+        tagDTOS, topicDTO
+    },
+    mounted: function () { // vue对象加载完毕
+        this.getTags();
+        this.getTopic(topicDTO.id);
+    },
+    methods: {
+        getTags: function () {
+            var url = "/publish/getTags";
+            axios.get(url).then(function (response) {
+                var jsonResult = response.data;
+                if (jsonResult.success) {
+                    vue.tagDTOS = jsonResult.data;
+                }
+            })
+        },
+        getTopic: function (id) {
+            if (id == null || id == '') {
+                return;
+            }
+            var url = "/publish/getTopic?id=" + id;
+            axios.get(url).then(function (response) {
+                var jsonResult = response.data;
+                if (jsonResult.success) {
+                    vue.topicDTO = jsonResult.data;
+                }
+            })
+        },
+        doPublish: doPublish,
+        loadTagPanel: loadTagPanel,
+        closeTagPanel: closeTagPanel,
+        addTag: addTag
     }
+});
 
-    if (tag === "") {
-        $("#tag-warning").show();
-        falg = false;
-    } else {
-        $("#tag-warning").hide();
-    }
-    return falg;
-}
 
 function doPublish() {
     // 进行表格内容空校验
-    var title = $("#title").val();
-    var description = $("#description").val();
-    var tag = $("#tag").val();
-    var id = $("#id").val();
-    var topicType = $("#topicType").val();
-    var flag = doCheckValue(title, description, tag);
+    var flag = doCheckValue();
     if (!flag) { // flag为 false 说明有数据为空
         return false;
     }
-    $.ajax({
-        url: '/publish',
-        dataType: 'json',
-        contentType: 'application/json',
-        data: JSON.stringify({title: title, description: description, tag: tag, id: id, topicType: topicType}),
-        type: 'post',
-        success: function (jsonResult) {
-            if (jsonResult.success) {
-                if (id != null && id != "") {
-                    location.href = "/topic/" + id;
-                } else {
-                    location.href = "/";
+    // 判断从url获取的id是否是数字
+    if(isNaN(vue.topicDTO.id)){
+        vue.topicDTO.id=null;
+    }
+    var url = "/publish";
+    axios.post(url, vue.topicDTO).then(function (response) {
+        var jsonResult = response.data;
+        if (jsonResult.success) {
+            if (!vue.topicDTO.id && vue.topicDTO.id != null && vue.topicDTO.id != "") {
+                location.href = "/topic/" + vue.topicDTO.id;
+            } else {
+                location.href = "/";
+            }
+        } else {
+            if (jsonResult.code == 2004) { // 用户未进行登录操作
+                var flag = confirm("当前操作需用户登录后进行，点击确定自动登录");
+                if (flag) {
+                    window.open("https://github.com/login/oauth/authorize?client_id=332735b1b85bfbb88779&scope=user&state=1");
+                    window.localStorage.setItem("closable", true);
+                    window.setInterval(function () {
+                        if (!window.localStorage.getItem("closable"))
+                            window.location.reload();
+                    }, 200);
                 }
             } else {
-                if (jsonResult.code == 2004) { // 用户未进行登录操作
-                    var flag = confirm("当前操作需用户登录后进行，点击确定自动登录");
-                    if (flag) {
-                        window.open("https://github.com/login/oauth/authorize?client_id=332735b1b85bfbb88779&scope=user&state=1");
-                        window.localStorage.setItem("closable", true);
-                        window.setInterval(function () {
-                            if (!window.localStorage.getItem("closable"))
-                                window.location.reload();
-                        }, 200);
+                if (jsonResult.code == 2006) { // 标签存在非法项目
+                    var msg = "存在非法的标签：[";
+                    for (var i = 0; i < jsonResult.data.length; i++) {
+                        if (i != jsonResult.data.length - 1)
+                            msg += jsonResult.data[i] + "，";
+                        else
+                            msg += jsonResult.data[i] + "]";
                     }
+                    alert(msg);
                 } else {
-                    if (jsonResult.code == 2006) { // 标签存在非法项目
-                        var msg = "存在非法的标签：[";
-                        for (var i = 0; i < jsonResult.data.length; i++) {
-                            if (i != jsonResult.data.length - 1)
-                                msg += jsonResult.data[i] + "，";
-                            else
-                                msg += jsonResult.data[i] + "]";
-                        }
-                        alert(msg);
-                    } else {
-                        alert(jsonResult.message);
-                    }
+                    alert(jsonResult.message);
                 }
             }
         }
     });
+}
+
+// 进行数据非空校验
+function doCheckValue() {
+    var flag = true;
+    // 实在不知道怎么办了，出此下策
+    vue.topicDTO.description = $("#description").val();
+
+    if (!vue.topicDTO.title || vue.topicDTO.title === "") {
+        $("#title-warning").show();
+        flag = false;
+    } else {
+        $("#title-warning").hide();
+    }
+
+    if (!vue.topicDTO.description || vue.topicDTO.description === "") {
+        $("#des-warning").show();
+        flag = false;
+    } else {
+        $("#des-warning").hide();
+    }
+
+    if (!vue.topicDTO.tag || vue.topicDTO.tag === "") {
+        $("#tag-warning").show();
+        flag = false;
+    } else {
+        $("#tag-warning").hide();
+    }
+    return flag;
 }
 
 function loadTagPanel() {
@@ -112,10 +147,8 @@ function closeTagPanel() {
     $(".tag-panel").hide();
 }
 
-function addTag() {
-    var tag = $(this).data("tag");
-
-    var content = $("#tag").val();
+function addTag(tag) {
+    var content = vue.topicDTO.tag;
 
     if (content) { // 如果不为空
         // 判断是否重复
@@ -128,5 +161,5 @@ function addTag() {
         content += tag;
     }
 
-    $("#tag").val(content);
+    vue.topicDTO.tag = content;
 }

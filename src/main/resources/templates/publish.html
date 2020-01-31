@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/community.css">
     <link rel="stylesheet" href="/editor/css/editormd.min.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="/jquery/jquery-3.4.1.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/js/publish.js"></script>
     <script src="/editor/js/editormd.min.js"></script>
     <script src="/editor/plugins/image-dialog/image-dialog.js"></script>
 </head>
@@ -18,7 +19,7 @@
 <!--导航栏-->
 <div th:replace="navigation :: nav"></div>
 
-<div class="container-fluid main">
+<div class="container-fluid main" id="publish">
     <div class="row">
         <div class="col-lg-9 .col-md-12 .col-sm-12 .col-xs-12">
             <h2><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> 发起</h2>
@@ -28,7 +29,7 @@
                 <input type="hidden" th:value="${id}" name="id" id="id">
                 <div class="form-group">
                     <label for="title"> 帖子标题（简明扼要）：</label>
-                    <input th:value="${title}" type="email" class="form-control" id="title" name="title"
+                    <input v-model="topicDTO.title" type="email" class="form-control" id="title" name="title"
                            placeholder="帖子标题...">
                     <div id="title-warning" class="alert alert-warning" role="alert" style="display: none">
                         帖子标题不可为空，请输入
@@ -37,7 +38,7 @@
 
                 <label for="description"> 帖子内容（详细描述）：</label>
                 <div class="form-group" id="topic-editor">
-                    <textarea th:text="${description}" class="form-control" name="description" id="description"
+                    <textarea v-text="topicDTO.description" class="form-control" name="description" id="description"
                               cols="30" rows="10" style="display: none"></textarea>
                 </div>
                 <div id="des-warning" class="alert alert-warning" role="alert" style="display: none">
@@ -45,9 +46,9 @@
                 </div>
                 <br>
 
-<!--                帖子主题选择-->
+                <!--                帖子主题选择-->
                 <label for="topicType"> 主题选择：</label>
-                <select class="form-control" id="topicType" name="topicType">
+                <select v-model="topicDTO.topicType" class="form-control" id="topicType" name="topicType">
                     <option value="1">问题</option>
                     <option value="2">技术</option>
                     <option value="3">创意</option>
@@ -58,39 +59,44 @@
                 <!--                标签选择-->
                 <div class="form-group">
                     <label for="tag"> 添加标签：</label>
-                    <input th:value="${tag}" type="email" class="form-control" id="tag" name="tag" autocomplete="off"
+                    <input v-model="topicDTO.tag" @click="loadTagPanel" type="email" class="form-control" id="tag"
+                           name="tag" autocomplete="off"
                            placeholder="输入标签，以,分隔">
                     <div id="tag-warning" class="alert alert-warning" role="alert" style="display: none">
                         主题标签不可为空，请选择合适的标签
                     </div>
-                    <div class="panel panel-default tag-panel" style="display: none;">
+                    <div @blur="closeTagPanel" class="panel panel-default tag-panel" style="display: none;">
                         <div>
                             <div class="panel-head" style="margin: 10px 10px;">
                                 <ul class="nav nav-tabs" role="tablist">
-                                    <li role="presentation" th:each="tagDTO,tagDTOStat : ${tagDTOS}"
-                                        th:class="${tagDTOStat.first?'active':''}"><a aria-controls="home"
-                                                                                      role="tab"
-                                                                                      data-toggle="tab"
-                                                                                      th:href="${'#'+tagDTO.category}"
-                                                                                      th:text="${tagDTO.category}"></a>
+                                    <li role="presentation" v-for="tagDTO,tagDTOStat in tagDTOS"
+                                        :class="tagDTOStat==0?'active':''"><a aria-controls="home"
+                                                                              role="tab"
+                                                                              data-toggle="tab"
+                                                                              :href="'#'+tagDTO.category"
+                                                                              v-text="tagDTO.category"></a>
                                     </li>
                                 </ul>
                             </div>
 
                             <div class="panel-body tab-content" style="margin: 10px 10px;">
-                                <div role="tabpanel" th:class="${tagdtoStat.first?'tab-pane active':'tab-pane'}"
-                                     th:id="${tagdto.category}" th:each="tagdto,tagdtoStat : ${tagDTOS}">
-                                    <span class="label label-warning label-span" th:data-tag="${tag.name}"
-                                          th:each="tag : ${tagdto.tags}">
-                                        <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
-                                        <span th:text="'&nbsp;&nbsp;' + ${tag.name}"></span>
-                                    </span>
-                                </div>
+                                <template v-for="tagdto,tagdtoStat in tagDTOS">
+                                    <div role="tabpanel" :class="tagdtoStat==0?'tab-pane active':'tab-pane'"
+                                         :id="tagdto.category">
+                                        <template v-for="tag in tagdto.tags">
+                                            <span @click.stop="addTag(tag.name)" :value="tag.name" class="label label-warning label-span">
+                                                <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                                                <span v-html="'&nbsp;&nbsp;'+tag.name"></span>
+                                            </span>
+                                        </template>
+                                    </div>
+                                </template>
                             </div>
                         </div>
                     </div>
                 </div>
-                <button id="publish-btn" type="button" class="btn btn-success btn-publish">发布</button>
+                <button @click="doPublish" id="publish-btn" type="button" class="btn btn-success btn-publish">发布
+                </button>
             </form>
         </div>
 
@@ -104,5 +110,6 @@
         </div>
     </div>
 </div>
+<script src="/js/publish.js"></script>
 </body>
 </html>
