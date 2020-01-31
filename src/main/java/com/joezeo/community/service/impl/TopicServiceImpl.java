@@ -12,12 +12,17 @@ import com.joezeo.community.mapper.UserMapper;
 import com.joezeo.community.pojo.Topic;
 import com.joezeo.community.pojo.TopicExample;
 import com.joezeo.community.pojo.User;
+import com.joezeo.community.provider.UCloudProvider;
 import com.joezeo.community.service.TopicService;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,12 +34,13 @@ public class TopicServiceImpl implements TopicService {
 
     @Autowired
     private TopicMapper topicMapper;
-
     @Autowired
     private TopicExtMapper topicExtMapper;
-
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UCloudProvider uCloudProvider;
 
     @Override
     public List<TopicDTO> list() {
@@ -158,6 +164,24 @@ public class TopicServiceImpl implements TopicService {
         TopicDTO topicDTO = new TopicDTO();
         BeanUtils.copyProperties(topic, topicDTO);
 
+        // 从UCloud服务器获取帖子内容
+        InputStream inputStream = uCloudProvider.downloadTopic(topic.getDescription());
+        try(ByteArrayOutputStream result = new ByteArrayOutputStream()){
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) != -1) {
+                result.write(buffer, 0, length);
+            }
+            String desc = result.toString("UTF-8");
+            topicDTO.setDescription(desc);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            throw new CustomizeException(CustomizeErrorCode.DOWNLOAD_TOPIC_FAILED);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new CustomizeException(CustomizeErrorCode.DOWNLOAD_TOPIC_FAILED);
+        }
+
         // 获取当前帖子的发起人
         User user = userMapper.selectByPrimaryKey(topic.getUserid());
         if (user == null) {
@@ -189,6 +213,10 @@ public class TopicServiceImpl implements TopicService {
             topic.setViewCount(0);
             topic.setGmtCreate(System.currentTimeMillis());
             topic.setGmtModify(topic.getGmtCreate());
+
+            // 将帖子的内容上传至UCloud服务器
+            String url = uCloudProvider.uploadTopic(topic.getDescription(), "text/plan");
+            topic.setDescription(url);
 
             int count = topicMapper.insert(topic);
             if (count != 1) {
