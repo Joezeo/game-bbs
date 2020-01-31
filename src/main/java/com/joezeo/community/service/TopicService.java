@@ -9,9 +9,9 @@ import java.util.List;
 public interface TopicService {
     List<TopicDTO> list();
 
-    PaginationDTO listPage(Integer page, Integer size, String condition, String tab);
+    PaginationDTO<TopicDTO> listPage(Integer page, Integer size, String condition, String tab);
 
-    PaginationDTO listPage(Long userid, Integer page, Integer size);
+    PaginationDTO<TopicDTO> listPage(Long userid, Integer page, Integer size);
 
     TopicDTO queryById(Long id);
 

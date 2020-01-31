@@ -62,7 +62,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public PaginationDTO listPage(Integer page, Integer size, String condition, String tab) {
+    public PaginationDTO<TopicDTO> listPage(Integer page, Integer size, String condition, String tab) {
         // 获取帖子主题
         Integer type = 0; // 初始值为0，为0时查询条件不包含主题
         if (tab != null && !"".equals(tab)) {
@@ -77,7 +77,7 @@ public class TopicServiceImpl implements TopicService {
 
         int count = topicExtMapper.countSearch(condition, type);
 
-        PaginationDTO paginationDTO = new PaginationDTO();
+        PaginationDTO<TopicDTO> paginationDTO = new PaginationDTO<>();
         paginationDTO.setPagination(page, size, count);
 
         // 防止页码大于总页数 或者小于1
@@ -86,7 +86,7 @@ public class TopicServiceImpl implements TopicService {
 
         List<Topic> topics = topicExtMapper.selectSearch(index, size, condition, type);
         if (topics == null || topics.size() == 0) {
-            paginationDTO.setDatas(new ArrayList());
+            paginationDTO.setDatas(new ArrayList<>());
             return paginationDTO;
         }
 
@@ -108,12 +108,12 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public PaginationDTO listPage(Long userid, Integer page, Integer size) {
+    public PaginationDTO<TopicDTO> listPage(Long userid, Integer page, Integer size) {
         TopicExample topicExample = new TopicExample();
         topicExample.createCriteria().andUseridEqualTo(userid);
         int count = (int) topicMapper.countByExample(topicExample);
 
-        PaginationDTO paginationDTO = new PaginationDTO();
+        PaginationDTO<TopicDTO> paginationDTO = new PaginationDTO<>();
         paginationDTO.setPagination(page, size, count);
 
         // 防止页码大于总页数 或者小于1
