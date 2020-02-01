@@ -1,18 +1,3 @@
-$(function () {
-    // 加载md编辑器
-    var editor = editormd("topic-editor", {
-        width: "100%",
-        height: 400,
-        path: "/editor/lib/",
-        watch: false,
-        placeholder: '请输入详细的帖子内容',
-        saveHTMLToTextarea: true,
-        imageUpload: true,
-        imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-        imageUploadURL: "/file/imgUpload"
-    });
-});
-
 var path = window.location.href;
 var pathid = path.substr(path.lastIndexOf("/") + 1);
 
@@ -29,6 +14,18 @@ var vue = new Vue({
         tagDTOS, topicDTO
     },
     mounted: function () { // vue对象加载完毕
+        // 加载md编辑器
+        var editor = editormd("topic-editor", {
+            width: "100%",
+            height: 400,
+            path: "/editor/lib/",
+            watch: false,
+            placeholder: '请输入详细的帖子内容',
+            saveHTMLToTextarea: true,
+            imageUpload: true,
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: "/file/imgUpload"
+        });
         this.getTags();
         this.getTopic(topicDTO.id);
     },

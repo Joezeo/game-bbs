@@ -14,8 +14,8 @@ public enum CustomizeErrorCode implements IExceptionErrorCode{
     QUESTION_ID_NOT_TRANSFER(2009, "该条评论所属帖子不见了"),
     UPLOAD_IMG_FIILED(2010, "上传图片失败"),
     READ_ALL_FIALED(2011, "已读所有通知失败，请稍后重试"),
-    DOWNLOAD_TOPIC_FAILED(2012, "获取帖子内容失败，请稍后重试")
-    ;
+    DOWNLOAD_TOPIC_FAILED(2012, "获取帖子内容失败，请稍后重试"),
+    TOPIC_NOT_FOUND(2013, "你查找的帖子不存在或已被删除，请换一个试试");
 
     private Integer code;
     private String message;

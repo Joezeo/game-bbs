@@ -12,7 +12,7 @@ public class CommentDTO implements Serializable {
     /*
     需从前端接受的参数
      */
-    private Long questionid;
+    private Long topicid;
     private Long parentId;
     private Integer parentType;
     private String content;

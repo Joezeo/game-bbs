@@ -1,15 +1,16 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${topic.title} + ' - JOEF'"></title>
+    <title v-text="topic.title + ' - JOEF'"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/community.css">
     <link rel="stylesheet" href="/editor/css/editormd.preview.min.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="/jquery/jquery-3.4.1.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/js/topic.js"></script>
     <script src="/editor/js/editormd.min.js"></script>
     <script src="/editor/lib/marked.min.js"></script>
     <script src="/editor/lib/prettify.min.js"></script>
@@ -19,92 +20,118 @@
 <!--导航栏-->
 <div th:replace="navigation :: nav"></div>
 
-<div class="container-fluid main">
+<div class="container-fluid main" id="topic">
     <div class="row">
         <!-- 页面左侧主体部分 -->
         <div class="col-lg-9 .col-md-12 .col-sm-12 .col-xs-12">
-            <!--            帖子标题，及相关信息-->
-            <div style="margin-left: 20px">
-                <input type="hidden" id="quesitonId" th:value="${topic.id}">
-                <h3 class="topic-title"><span th:text="${topic.title}"></span></h3>
-                <span class="community-menu">
-                作者&nbsp;<span th:text="${topic.user.name}"></span> |
-                发布于&nbsp;<span th:text="${#calendars.format(topic.gmtCreate,'dd MMMM yyyy')}"></span> |
-                阅读数&nbsp;<span th:text="${topic.viewCount}"></span>
+            <template v-if="loadedTopic">
+                <!--            帖子标题，及相关信息-->
+                <div style="margin-left: 20px">
+                    <input type="hidden" id="quesitonId" :value="topic.id">
+                    <h3 class="topic-title"><span v-text="topic.title"></span></h3>
+                    <span class="community-menu">
+                作者&nbsp;<span v-text="topic.user.name"></span> |
+                发布于&nbsp;<span v-text="topic.gmtCreate"></span> |
+                阅读数&nbsp;<span v-text="topic.viewCount"></span>
             </span>
-            </div>
+                </div>
 
-            <!--           帖子描述 -->
-            <hr>
-            <div id="topic-markdown-view" class="topic-desc">
-                <textarea style="display: none;" th:text="${topic.description}"></textarea>
-            </div>
+                <!--           帖子描述 -->
+                <hr>
+                <div id="topic-markdown-view" class="topic-desc">
+                    <textarea style="display: none;" v-text="topic.description" id="topic-textarea"></textarea>
+                </div>
 
-            <!--           标签-->
-            <hr>
-            <div style="margin-left: 20px;">
-            <span class="label label-info" th:each="tag : ${topic.tag.split(',')}" style="margin-right: 7px;">
+                <!--           标签-->
+                <hr>
+                <div style="margin-left: 20px;">
+            <span class="label label-info" v-for="tag in splitTag(topic.tag)" style="margin-right: 7px;">
                         <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
-                        <span th:text="'&nbsp;&nbsp;'+${tag}"></span>
+                        <span v-html="'&nbsp;&nbsp;'+tag"></span>
             </span>
-            </div>
+                </div>
 
-            <!--            帖子相关选项：编辑等等-->
-            <hr>
-            <div class="topic-option" th:if="${session.user != null && session.user.id == topic.user.id}" style="margin-left: 20px;"><span
-                    class="glyphicon glyphicon-pencil" aria-hidden="true"></span><a class="topic-option"
-                                                                                    th:href="@{/publish/{id}(id=${topic.id})}">编辑</a>
-            </div>
+                <!--            帖子相关选项：编辑等等-->
+                <hr>
+                <div class="topic-option" th:if="${session.user != null}">
+                    <template v-if="user.id == topic.user.id">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span><a class="topic-option"
+                                                                                              :href="'/publish/'+topic.id">编辑</a>
+                    </template>
+                </div>
+            </template>
+
 
             <!--            评论区-->
             <div style="margin-top: 60px;">
                 <div class="comment-head">
-                    <h2><span th:text="${topic.commentCount}"></span>个回复</h2>
-
-                    <hr>
-                    <!-- 评论主体 -->
-                    <div class="media comment-div" th:each="comment : ${comments}">
-                        <div class="media-left">
-                            <a href="#">
-                                <img class="media-object head-img" th:src="@{${comment.user.avatarUrl}}" alt="用户头像"
-                                     style="border-radius: 8px;">
-                            </a>
-                        </div>
-                        <div class="media-body">
-                            <h6 class="media-heading"><a href="#" th:text="${comment.user.name}"></a></h6>
-                        </div>
-
-                        <div th:text="${comment.content}" class="comment-cotent"></div>
-
-                        <!-- 评论的点赞，回复，时间图标 -->
-                        <div class="comment-icon">
-                            <a>
-                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-                                <span th:text="${comment.likeCount}"></span>
-                            </a>
-                            <a th:data-id="${comment.id}" class="reply-comment">
-                                <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-                                <span th:id="'subcomment-count'+${comment.id}" th:text="${comment.commentCount}"></span>
-                            </a>
-                            <span class="comment-date"
-                                  th:text="${#calendars.format(comment.gmtCreate,'yyyy-MM-dd')}"></span>
-                        </div>
-                        <!-- 二级评论 -->
-                        <div class="sub-comment collapse" th:id="'subcomment-' + ${comment.id}">
-                            <div th:id="'data-load-div-' + ${comment.id}"></div>
-                            <div>
-                                <input type="email" class="form-control" th:id="'subcomment-content-' + ${comment.id}"
-                                       placeholder="评论一下...">
+                    <h2><span v-text="topic.commentCount"></span>个回复</h2>
+                    <template v-if="loadedComments" v-for="comment in comments">
+                        <hr>
+                        <!-- 评论主体 -->
+                        <div class="media comment-div">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object head-img" :src="comment.user.avatarUrl" alt="用户头像"
+                                         style="border-radius: 8px;">
+                                </a>
                             </div>
-                            <div style="text-align: right">
-                                <button type="button" class="btn btn-default btn-sm btn-success reply">回复</button>
-                                <button type="button" class="btn btn-default btn-sm back">取消</button>
+                            <div class="media-body">
+                                <h6 class="media-heading"><a href="#" v-text="comment.user.name"></a></h6>
+                            </div>
+
+                            <div v-text="comment.content" class="comment-cotent"></div>
+
+                            <!-- 评论的点赞，回复，时间图标 -->
+                            <div class="comment-icon">
+                                <a>
+                                    <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                                    <span v-text="comment.likeCount"></span>
+                                </a>
+                                <a @click.capture="subComment(comment.id)" :value="comment.id" class="reply-comment">
+                                    <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                                    <span :id="'subcomment-count'+comment.id" v-text="comment.commentCount"></span>
+                                </a>
+                                <span class="comment-date"
+                                      v-text="comment.gmtCreate"></span>
+                            </div>
+                            <!-- 二级评论 -->
+                            <div class="sub-comment collapse" v-if="loadedSubComments" :id="'subcomment-' + comment.id">
+                                <!-- 加载二级评论 -->
+                                <div v-for="subComment in subComments">
+                                    <div class="media" style="border-bottom: 1px solid #efefef">
+                                        <div class="media-left">
+                                            <a href="#">
+                                                <img class="media-object" :src="subComment.user.avatarUrl" alt="avatar"
+                                                     style="width: 36px;height: 36px;border-radius: 6px;margin: 10px;">
+                                            </a>
+                                        </div>
+                                        <div class="media-body">
+                                            <h6 class="media-heading" style="margin-top: 10px;"><a href="#"
+                                                                                                   v-text="subComment.user.name"></a>
+                                            </h6>
+                                            <div v-text="subComment.content" class="sub-comment-content"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <input type="email" class="form-control" :id="'subcomment-content-' + comment.id" style="margin-top: 3px;"
+                                           placeholder="评论一下...">
+                                </div>
+                                <div style="text-align: right">
+                                    <button @click.capture="doSubcomment(comment.id)" type="button" :value="comment.id"
+                                            class="btn btn-default btn-sm btn-success reply">回复
+                                    </button>
+                                    <button @click.capture="closeSubcomment(comment.id)" :value="comment.id" type="button" class="btn btn-default btn-sm back">
+                                        取消
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </template>
                 </div>
 
-                <div class="comment-body" th:if="${session.user != null}"> <!-- 需要被隐藏的部分 -->
+                <div class="comment-body" th:if="${session.user != null}"> <!-- 需要被隐藏的部分 - 回复区 -->
                     <h2>回复</h2>
                     <hr>
                     <div class="media" style="margin-bottom: 10px;">
@@ -119,13 +146,13 @@
                         </div>
                     </div>
 
-                    <textarea class="form-control" name="content" id="content" cols="30" rows="10"></textarea>
+                    <textarea v-model="commentContent" class="form-control" name="content" id="content" cols="30" rows="10"></textarea>
 
-                    <button id="btn-comment-reply" type="button" class="btn btn-success">回复</button>
+                    <button @click="doComment" id="btn-comment-reply" type="button" class="btn btn-success">回复</button>
                 </div>
                 <div th:if="${session.user == null}" style="text-align: center; margin-bottom: 20px">
                     <hr>
-                    <a id="auto-login">需登录后才能回复，点击此处自动登录</a>
+                    <a @click="autoLogin" id="auto-login">需登录后才能回复，点击此处自动登录</a>
                 </div>
             </div>
         </div>
@@ -135,15 +162,15 @@
             <!--            发起人-->
             <div style="margin-top: 30px;">
                 <h4>发起人</h4>
-                <div class="media">
+                <div class="media" v-if="loadedTopic">
                     <div class="media-left">
                         <a href="#">
-                            <img class="media-object head-img" th:src="@{${topic.user.avatarUrl}}" alt="用户头像"
+                            <img class="media-object head-img" :src="topic.user.avatarUrl" alt="用户头像"
                                  style="border-radius: 8px;">
                         </a>
                     </div>
                     <div class="media-body">
-                        <h6 class="media-heading"><a href="#" th:text="${topic.user.name}"></a></h6>
+                        <h6 class="media-heading"><a href="#" v-text="topic.user.name"></a></h6>
                     </div>
                 </div>
             </div>
@@ -153,8 +180,8 @@
                 <hr>
                 <h4>相关帖子</h4>
                 <ul style="list-style: none;padding-left: 0px; font-size: 13px; line-height: 30px">
-                    <li th:each="related : ${topic.relateds}">
-                        <a th:href="@{/topic/{id}(id=${related.id})}" th:text="${related.title}"></a>
+                    <li v-for="related in topic.relateds">
+                        <a :href="'/topic/'+related.id" v-text="related.title"></a>
                     </li>
                 </ul>
             </div>
@@ -162,5 +189,6 @@
     </div>
 </div>
 <div th:replace="footer :: foot"></div>
+<script src="/js/topic.js"></script>
 </body>
 </html>

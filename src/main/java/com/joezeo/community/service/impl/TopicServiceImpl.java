@@ -247,4 +247,13 @@ public class TopicServiceImpl implements TopicService {
             throw new ServiceException("累加阅读数失败");
         }
     }
+
+    @Override
+    public boolean isExist(Long id) {
+        Topic topic = topicMapper.selectByPrimaryKey(id);
+        if(topic == null){
+            return false;
+        }
+        return true;
+    }
 }

@@ -18,4 +18,6 @@ public interface TopicService {
     void createOrUpdate(Topic topic);
 
     void incVie(Long id);
+
+    boolean isExist(Long id);
 }

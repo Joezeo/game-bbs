@@ -39,7 +39,7 @@ public class CommentController {
     /**
      *  提交二级评论
      */
-    @PostMapping("/subComment")
+    @PostMapping("/comment/subComment")
     @ResponseBody
     public JsonResult subComment(@RequestBody CommentDTO commentDTO, HttpSession session){
         User user = (User) session.getAttribute("user");
@@ -53,7 +53,7 @@ public class CommentController {
     }
 
 
-    @PostMapping("/getSubcomment")
+    @PostMapping("/comment/getSubcomment")
     @ResponseBody
     public JsonResult getSubComment(@RequestBody CommentDTO commentDTO) {
 

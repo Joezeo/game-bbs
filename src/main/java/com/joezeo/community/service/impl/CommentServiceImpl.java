@@ -49,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
             throw new ServiceException("参数userid异常");
         }
 
-        if(commentDTO.getQuestionid() == null || commentDTO.getQuestionid() <= 0){
+        if(commentDTO.getTopicid() == null || commentDTO.getTopicid() <= 0){
             throw new CustomizeException(CustomizeErrorCode.QUESTION_ID_NOT_TRANSFER);
         }
 
@@ -84,7 +84,7 @@ public class CommentServiceImpl implements CommentService {
             }
 
             // 创建新通知
-            createNotify(notifier.getId(), topic.getUserid(), topic.getId(), NotificationTypeEnum.QUESTION, notifier.getName(), topic.getTitle(), commentDTO.getQuestionid());
+            createNotify(notifier.getId(), topic.getUserid(), topic.getId(), NotificationTypeEnum.QUESTION, notifier.getName(), topic.getTitle(), commentDTO.getTopicid());
         } else { // 回复评论
             Comment memComment = commentMapper.selectByPrimaryKey(commentDTO.getParentId());
             if(memComment == null){
@@ -99,7 +99,7 @@ public class CommentServiceImpl implements CommentService {
             }
 
             // 创建新通知
-            createNotify(notifier.getId(), memComment.getUserid(), memComment.getId(), NotificationTypeEnum.COMMENT, notifier.getName(), memComment.getContent(), commentDTO.getQuestionid());
+            createNotify(notifier.getId(), memComment.getUserid(), memComment.getId(), NotificationTypeEnum.COMMENT, notifier.getName(), memComment.getContent(), commentDTO.getTopicid());
         }
 
         int count = commentMapper.insertSelective(comment);

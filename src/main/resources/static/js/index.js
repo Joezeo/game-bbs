@@ -2,7 +2,7 @@ var indexDTO = {
     pagination: {},
     condition: '',
     tab: '',
-    loaded:false // 页面是否异步加载完毕
+    loaded: false // 页面是否异步加载完毕
 };
 var vue = new Vue({
     el: "#index",
@@ -20,16 +20,19 @@ var vue = new Vue({
                 window.close();
             }
         },
-        list: function (page,tab) {
+        list: function (page, tab) {
             var url = "/list";
+            if (!tab) {
+                tab = 'question';
+            }
             var params = {
                 page: page,
                 size: 10, // 默认每页展示10条帖子
                 tab: tab
             };
-            axios.post(url,params).then(function (response) {
+            axios.post(url, params).then(function (response) {
                 var jsonResult = response.data;
-                if(jsonResult.success){
+                if (jsonResult.success) {
                     var indexdto = response.data.data;
                     vue.pagination = indexdto.pagination;
                     vue.condition = indexdto.condition;
