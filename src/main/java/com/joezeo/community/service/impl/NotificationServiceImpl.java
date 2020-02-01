@@ -32,12 +32,12 @@ public class NotificationServiceImpl implements NotificationService {
     private CommentMapper commentMapper;
 
     @Override
-    public PaginationDTO listPage(Long id, Integer page, Integer size) {
+    public PaginationDTO<NotificationDTO> listPage(Long id, Integer page, Integer size) {
         NotificationExample notificationExample = new NotificationExample();
         notificationExample.createCriteria().andReceiverEqualTo(id);
         int count = (int) notificationMapper.countByExample(notificationExample);
 
-        PaginationDTO<NotificationDTO> paginationDTO = new PaginationDTO();
+        PaginationDTO<NotificationDTO> paginationDTO = new PaginationDTO<>();
         paginationDTO.setPagination(page, size, count);
 
         // 防止页码大于总页数 或者小于1

@@ -9,10 +9,7 @@ import com.joezeo.community.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,18 +23,11 @@ public class IndexController {
         return "index";
     }
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     @ResponseBody
-    public JsonResult<IndexDTO> index(
-            @RequestParam(name = "page", defaultValue = "1") Integer page,
-            @RequestParam(name = "size", defaultValue = "10") Integer size,
-            @RequestParam(name = "tab", defaultValue = "question") String tab,
-            @RequestParam(name = "condition", required = false) String condition) {
-        IndexDTO<TopicDTO> indexDTO = new IndexDTO<>();
-        PaginationDTO<TopicDTO> paginationDTO = topicService.listPage(page, size, condition, tab);
+    public JsonResult<IndexDTO> index(@RequestBody IndexDTO<TopicDTO> indexDTO){
+        PaginationDTO<TopicDTO> paginationDTO = topicService.listPage(indexDTO.getPage(), indexDTO.getSize(), indexDTO.getCondition(), indexDTO.getTab());
         indexDTO.setPagination(paginationDTO);
-        indexDTO.setCondition(condition);
-        indexDTO.setTab(tab);
         return JsonResult.okOf(indexDTO);
     }
 }

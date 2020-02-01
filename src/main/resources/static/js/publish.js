@@ -35,7 +35,7 @@ var vue = new Vue({
     methods: {
         getTags: function () {
             var url = "/publish/getTags";
-            axios.get(url).then(function (response) {
+            axios.post(url).then(function (response) {
                 var jsonResult = response.data;
                 if (jsonResult.success) {
                     vue.tagDTOS = jsonResult.data;
@@ -46,8 +46,11 @@ var vue = new Vue({
             if (id == null || id == '') {
                 return;
             }
-            var url = "/publish/getTopic?id=" + id;
-            axios.get(url).then(function (response) {
+            var params = {
+                id:id
+            };
+            var url = "/publish/getTopic";
+            axios.post(url,params).then(function (response) {
                 var jsonResult = response.data;
                 if (jsonResult.success) {
                     vue.topicDTO = jsonResult.data;

@@ -24,14 +24,20 @@ var vue = new Vue({
             var url = "/list";
             var params = {
                 page: page,
+                size: 10, // 默认每页展示10条帖子
                 tab: tab
             };
-            axios.get(url,{params}).then(function (response) {
-                var jsonResult = response.data.data;
-                vue.pagination = jsonResult.pagination;
-                vue.condition = jsonResult.condition;
-                vue.tab = jsonResult.tab;
-                vue.loaded = true;
+            axios.post(url,params).then(function (response) {
+                var jsonResult = response.data;
+                if(jsonResult.success){
+                    var indexdto = response.data.data;
+                    vue.pagination = indexdto.pagination;
+                    vue.condition = indexdto.condition;
+                    vue.tab = indexdto.tab;
+                    vue.loaded = true;
+                } else {
+                    alert(jsonResult.message);
+                }
             })
         }
     }

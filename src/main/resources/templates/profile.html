@@ -1,103 +1,109 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${sectionName}+' - JOEF'"></title>
+    <title v-text="sectionName+' - JOEF'"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/community.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="/jquery/jquery-3.4.1.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/js/profile.js"></script>
 </head>
 <body>
 
 <!--导航栏-->
 <div th:replace="navigation :: nav"></div>
 
-<div class="container-fluid main profile">
+<div class="container-fluid main profile" id="profile">
     <div class="row">
         <div class="col-lg-9 .col-md-12 .col-sm-12 .col-xs-12">
             <div class="row top-row" style="margin-bottom: 15px;">
 
                 <div class="col-lg-9 .col-md-9 .col-sm-9 .col-xs-9">
                     <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-                        <span th:text="${sectionName}"></span></h2>
+                        <span v-text="sectionName"></span></h2>
                 </div>
 
                 <div class="col-lg-3 .col-md-3 .col-sm-3 .col-xs-3">
-                    <button type="button" class="btn btn-success btn-allread" th:if="${section=='notify'}">全部已读
+                    <button @click="readAllNotification" type="button" class="btn btn-success btn-allread" v-if="section=='notify'">全部已读
                     </button>
                 </div>
             </div>
 
-            <!--            我的帖子-->
-            <div th:if="${section == 'topics'}">
-                <div class="media" th:each="topic : ${pagination.datas}">
-                    <div class="media-left">
-                        <a href="#">
-                            <img class="media-object head-img" th:src="@{${topic.user.avatarUrl}}" alt="用户头像" style="border-radius: 8px;">
-                        </a>
+            <template v-if="loaded">
+                <!--            我的帖子-->
+                <div v-if="section == 'topics'">
+                    <div class="media" v-for="topic in pagination.datas">
+                        <div class="media-left">
+                            <a href="#">
+                                <img class="media-object head-img" :src="topic.user.avatarUrl" alt="用户头像"
+                                     style="border-radius: 8px;">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading"><a :href="'/topic/'+topic.id"
+                                                         style="color: black;padding-top: 10px;font-size: 16px;"
+                                                         v-text="topic.title"></a></h4>
+                            <span class="text-desc"><span v-text="topic.commentCount"></span> 个评论 • <span
+                                    v-text="topic.viewCount"></span> 次浏览 • <span
+                                    v-text="topic.gmtCreate"></span></span></span>
+                        </div>
+                        <hr>
                     </div>
-                    <div class="media-body">
-                        <h4 class="media-heading"><a th:href="@{/topic/{id}(id=${topic.id})}" style="color: black;padding-top: 10px;font-size: 16px;"
-                                                     th:text="${topic.title}"></a></h4>
-                        <span class="text-desc"><span th:text="${topic.commentCount}"></span> 个评论 • <span
-                                th:text="${topic.viewCount}"></span> 次浏览 • <span
-                                th:text="${#calendars.format(topic.gmtCreate,'yyyy-MM-dd')}"></span></span></span>
+                </div>
+            </template>
+
+            <template v-if="loaded">
+                <!--            最新回复-->
+                <div v-if="section == 'notify'">
+                    <div v-for="notify in pagination.datas">
+                        <p>
+                            <a href="#" v-text="notify.notifiername"></a>
+                            <span v-text="notify.type"></span>
+                            <a :href="'/notification/'+notify.id" v-text="notify.relatedname"></a>
+                            <span class="label label-warning" v-if="notify.status == 0">未读</span>
+                        </p>
                     </div>
-                    <hr>
                 </div>
-            </div>
+            </template>
 
-            <!--            最新回复-->
-            <div th:if="${section == 'notify'}">
-                <div th:each="notify : ${pagination.datas}">
-                    <p>
-                        <a href="#" th:text="${notify.notifiername}"></a>
-                        <span th:text="${notify.type}"></span>
-                        <a th:href="@{/notification/{id}(id=${notify.id})}" th:text="${notify.relatedname}"></a>
-                        <span class="label label-warning" th:if="${notify.status == 0}">未读</span>
-                    </p>
-                </div>
-            </div>
-
-            <!--            分页条开始-->
-            <nav aria-label="Page navigation">
-                <ul class="pagination">
-                    <li th:if="${pagination.hasFirst}">
-                        <a th:href="@{/profile/{action}(page=1, action=${section})}" aria-label="First">
-                            <span aria-hidden="true">&lt;&lt;</span>
-                        </a>
-                    </li>
-                    <li th:if="${pagination.hasPrevious}">
-                        <a th:href="@{/profile/{action}(page=${pagination.page}-1, action=${section})}"
-                           aria-label="Previous">
-                            <span aria-hidden="true">&lt;</span>
-                        </a>
-                    </li>
-                    <li th:each="page : ${pagination.pages}" th:class="${page==pagination.page}?'active':''"><a
-                            th:href="@{/profile/{action}(page=${page}, action=${section})}" th:text="${page}">1</a></li>
-                    <li th:if="${pagination.hasNext}">
-                        <a th:href="@{/profile/{action}(page=${pagination.page}+1, action=${section})}"
-                           aria-label="Next">
-                            <span aria-hidden="true">&gt;</span>
-                        </a>
-                    </li>
-                    <li th:if="${pagination.hasLast}">
-                        <a th:href="@{/profile/{action}(page=${pagination.totalPage}, action=${section})}"
-                           aria-label="Last">
-                            <span aria-hidden="true">&gt;&gt;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <!--            分页条结束-->
+            <template v-if="loaded">
+                <!--            分页条开始-->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li v-if="pagination.hasFirst">
+                            <a @click="getDatas(section,1)" aria-label="First">
+                                <span aria-hidden="true">&lt;&lt;</span>
+                            </a>
+                        </li>
+                        <li v-if="pagination.hasPrevious">
+                            <a @click="getDatas(section,pagination.page-1)" aria-label="Previous">
+                                <span aria-hidden="true">&lt;</span>
+                            </a>
+                        </li>
+                        <li v-for="page in pagination.pages" :class="page==pagination.page?'active':''">
+                            <a @click="getDatas(section,page)" v-text="page">1</a></li>
+                        <li v-if="pagination.hasNext">
+                            <a @click="getDatas(section,pagination.page+1)" aria-label="Next">
+                                <span aria-hidden="true">&gt;</span>
+                            </a>
+                        </li>
+                        <li v-if="pagination.hasLast">
+                            <a @click="getDatas(section,pagination.totalPage)" aria-label="Last">
+                                <span aria-hidden="true">&gt;&gt;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!--            分页条结束-->
+            </template>
 
         </div>
         <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
             <div class="list-group section">
-                <a href="/profile/topics" type="button" class="list-group-item">我的问题</a>
+                <a href="/profile/topics" type="button" class="list-group-item">我的帖子</a>
                 <a href="/profile/notify" type="button" class="list-group-item">
                     最新回复
                     <span class="badge" th:text="${session.unreadCount}"></span>
@@ -108,5 +114,6 @@
 </div>
 
 <div th:replace="footer :: foot"></div>
+<script src="/js/profile.js"></script>
 </body>
 </html>

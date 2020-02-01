@@ -8,6 +8,8 @@ import lombok.Data;
 @Data
 public class IndexDTO<T> {
     private PaginationDTO<T> pagination;
+    private Integer page;
+    private Integer size;
     private String condition;
     private String tab;
 }

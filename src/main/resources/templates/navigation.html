@@ -40,7 +40,8 @@
                 </li>
 
                 <li th:if="${session.user != null}">
-                    <a href="/profile/notify" style="color: black;font-weight: bold;">通知 <span class="badge" th:text="${session.unreadCount}"></span></a>
+                    <a href="/profile/notify" style="color: black;font-weight: bold;">
+                        通知 <span class="badge" th:text="${session.unreadCount}"></span></a>
                 </li>
 
                 <li class="dropdown" th:if="${session.user != null}">

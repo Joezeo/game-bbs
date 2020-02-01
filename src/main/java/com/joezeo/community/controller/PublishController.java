@@ -41,7 +41,7 @@ public class PublishController {
     }
 
     // 获取标签信息
-    @GetMapping("/publish/getTags")
+    @PostMapping("/publish/getTags")
     @ResponseBody
     public JsonResult<List<TagDTO>> getTags(){
         List<TagDTO> tagDTOS = tagCache.get();
@@ -49,10 +49,10 @@ public class PublishController {
     }
 
     // 获取需要编辑的帖子信息
-    @GetMapping("/publish/getTopic")
+    @PostMapping("/publish/getTopic")
     @ResponseBody
-    public JsonResult<TopicDTO> getTopic(Long id){
-        TopicDTO topicDTO = topicService.queryById(id);
+    public JsonResult<TopicDTO> getTopic(@RequestBody TopicDTO topicDTO){
+        topicDTO = topicService.queryById(topicDTO.getId());
         return JsonResult.okOf(topicDTO);
     }
 
