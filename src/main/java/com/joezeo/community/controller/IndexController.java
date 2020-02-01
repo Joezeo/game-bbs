@@ -30,7 +30,7 @@ public class IndexController {
     @ResponseBody
     public JsonResult<IndexDTO> index(
             @RequestParam(name = "page", defaultValue = "1") Integer page,
-            @RequestParam(name = "size", defaultValue = "5") Integer size,
+            @RequestParam(name = "size", defaultValue = "10") Integer size,
             @RequestParam(name = "tab", defaultValue = "question") String tab,
             @RequestParam(name = "condition", required = false) String condition) {
         IndexDTO<TopicDTO> indexDTO = new IndexDTO<>();

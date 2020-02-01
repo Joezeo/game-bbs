@@ -19,7 +19,7 @@
 <div class="container-fluid main" id="index">
     <div class="row">
         <div class="col-lg-9 .col-md-12 .col-sm-12 .col-xs-12">
-            <div class="row">
+            <div class="row top-row">
                 <div class="col-lg-2 .col-md-12 .col-sm-12 .col-xs-12">
                     <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> 发现</h2>
                 </div>
@@ -29,12 +29,12 @@
                         <a @click="list(1,'tech')" :class="tab=='tech'?'selectedTab':'tab'">技术</a>
                         <a @click="list(1,'creative')" :class="tab=='creative'?'selectedTab':'tab'">创意</a>
                         <a @click="list(1,'play')" :class="tab=='play'?'selectedTab':'tab'">好玩</a>
+                        <a @click="list(1,'essay')" :class="tab=='essay'?'selectedTab':'tab'">文章</a>
                     </div>
                 </div>
             </div>
 
             <div>
-                <hr>
                 <!-- 显示主要内容 -->
                 <template v-if="loaded">
                     <div class="media" v-for="topic in pagination.datas">
@@ -55,49 +55,73 @@
                                         v-text="topic.gmtCreate"></span></span></span>
                             </div>
                         </div>
+                        <hr>
                     </div>
-                    <hr>
                 </template>
             </div>
 
             <!--            分页条开始-->
-            <nav aria-label="Page navigation">
-                <template v-if="loaded">
-                    <ul class="pagination">
-                        <li v-if="pagination.hasFirst">
-                            <a @click="list(1,tab)" aria-label="First">
-                                <span aria-hidden="true">&lt;&lt;</span>
-                            </a>
-                        </li>
-                        <li v-if="pagination.hasPrevious">
-                            <a @click="list(pagination.page-1,tab)" aria-label="Previous">
-                                <span aria-hidden="true">&lt;</span>
-                            </a>
-                        </li>
+            <div>
+                <nav aria-label="Page navigation">
+                    <template v-if="loaded">
+                        <ul class="pagination">
+                            <li v-if="pagination.hasFirst">
+                                <a @click="list(1,tab)" aria-label="First">
+                                    <span aria-hidden="true">&lt;&lt;</span>
+                                </a>
+                            </li>
+                            <li v-if="pagination.hasPrevious">
+                                <a @click="list(pagination.page-1,tab)" aria-label="Previous">
+                                    <span aria-hidden="true">&lt;</span>
+                                </a>
+                            </li>
 
-                        <li v-for="page in pagination.pages" :class="[page==pagination.page?'active':'']"><a
-                                @click="list(page,tab)" v-text="page"></a></li>
+                            <li v-for="page in pagination.pages" :class="[page==pagination.page?'active':'']"><a
+                                    @click="list(page,tab)" v-text="page"></a></li>
 
-                        <li v-if="pagination.hasNext">
-                            <a @click="list(pagination.page+1,tab)" aria-label="Next">
-                                <span aria-hidden="true">&gt;</span>
-                            </a>
-                        </li>
-                        <li v-if="pagination.hasLast">
-                            <a @click="list(pagination.totalPage,tab)" aria-label="Last">
-                                <span aria-hidden="true">&gt;&gt;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </template>
-            </nav>
+                            <li v-if="pagination.hasNext">
+                                <a @click="list(pagination.page+1,tab)" aria-label="Next">
+                                    <span aria-hidden="true">&gt;</span>
+                                </a>
+                            </li>
+                            <li v-if="pagination.hasLast">
+                                <a @click="list(pagination.totalPage,tab)" aria-label="Last">
+                                    <span aria-hidden="true">&gt;&gt;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </template>
+                </nav>
+            </div>
             <!--            分页条结束-->
 
         </div>
 
-        <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12"></div>
+        <!--        左侧信息条-->
+        <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
+            <div class="panel panel-default" style="margin-top: 30px">
+                <div class="panel-body">
+                    <img th:src="${session.user.avatarUrl}" alt="Avatar"
+                         style="width: 48px;height: 48px;border-radius: 6px;">
+                    <a href="#" style="color: black;font-family: Consolas;font-size: 16px">
+                        <span th:text="${session.user.name}"></span>
+                    </a>
+                    <hr>
+                    <h3>
+                    <span class="label label-default" style="background: #efefef;height: 30px;">
+                        <img src="/imgs/coin.png" alt="coin" style="width: 20px;height: 20px;">
+                        <span style="color: black; font-size: 14px;font-family: Consolas;">账户余额：28.0COIN</span>
+
+                    </span>
+                    </h3>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+</div>
+
+<div th:replace="footer :: foot"></div>
 <script src="js/index.js"></script>
 </body>
 </html>

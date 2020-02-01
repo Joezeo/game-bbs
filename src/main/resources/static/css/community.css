@@ -1,5 +1,23 @@
+html{
+    height: 100%;
+}
 body{
     background-color: #efefef;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+h2{
+    letter-spacing: 3px;
+}
+a{
+    color: black;
+    font-family: Consolas;
+}
+
+.top-row{
+    border-bottom: 1px solid #ebebeb;
+    margin-bottom: 20px;
 }
 
 #Tabs {
@@ -25,8 +43,8 @@ body{
     border-radius: 5px;
 }
 .inner {
-    margin-top: 34px;
-    margin-left: -70px;
+    margin-top: 30px;
+    margin-left: -30px;
     padding-left: 20px;
     padding-right: 20px;
     font-size: 16px;
@@ -42,14 +60,35 @@ body{
 
 .main{
     margin-top: 30px;
-    margin-left: 100px;
-    margin-right: 100px;
+    margin-left: 10%;
+    margin-right: 10%;
     background-color: white;
+    flex: 1;
 }
 
-.btn-topic{
-    float: right;
-    margin-top: 6px;
+.footer{
+    margin-top: 50px;
+    border-top: 1px solid rgba(0,0,0,.22);
+    background-color: white;
+    color: #999;
+    text-align: center;
+    font-weight: bold;
+    padding: 0 10px;
+}
+
+.media{
+    margin-top: 0px;
+}
+
+.footer .inner-1{
+    margin-left: 10%;
+    text-align: left;
+    font-family: Consolas;
+}
+.footer .inner-2{
+    margin-left: 10%;
+    text-align: left;
+    font-family: Consolas;
 }
 
 .btn-publish{

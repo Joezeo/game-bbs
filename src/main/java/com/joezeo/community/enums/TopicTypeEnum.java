@@ -4,7 +4,8 @@ public enum TopicTypeEnum {
     QUESTION(1, "question"),
     TECH(2, "tech"),
     CREATIVE(3, "creative"),
-    PLAY(4, "play")
+    PLAY(4, "play"),
+    ESSAY(5, "essay")
     ;
     private Integer type;
     private String name;

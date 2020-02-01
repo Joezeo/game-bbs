@@ -45,7 +45,7 @@
 
                 <li class="dropdown" th:if="${session.user != null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false" style="color: black;">
+                       aria-expanded="false" style="color: black;font-size: 16px;">
                         <span th:text="${session.user.getName()}" style="font-weight: bold;"></span>
                         <span class="caret"></span>
                     </a>
@@ -55,8 +55,15 @@
                         <li><a href="/logout">退出登录 </a></li>
                     </ul>
                 </li>
-                <a class="btn btn-default btn-topic" href="/publish" role="button"
-                   th:if="${session.user != null}" style="background: white;font-weight: bold;">创作新主题</a>
+
+                <li class="dropdown" th:if="${session.user != null}">
+                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" style="background: white;font-weight: bold;">
+                       创作新主题</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/publish">发帖子</a></li>
+                        <li><a href="/pubEassy">发文章</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>

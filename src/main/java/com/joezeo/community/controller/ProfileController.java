@@ -27,7 +27,7 @@ public class ProfileController {
     @GetMapping("/profile/{action}")
     public String profile(@PathVariable(name = "action") String action,
                           @RequestParam(name = "page", defaultValue = "1") Integer page,
-                          @RequestParam(name = "size", defaultValue = "5") Integer size,
+                          @RequestParam(name = "size", defaultValue = "10") Integer size,
                           Model model,
                           HttpSession session) {
         User user = (User) session.getAttribute("user");
@@ -44,7 +44,6 @@ public class ProfileController {
             model.addAttribute("pagination", paginationDTO);
         } else if ("notify".equals(action)) {
             // 最新回复页面：每页显示十条数据
-            size = 10;
             model.addAttribute("section", "notify");
             model.addAttribute("sectionName", "最新回复");
 
