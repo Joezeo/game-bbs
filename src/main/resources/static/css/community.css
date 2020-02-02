@@ -126,7 +126,8 @@ a{
     font-family: candara,"Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","WenQuanYi Micro Hei","Microsoft Yahei",sans-serif, -apple-system;
     -webkit-font-smoothing: antialiased;
     color: #333;
-    margin-left: 20px;
+    margin-left: 5px;
+    margin-top: 17px;
 }
 
 .topic-title{

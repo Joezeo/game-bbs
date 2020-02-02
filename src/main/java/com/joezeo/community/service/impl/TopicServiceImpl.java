@@ -1,5 +1,6 @@
 package com.joezeo.community.service.impl;
 
+import com.joezeo.community.dao.RedisDao;
 import com.joezeo.community.dto.PaginationDTO;
 import com.joezeo.community.dto.TopicDTO;
 import com.joezeo.community.enums.TopicTypeEnum;
@@ -38,6 +39,8 @@ public class TopicServiceImpl implements TopicService {
     private TopicExtMapper topicExtMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private RedisDao redisDao;
 
     @Autowired
     private UCloudProvider uCloudProvider;
@@ -164,22 +167,36 @@ public class TopicServiceImpl implements TopicService {
         TopicDTO topicDTO = new TopicDTO();
         BeanUtils.copyProperties(topic, topicDTO);
 
-        // 从UCloud服务器获取帖子内容
-        InputStream inputStream = uCloudProvider.downloadTopic(topic.getDescription());
-        try(ByteArrayOutputStream result = new ByteArrayOutputStream()){
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = inputStream.read(buffer)) != -1) {
-                result.write(buffer, 0, length);
-            }
-            String desc = result.toString("UTF-8");
+        /*
+        获取帖子内容:
+        1.先从redis中获取缓存的帖子内容
+            如不存在：1.1从UCloud下载帖子内容
+                     1.2将帖子内容缓存至redis
+        */
+        if (redisDao.hasKey("topic-" + id)) {
+            String desc = (String) redisDao.get("topic-" + id);
             topicDTO.setDescription(desc);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            throw new CustomizeException(CustomizeErrorCode.DOWNLOAD_TOPIC_FAILED);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new CustomizeException(CustomizeErrorCode.DOWNLOAD_TOPIC_FAILED);
+        } else {
+            // 从UCloud下载帖子内容
+            InputStream inputStream = uCloudProvider.downloadTopic(topic.getDescription());
+            try (ByteArrayOutputStream result = new ByteArrayOutputStream()) {
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = inputStream.read(buffer)) != -1) {
+                    result.write(buffer, 0, length);
+                }
+                String desc = result.toString("UTF-8");
+                topicDTO.setDescription(desc);
+
+                // 将帖子内容缓存至redis中 缓存一天的时间
+                redisDao.set("topic-" + id, desc, 60 * 60 * 24);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                throw new CustomizeException(CustomizeErrorCode.DOWNLOAD_TOPIC_FAILED);
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new CustomizeException(CustomizeErrorCode.DOWNLOAD_TOPIC_FAILED);
+            }
         }
 
         // 获取当前帖子的发起人
@@ -251,7 +268,7 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public boolean isExist(Long id) {
         Topic topic = topicMapper.selectByPrimaryKey(id);
-        if(topic == null){
+        if (topic == null) {
             return false;
         }
         return true;

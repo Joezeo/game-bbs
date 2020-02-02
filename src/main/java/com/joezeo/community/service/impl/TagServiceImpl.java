@@ -4,7 +4,7 @@ import com.joezeo.community.exception.ServiceException;
 import com.joezeo.community.mapper.TagMapper;
 import com.joezeo.community.pojo.Tag;
 import com.joezeo.community.pojo.TagExample;
-import com.joezeo.community.dao.RedisUtils;
+import com.joezeo.community.dao.RedisDao;
 import com.joezeo.community.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class TagServiceImpl implements TagService {
     private TagMapper tagMapper;
 
     @Autowired
-    private RedisUtils redisUtils;
+    private RedisDao redisDao;
 
     @Override
     public List<Tag> listTagsByCategory(Integer index) {
@@ -30,8 +30,8 @@ public class TagServiceImpl implements TagService {
         List<Tag> tags;
         // 先从redis中获取
         String key = "tag" + index.toString();
-        if(redisUtils.hasKey(key)){
-            List<Object> list = redisUtils.lGet(key, 0 , -1);
+        if(redisDao.hasKey(key)){
+            List<Object> list = redisDao.lGet(key, 0 , -1);
             tags = new ArrayList<>();
             for (Object o : list) {
                 tags.add((Tag) o);
@@ -42,7 +42,7 @@ public class TagServiceImpl implements TagService {
             tags = tagMapper.selectByExample(example);
             // 存入redis中
             for (Tag tag : tags) {
-                redisUtils.lSet(key, tag);
+                redisDao.lSet(key, tag);
             }
         }
         if(tags == null || tags.size()==0){

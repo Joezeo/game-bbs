@@ -3,6 +3,7 @@ var section = path.substr(path.lastIndexOf("/")+1);
 var sectionName = "";
 var pagination = {};
 var loaded = false;
+var unreadCount = 0;
 
 var vue = new Vue({
     el:"#profile",
@@ -10,7 +11,8 @@ var vue = new Vue({
         section:section,
         sectionName,
         pagination,
-        loaded
+        loaded,
+        unreadCount
     },
     mounted:function () {
         switch (this.section) {
@@ -22,6 +24,7 @@ var vue = new Vue({
                 break;
         }
         this.getDatas(this.section,1);
+        this.getUnreadCount();
     },
     methods:{
         readAllNotification:readAllNotification,
@@ -45,6 +48,18 @@ var vue = new Vue({
                 if(jsonResult.success){
                     vue.pagination = jsonResult.data;
                     vue.loaded = true;
+                }
+            });
+        },
+        getUnreadCount:function () {
+            var url = "/getUnredCount";
+            axios.post(url).then(function (response) {
+                var jsonResult = response.data;
+                if(jsonResult.success){
+                    vue.unreadCount = jsonResult.data;
+                } else {
+                    // 用户未登录，无法获取unreadCount
+                    vue.unreadCount = 0;
                 }
             });
         }

@@ -1,11 +1,13 @@
 var path = window.location.href;
 var topicId = path.substr(path.lastIndexOf("/") + 1);
+
 var user={};
 var topic = {};
 var comments = {};
 var subComments = {};
 var commentContent = "";
 
+var loadedUser = false;
 var loadedTopic = false;
 var loadedComments = false;
 var loadedSubComments = false;
@@ -14,15 +16,11 @@ axios.default.withCredentials = true;
 var vue = new Vue({
     el: "#topic",
     data: {
-        topicId, topic, comments, subComments, user, loadedTopic, loadedComments, loadedSubComments, commentContent
+        topicId, topic, comments, subComments, user,
+        loadedTopic, loadedComments, loadedSubComments,loadedUser,
+        commentContent
     },
     mounted: function () {
-        // 加载markdown预览
-        var testView = editormd.markdownToHTML("topic-markdown-view", {
-            // markdown : "[TOC]\n### Hello world!\n## Heading 2", // Also, you can dynamic set Markdown text
-            // htmlDecode : true,  // Enable / disable HTML tag encode.
-            // htmlDecode : "style,script,iframe",  // Note: If enabled, you should filter some dangerous HTML tags for website security.
-        });
         this.getUser();
         this.getTopic(this.topicId);
         this.getComments(this.topicId);
@@ -45,6 +43,7 @@ var vue = new Vue({
                 var jsonResult = response.data;
                 if(jsonResult.success){
                     vue.user = jsonResult.data;
+                    vue.loadedUser = true;
                 } else {
                     alert(jsonResult.message);
                 }

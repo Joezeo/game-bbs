@@ -113,8 +113,8 @@ function doPublish() {
 // 进行数据非空校验
 function doCheckValue() {
     var flag = true;
-    // 实在不知道怎么办了，出此下策
-    vue.topicDTO.description = $("#description").val();
+    // 取出html内容，直接在页面展示
+    vue.topicDTO.description = $(".editormd-html-textarea").val();
 
     if (!vue.topicDTO.title || vue.topicDTO.title === "") {
         $("#title-warning").show();

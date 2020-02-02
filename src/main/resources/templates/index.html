@@ -100,11 +100,11 @@
         <!--        右侧信息条-->
         <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
             <div class="panel panel-default" style="margin-top: 30px">
-                <div class="panel-body" th:if="${session.user != null}">
-                    <img th:src="${session.user.avatarUrl}" alt="Avatar"
+                <div class="panel-body" v-if="loadedUser">
+                    <img :src="user.avatarUrl" alt="Avatar"
                          style="width: 48px;height: 48px;border-radius: 6px;">
                     <a href="#" style="color: black;font-family: Consolas;font-size: 16px">
-                        <span th:text="${session.user.name}"></span>
+                        <span v-text="user.name"></span>
                     </a>
                     <hr>
                     <h3>
@@ -116,7 +116,7 @@
                     </h3>
                 </div>
 
-                <div class="panel-body" th:if="${session.user == null}">
+                <div class="panel-body" v-if="!loadedUser">
                     <span style="font-weight: bold">您还未登录，请登录</span>
                 </div>
             </div>

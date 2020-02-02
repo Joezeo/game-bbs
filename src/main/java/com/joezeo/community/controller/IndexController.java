@@ -29,7 +29,7 @@ public class IndexController {
 
     @PostMapping("/list")
     @ResponseBody
-    public JsonResult<IndexDTO> index(@RequestBody IndexDTO<TopicDTO> indexDTO, HttpSession session){
+    public JsonResult<IndexDTO> index(@RequestBody IndexDTO<TopicDTO> indexDTO){
         PaginationDTO<TopicDTO> paginationDTO = topicService.listPage(indexDTO.getPage(), indexDTO.getSize(), indexDTO.getCondition(), indexDTO.getTab());
 
         indexDTO.setPagination(paginationDTO);
@@ -46,5 +46,18 @@ public class IndexController {
         }
 
         return JsonResult.okOf(user);
+    }
+
+    /**
+     * 获取当前session用户的未读通知数量
+     * @param session
+     * @return
+     */
+    @PostMapping("/getUnreadCount")
+    @ResponseBody
+    public JsonResult<Integer> getUnreadCount(HttpSession session){
+        Integer unreadCount = (Integer) session.getAttribute("unreadCount");
+
+        return JsonResult.okOf(unreadCount);
     }
 }
