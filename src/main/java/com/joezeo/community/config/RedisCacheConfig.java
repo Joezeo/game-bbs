@@ -9,6 +9,10 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 @Configuration
 public class RedisCacheConfig {
 
+    /**
+     * 让redis使用线程当前的类加载器
+     * 避免与devtools冲突
+     */
     @Bean
     public RedisCacheManager redisCacheManager(LettuceConnectionFactory lettuceConnectionFactory){
         return RedisCacheManager.builder(lettuceConnectionFactory)
