@@ -1,7 +1,7 @@
 var path = window.location.href;
 var topicId = path.substr(path.lastIndexOf("/") + 1);
 
-var user={};
+var user = {};
 var topic = {};
 var comments = {};
 var subComments = {};
@@ -17,7 +17,7 @@ var vue = new Vue({
     el: "#topic",
     data: {
         topicId, topic, comments, subComments, user,
-        loadedTopic, loadedComments, loadedSubComments,loadedUser,
+        loadedTopic, loadedComments, loadedSubComments, loadedUser,
         commentContent
     },
     mounted: function () {
@@ -37,15 +37,13 @@ var vue = new Vue({
         doSubcomment: doSubcomment,
         // 如未登录点击链接自动登录
         autoLogin: autoLogin,
-        getUser: function(){
+        getUser: function () {
             var url = "/getUser";
             axios.post(url).then(function (response) {
                 var jsonResult = response.data;
-                if(jsonResult.success){
+                if (jsonResult.data != null) {
                     vue.user = jsonResult.data;
                     vue.loadedUser = true;
-                } else {
-                    alert(jsonResult.message);
                 }
             })
         },
@@ -153,7 +151,7 @@ function subComment(commentId) {
 }
 
 function closeSubcomment(commentId) {
-    $("#subcomment-"+commentId).removeClass("in");
+    $("#subcomment-" + commentId).removeClass("in");
 }
 
 // 提交二级评论

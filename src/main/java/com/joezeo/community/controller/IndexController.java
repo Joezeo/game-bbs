@@ -41,9 +41,6 @@ public class IndexController {
     @ResponseBody
     public JsonResult<User> getUser(HttpSession session){
         User user = (User) session.getAttribute("user");
-        if(user == null){
-            throw new CustomizeException(CustomizeErrorCode.USER_NOT_LOGIN);
-        }
 
         return JsonResult.okOf(user);
     }

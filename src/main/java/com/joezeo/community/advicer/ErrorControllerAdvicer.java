@@ -20,7 +20,7 @@ public class ErrorControllerAdvicer{
     ModelAndView handleControllerException(Throwable ex, HttpServletRequest request, HttpServletResponse response) {
         String contentType = request.getContentType();
 
-        if("application/json".equals(contentType)){ // 如果以前后端分离的方式访问服务器
+        if("application/json;charset=UTF-8".equals(contentType)){ // 如果以前后端分离的方式访问服务器
             JsonResult result;
             if(ex instanceof CustomizeException){
                 result = JsonResult.errorOf((CustomizeException)ex);
@@ -31,8 +31,7 @@ public class ErrorControllerAdvicer{
             response.setContentType("application/json");
             response.setStatus(200);
             response.setCharacterEncoding("utf-8");
-            try (PrintWriter writer = response.getWriter()
-            ) {
+            try (PrintWriter writer = response.getWriter()) {
                 writer.write(JSON.toJSONString(result));
             } catch (IOException e) {
                 e.printStackTrace();

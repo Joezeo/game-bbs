@@ -1,5 +1,9 @@
 package com.joezeo.community.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.joezeo.community.dto.JsonResult;
+import com.joezeo.community.exception.CustomizeErrorCode;
+import com.joezeo.community.exception.CustomizeException;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,10 +13,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * 如果不定义此ErrorController
  * springmvc 会默认使用 BasicErrorController
+ * 此异常处理器处理根路径下的异常
  */
 @Controller
 @RequestMapping("${server.error.path:${error.path:/error}}")
@@ -24,16 +31,19 @@ public class CustomizeErrorController implements ErrorController {
     }
 
     @RequestMapping(produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView errorHtml(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView errorHtml(HttpServletRequest request, HttpServletResponse response, Throwable ex) {
+        // 需判断前端的请求类型是不是application/json
+        String contentType = request.getContentType();
         HttpStatus status = getStatus(request);
+
         ModelAndView modelAndView = new ModelAndView("error");
-        if(status.is4xxClientError()){
-            if (status.equals(HttpStatus.NOT_FOUND)){
+        if (status.is4xxClientError()) {
+            if (status.equals(HttpStatus.NOT_FOUND)) {
                 modelAndView.addObject("message", "404：你来到了一片没有知识的荒野！");
             } else {
                 modelAndView.addObject("message", "浏览器太累了，请稍后重试！");
             }
-        } else if(status.is5xxServerError()){
+        } else if (status.is5xxServerError()) {
             modelAndView.addObject("message", "服务器冒烟了，请稍后重试！");
         }
         return modelAndView;
@@ -46,8 +56,7 @@ public class CustomizeErrorController implements ErrorController {
         }
         try {
             return HttpStatus.valueOf(statusCode);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
     }

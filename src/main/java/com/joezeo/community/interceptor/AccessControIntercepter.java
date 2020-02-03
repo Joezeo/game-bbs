@@ -15,7 +15,7 @@ public class AccessControIntercepter implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         response.setHeader("Access-Control-Allow-Origin","*");
         response.setHeader("Access-Control-Allow-Methods","POST");
-        response.setHeader("Access-Control-Allow-Headers","Access-Control");
+        response.setHeader("Access-Control-Allow-Headers","content-type");
         response.setHeader("Allow","POST");
         return true;
     }
