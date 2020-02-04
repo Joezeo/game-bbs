@@ -8,8 +8,23 @@
 <body>
 <nav class="footer" th:fragment="foot">
     <div class="inner-1">
-        <h1>JOEF</h1>
+        <ul style="list-style-type: none;width: 300px;">
+            <li style="float: left;">
+                <h1 style="margin-top: -10px;margin-right: 10px">JOEF</h1>
+            </li>
+            <li class="dropup" style="float: left;">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                   aria-expanded="false" style="color: #999">
+                    <span style="font-weight: bold;">小工具</span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="/gallery">图床</a></li>
+                </ul>
+            </li>
+        </ul>
     </div>
+    <br><br>
     <div class="inner-2">
         <span>Copyright © 2020 · JOEF · FORUM </span>
     </div>

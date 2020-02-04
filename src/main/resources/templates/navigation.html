@@ -24,15 +24,6 @@
                 <button type="submit" class="btn btn-default" style="background: white;font-weight: bold;">搜索</button>
             </form>
 
-            <ul class="nav navbar-nav">
-                <li style="font-size: 17px;">
-                    <!-- 图床 -->
-                    <a href="/gallery" class="navbar-link" style="font-weight: bold;color: black;">
-                        <span class="glyphicon glyphicon-sd-video" aria-hidden="true" style="background: white;color: black;"></span>
-                        图床</a>
-                </li>
-            </ul>
-
             <ul class="nav navbar-nav navbar-right">
 
                 <li th:if="${session.user == null}">
