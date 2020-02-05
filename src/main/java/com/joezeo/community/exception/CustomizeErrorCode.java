@@ -15,7 +15,7 @@ public enum CustomizeErrorCode implements IExceptionErrorCode{
     UPLOAD_IMG_FIILED(2010, "上传图片失败"),
     READ_ALL_FIALED(2011, "已读所有通知失败，请稍后重试"),
     DOWNLOAD_TOPIC_FAILED(2012, "获取帖子内容失败，请稍后重试"),
-    TOPIC_NOT_FOUND(2013, "你查找的帖子不存在或已被删除，请换一个试试");
+    TOPIC_NOT_FOUND(2013, "你查找的帖子不存在或已被删除，请换一个试试"), SPIDE_STEAM_URL_ERROR(2014, "爬取steam应用url失败");
 
     private Integer code;
     private String message;

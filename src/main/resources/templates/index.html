@@ -110,6 +110,7 @@
 
                     </span>
                     </h3>
+                    <button v-if="user.id==1" @click="spideUrl" class="btn btn-default" type="submit">爬取Steam所有Url</button>
                 </div>
 
                 <div class="panel-body" v-if="!loadedUser">
