@@ -1,5 +1,6 @@
 package com.joezeo.community.spider;
 
+import com.joezeo.community.enums.SpiderJobTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ public class SipderSchedulTask {
         if (game.size() != 0) {
             for (String url : game) {
                 System.out.println("再次爬取页面："+url);
-                pageGetter.spiderAsyn(url, "game");
+                pageGetter.spiderUrlAsyn(url, "game", null, SpiderJobTypeEnum.DAILY_CHECK_URL);
             }
         }
 
@@ -35,7 +36,7 @@ public class SipderSchedulTask {
         if (bundle.size() != 0) {
             for (String url : bundle) {
                 System.out.println("再次爬取页面："+url);
-                pageGetter.spiderAsyn(url, "bundle");
+                pageGetter.spiderUrlAsyn(url, "bundle", null, SpiderJobTypeEnum.DAILY_CHECK_URL);
             }
         }
 
@@ -44,7 +45,7 @@ public class SipderSchedulTask {
         if (software.size() != 0) {
             for (String url : software) {
                 System.out.println("再次爬取页面："+url);
-                pageGetter.spiderAsyn(url, "software");
+                pageGetter.spiderUrlAsyn(url, "software", null, SpiderJobTypeEnum.DAILY_CHECK_URL);
             }
         }
 
@@ -53,7 +54,7 @@ public class SipderSchedulTask {
         if (dlc.size() != 0) {
             for (String url : dlc) {
                 System.out.println("再次爬取页面："+url);
-                pageGetter.spiderAsyn(url, "dlc");
+                pageGetter.spiderUrlAsyn(url, "dlc", null, SpiderJobTypeEnum.DAILY_CHECK_URL);
             }
         }
 
@@ -62,7 +63,7 @@ public class SipderSchedulTask {
         if (demo.size() != 0) {
             for (String url : demo) {
                 System.out.println("再次爬取页面："+url);
-                pageGetter.spiderAsyn(url, "demo");
+                pageGetter.spiderUrlAsyn(url, "demo", null, SpiderJobTypeEnum.DAILY_CHECK_URL);
             }
         }
 
@@ -71,7 +72,7 @@ public class SipderSchedulTask {
         if (sound.size() != 0) {
             for (String url : sound) {
                 System.out.println("再次爬取页面："+url);
-                pageGetter.spiderAsyn(url, "sound");
+                pageGetter.spiderUrlAsyn(url, "sound", null, SpiderJobTypeEnum.DAILY_CHECK_URL);
             }
         }
     }

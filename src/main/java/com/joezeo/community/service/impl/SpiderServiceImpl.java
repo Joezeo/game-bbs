@@ -12,6 +12,11 @@ public class SpiderServiceImpl implements SpiderService {
 
     @Override
     public void spideUrl() {
-        steamSpider.storeUrl();
+        steamSpider.initUrl();
+    }
+
+    @Override
+    public void spideApp() {
+        steamSpider.initAppInfo();
     }
 }

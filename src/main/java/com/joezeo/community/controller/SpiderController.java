@@ -15,8 +15,15 @@ public class SpiderController {
 
     @PostMapping("/spideUrl")
     @ResponseBody
-    public JsonResult spideUrl(){
+    public JsonResult spideUrl() {
         spiderService.spideUrl();
+        return JsonResult.okOf(null);
+    }
+
+    @PostMapping("/spideApp")
+    @ResponseBody
+    public JsonResult spideApp() {
+        spiderService.spideApp();
         return JsonResult.okOf(null);
     }
 }

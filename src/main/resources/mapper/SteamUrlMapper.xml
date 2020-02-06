@@ -16,4 +16,42 @@
             (default, #{key},#{value})
         </foreach>
     </insert>
+
+    <insert id="insert">
+        insert into
+        <choose>
+            <when test="type == 'game'">t_steam_game_url</when>
+            <when test="type == 'software'">t_steam_software_url</when>
+            <when test="type == 'demo'">t_steam_demo_game_url</when>
+            <when test="type == 'dlc'">t_steam_dlc_url</when>
+            <when test="type == 'sound'">t_steam_sound_tape_url</when>
+            <when test="type == 'bundle'">t_steam_bundle_url</when>
+        </choose>
+        values (default , #{appid}, #{url})
+    </insert>
+
+    <select id="selectByAppid" resultType="SteamUrl">
+        select appid from
+        <choose>
+            <when test="type == 'game'">t_steam_game_url</when>
+            <when test="type == 'software'">t_steam_software_url</when>
+            <when test="type == 'demo'">t_steam_demo_game_url</when>
+            <when test="type == 'dlc'">t_steam_dlc_url</when>
+            <when test="type == 'sound'">t_steam_sound_tape_url</when>
+            <when test="type == 'bundle'">t_steam_bundle_url</when>
+        </choose>
+        where appid = #{appid}
+    </select>
+
+    <select id="selectAll" resultType="SteamUrl">
+        select appid,url from
+        <choose>
+            <when test="type == 'game'">t_steam_game_url</when>
+            <when test="type == 'software'">t_steam_software_url</when>
+            <when test="type == 'demo'">t_steam_demo_game_url</when>
+            <when test="type == 'dlc'">t_steam_dlc_url</when>
+            <when test="type == 'sound'">t_steam_sound_tape_url</when>
+            <when test="type == 'bundle'">t_steam_bundle_url</when>
+        </choose>
+    </select>
 </mapper>

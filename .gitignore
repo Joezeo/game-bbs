@@ -33,4 +33,3 @@ build/
 ### extend ###
 src/main/resources/application.properties
 log/
-src/main/java/com/joezeo/community/spider/PageResolver.java

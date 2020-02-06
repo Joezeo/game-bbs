@@ -68,6 +68,17 @@ var vue = new Vue({
                     alert(jsonResult.message);
                 }
             })
+        },
+        spideApp: function () {
+            var url = 'spideApp';
+            axios.post(url).then(function (response) {
+                var jsonResult = response.data;
+                if(jsonResult.success){
+
+                } else {
+                    alert(jsonResult.message);
+                }
+            })
         }
     }
 });

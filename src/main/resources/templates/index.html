@@ -110,7 +110,8 @@
 
                     </span>
                     </h3>
-                    <button v-if="user.id==1" @click="spideUrl" class="btn btn-default" type="submit">爬取Steam所有Url</button>
+                    <button v-if="user.id==1" @click="spideUrl" class="btn btn-default" type="submit" style="background: white;">爬取Steam所有Url</button>
+                    <button v-if="user.id==1" @click="spideApp" class="btn btn-default" type="submit" style="background: white;">爬取Steam所有软件信息</button>
                 </div>
 
                 <div class="panel-body" v-if="!loadedUser">
