@@ -3,9 +3,9 @@ package com.joezeo.community.mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface SteamUrlMapper {
-    int insertList(@Param("list") List<String> list, @Param("type") String type);
+    int insertMap(@Param("map") Map<String, String> map, @Param("type") String type);
 }

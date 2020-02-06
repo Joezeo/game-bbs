@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.joezeo.community.mapper.SteamUrlMapper">
-    <insert id="insertList" parameterType="list">
+    <insert id="insertMap" parameterType="map">
         insert into
         <choose>
             <when test="type == 'game'">t_steam_game_url</when>
@@ -9,10 +9,11 @@
             <when test="type == 'demo'">t_steam_demo_game_url</when>
             <when test="type == 'dlc'">t_steam_dlc_url</when>
             <when test="type == 'sound'">t_steam_sound_tape_url</when>
+            <when test="type == 'bundle'">t_steam_bundle_url</when>
         </choose>
         values
-        <foreach collection="list" item="url" separator=",">
-            (default, #{url})
+        <foreach collection="map" index="key" item="value" separator=",">
+            (default, #{key},#{value})
         </foreach>
     </insert>
 </mapper>
