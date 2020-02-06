@@ -11,12 +11,14 @@ public class SteamAppInfo implements Serializable {
     private Integer id;
     private Integer appid;
     private String name;
+    private String imgUrl;
     private String description;
     private String releaseDate;
     private String devloper;
     private String publisher;
     private Integer originalPrice;
     private Integer finalPrice;
+    private String summary;
     private Long gmtCreate;
     private Long gmtModify;
 }

@@ -24,7 +24,7 @@
             <when test="type == 'sound'">t_steam_sound_tape_info</when>
             <when test="type == 'bundle'">t_steam_bundle_info</when>
         </choose>
-        values (default , #{appInfo.appid}, #{appInfo.name}, #{appInfo.description}, #{appInfo.releaseDate}, #{appInfo.devloper}, #{appInfo.publisher},
-        #{appInfo.originalPrice}, #{appInfo.finalPrice}, #{appInfo.gmtCreate}, #{appInfo.gmtModify})
+        values (default , #{appInfo.appid}, #{appInfo.name}, #{appInfo.imgUrl},#{appInfo.description}, #{appInfo.releaseDate}, #{appInfo.devloper}, #{appInfo.publisher},
+        #{appInfo.originalPrice}, #{appInfo.finalPrice},#{appInfo.summary}, #{appInfo.gmtCreate}, #{appInfo.gmtModify})
     </insert>
 </mapper>

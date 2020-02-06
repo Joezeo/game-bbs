@@ -93,8 +93,20 @@ public class PageResolver {
         imgSrc = imgDiv.stream().map(img -> img.attr("src")).collect(Collectors.joining());
 
         String description = "";
-        Elements descDiv = doc.getElementsByClass("game_description_snippet");
-        description = descDiv.stream().map(desc -> desc.html()).collect(Collectors.joining());
+        if ("dlc".equals(type)) { // dlc 的简介被另外class修饰
+            Elements elements = doc.getElementsByClass("glance_details");
+            for (Element ele : elements) {
+                Elements ps = ele.getElementsByTag("p");
+                for (Element p : ps) {
+                    description = p.html();
+                    break;
+                }
+                break;
+            }
+        } else {
+            Elements descDiv = doc.getElementsByClass("game_description_snippet");
+            description = descDiv.stream().map(desc -> desc.html()).collect(Collectors.joining());
+        }
 
         String date = "";
         Elements dateDiv = doc.getElementsByClass("date");
@@ -102,8 +114,12 @@ public class PageResolver {
 
         String devlop = "";
         Element devpDiv = doc.getElementById("developers_list");
-        Elements devps = devpDiv.getElementsByTag("a");
-        devlop = devps.stream().map(devp -> devp.html()).collect(Collectors.joining(";"));
+        if (devpDiv != null) {
+            Elements devps = devpDiv.getElementsByTag("a");
+            if (devps != null) {
+                devlop = devps.stream().map(devp -> devp.html()).collect(Collectors.joining(";"));
+            }
+        }
 
         String publisher = "";
         Elements divs = doc.getElementsByClass("summary column");
@@ -147,25 +163,39 @@ public class PageResolver {
                         finalPrice = 0;
                         break;
                     } else {
-                        String priceStr = subele.attr("data-price-final");
-                        originalPrice = Integer.parseInt(priceStr) / 100;
-                        finalPrice = originalPrice;
-                        break;
+                        String priceStr = subele.attr("data-price-final").trim();
+                        if ("".equals(priceStr)) {
+                            originalPrice = 0;
+                            finalPrice = 0;
+                            break;
+                        } else {
+                            originalPrice = Integer.parseInt(priceStr) / 100;
+                            finalPrice = originalPrice;
+                            break;
+                        }
                     }
                 }
             }
             break; // 第二个是捆绑包的价格
         }
 
+        // 用户评测
+        String summary = "";
+        Elements summryDivs = doc.getElementsByClass("user_reviews_summary_row");
+        summary = summryDivs.stream().map(div -> div.attr("data-tooltip-html")).collect(Collectors.joining("|"));
+
+
         SteamAppInfo steamAppInfo = new SteamAppInfo();
         steamAppInfo.setAppid(appid);
         steamAppInfo.setName(appName);
+        steamAppInfo.setImgUrl(imgSrc);
         steamAppInfo.setDescription(description);
         steamAppInfo.setReleaseDate(date);
         steamAppInfo.setDevloper(devlop);
         steamAppInfo.setPublisher(publisher);
         steamAppInfo.setOriginalPrice(originalPrice);
         steamAppInfo.setFinalPrice(finalPrice);
+        steamAppInfo.setSummary(summary);
         steamAppInfo.setGmtCreate(System.currentTimeMillis());
         steamAppInfo.setGmtModify(steamAppInfo.getGmtCreate());
         int index = steamAppInfoMapper.insert(steamAppInfo, type);
@@ -195,8 +225,20 @@ public class PageResolver {
 
         // 软件简介
         String description = "";
-        Elements descDiv = doc.getElementsByClass("game_description_snippet");
-        description = descDiv.stream().map(desc -> desc.html()).collect(Collectors.joining());
+        if ("dlc".equals(type)) { // dlc 的简介被另外class修饰
+            Elements elements = doc.getElementsByClass("glance_details");
+            for (Element ele : elements) {
+                Elements ps = ele.getElementsByTag("p");
+                for (Element p : ps) {
+                    description = p.html();
+                    break;
+                }
+                break;
+            }
+        } else {
+            Elements descDiv = doc.getElementsByClass("game_description_snippet");
+            description = descDiv.stream().map(desc -> desc.html()).collect(Collectors.joining());
+        }
 
         // 发行日期
         String date = "";
@@ -206,8 +248,12 @@ public class PageResolver {
         // 开发商
         String devlop = "";
         Element devpDiv = doc.getElementById("developers_list");
-        Elements devps = devpDiv.getElementsByTag("a");
-        devlop = devps.stream().map(devp -> devp.html()).collect(Collectors.joining(";"));
+        if (devpDiv != null) {
+            Elements devps = devpDiv.getElementsByTag("a");
+            if (devps != null) {
+                devlop = devps.stream().map(devp -> devp.html()).collect(Collectors.joining(";"));
+            }
+        }
 
         // 发行商
         String publisher = "";
@@ -253,26 +299,39 @@ public class PageResolver {
                         break;
                     } else {
                         String priceStr = subele.attr("data-price-final");
-                        originalPrice = Integer.parseInt(priceStr) / 100;
-                        finalPrice = originalPrice;
-                        break;
+                        if ("".equals(priceStr)) {
+                            originalPrice = 0;
+                            finalPrice = 0;
+                            break;
+                        } else {
+                            originalPrice = Integer.parseInt(priceStr) / 100;
+                            finalPrice = originalPrice;
+                            break;
+                        }
                     }
                 }
             }
             break; // 第二个是捆绑包的价格
         }
 
+        // 用户评测
+        String summary = "";
+        Elements summryDivs = doc.getElementsByClass("user_reviews_summary_row");
+        summary = summryDivs.stream().map(div -> div.attr("data-tooltip-html")).collect(Collectors.joining("|"));
+
         SteamAppInfo steamAppInfo = steamAppInfoMapper.selectByAppid(appid, type);
         if (steamAppInfo == null) { // 该app不存在才存入数据库中
             steamAppInfo = new SteamAppInfo();
             steamAppInfo.setAppid(appid);
             steamAppInfo.setName(appName);
+            steamAppInfo.setImgUrl(imgSrc);
             steamAppInfo.setDescription(description);
             steamAppInfo.setReleaseDate(date);
             steamAppInfo.setDevloper(devlop);
             steamAppInfo.setPublisher(publisher);
             steamAppInfo.setOriginalPrice(originalPrice);
             steamAppInfo.setFinalPrice(finalPrice);
+            steamAppInfo.setSummary(summary);
             steamAppInfo.setGmtCreate(System.currentTimeMillis());
             steamAppInfo.setGmtModify(steamAppInfo.getGmtCreate());
             int index = steamAppInfoMapper.insert(steamAppInfo, type);
