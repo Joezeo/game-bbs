@@ -1,5 +1,5 @@
 var indexDTO = {
-    user:{},
+    user: {},
     pagination: {},
     condition: '',
     tab: '',
@@ -15,11 +15,11 @@ var vue = new Vue({
         this.list(1);
     },
     methods: {
-        getUser:function(){
+        getUser: function () {
             var url = "/getUser";
             axios.post(url).then(function (response) {
                 var jsonResult = response.data;
-                if(jsonResult.success){
+                if (jsonResult.success) {
                     vue.user = jsonResult.data;
                     vue.loadedUser = true;
                 } else {
@@ -62,7 +62,7 @@ var vue = new Vue({
             var url = 'spideUrl';
             axios.post(url).then(function (response) {
                 var jsonResult = response.data;
-                if(jsonResult.success){
+                if (jsonResult.success) {
 
                 } else {
                     alert(jsonResult.message);
@@ -73,7 +73,40 @@ var vue = new Vue({
             var url = 'spideApp';
             axios.post(url).then(function (response) {
                 var jsonResult = response.data;
-                if(jsonResult.success){
+                if (jsonResult.success) {
+
+                } else {
+                    alert(jsonResult.message);
+                }
+            })
+        },
+        checkUrl: function () {
+            var url = 'checkUrl';
+            axios.post(url).then(function (response) {
+                var jsonResult = response.data;
+                if (jsonResult.success) {
+
+                } else {
+                    alert(jsonResult.message);
+                }
+            })
+        },
+        checkApp: function () {
+            var url = 'checkApp';
+            axios.post(url).then(function (response) {
+                var jsonResult = response.data;
+                if (jsonResult.success) {
+
+                } else {
+                    alert(jsonResult.message);
+                }
+            })
+        },
+        spideSpecialPrice: function () {
+            var url = 'spideSpecialPrice';
+            axios.post(url).then(function (response) {
+                var jsonResult = response.data;
+                if (jsonResult.success) {
 
                 } else {
                     alert(jsonResult.message);

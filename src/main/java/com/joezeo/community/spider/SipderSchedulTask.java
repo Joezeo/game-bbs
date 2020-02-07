@@ -6,6 +6,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 定时检查SiderComponent的failUrl容器是否含有上一次执行失败的url
@@ -20,12 +21,14 @@ public class SipderSchedulTask {
     @Autowired
     private PageGetter pageGetter;
 
-    @Scheduled(cron = "0/5 * * * * ?")
+    @Scheduled(cron = "0/30 * * * * ?")
     public void restorePage() {
         // 判断游戏url
         List<String> game = spiderComponent.gameFailUrl;
-        if (game.size() != 0) {
-            for (String url : game) {
+        List<String> gameCopy = game.stream().collect(Collectors.toList());
+        game.removeAll(game);
+        if (gameCopy.size() != 0) {
+            for (String url : gameCopy) {
                 System.out.println("再次爬取页面："+url);
                 pageGetter.spiderUrlAsyn(url, "game", null, SpiderJobTypeEnum.DAILY_CHECK_URL);
             }
@@ -33,8 +36,10 @@ public class SipderSchedulTask {
 
         // 判断捆绑包url
         List<String> bundle = spiderComponent.gameFailUrl;
-        if (bundle.size() != 0) {
-            for (String url : bundle) {
+        List<String> bundleCopy = bundle.stream().collect(Collectors.toList());
+        bundle.removeAll(bundle);
+        if (bundleCopy.size() != 0) {
+            for (String url : bundleCopy) {
                 System.out.println("再次爬取页面："+url);
                 pageGetter.spiderUrlAsyn(url, "bundle", null, SpiderJobTypeEnum.DAILY_CHECK_URL);
             }
@@ -42,8 +47,9 @@ public class SipderSchedulTask {
 
         // 判断软件url
         List<String> software = spiderComponent.softwareFailUrl;
-        if (software.size() != 0) {
-            for (String url : software) {
+        List<String> softwareCopy = software.stream().collect(Collectors.toList());
+        if (softwareCopy.size() != 0) {
+            for (String url : softwareCopy) {
                 System.out.println("再次爬取页面："+url);
                 pageGetter.spiderUrlAsyn(url, "software", null, SpiderJobTypeEnum.DAILY_CHECK_URL);
             }
@@ -51,8 +57,10 @@ public class SipderSchedulTask {
 
         // 判断 dlc url
         List<String> dlc = spiderComponent.dlcFailUrl;
-        if (dlc.size() != 0) {
-            for (String url : dlc) {
+        List<String> dlcCopy = dlc.stream().collect(Collectors.toList());
+        dlc.removeAll(dlc);
+        if (dlcCopy.size() != 0) {
+            for (String url : dlcCopy) {
                 System.out.println("再次爬取页面："+url);
                 pageGetter.spiderUrlAsyn(url, "dlc", null, SpiderJobTypeEnum.DAILY_CHECK_URL);
             }
@@ -60,8 +68,9 @@ public class SipderSchedulTask {
 
         // 判断试玩游戏url
         List<String> demo = spiderComponent.demoFailUrl;
-        if (demo.size() != 0) {
-            for (String url : demo) {
+        List<String> demoCopy = demo.stream().collect(Collectors.toList());
+        if (demoCopy.size() != 0) {
+            for (String url : demoCopy) {
                 System.out.println("再次爬取页面："+url);
                 pageGetter.spiderUrlAsyn(url, "demo", null, SpiderJobTypeEnum.DAILY_CHECK_URL);
             }
@@ -69,8 +78,10 @@ public class SipderSchedulTask {
 
         // 判断原声带url
         List<String> sound = spiderComponent.soundFailUrl;
-        if (sound.size() != 0) {
-            for (String url : sound) {
+        List<String> soundCopy = sound.stream().collect(Collectors.toList());
+        sound.removeAll(sound);
+        if (soundCopy.size() != 0) {
+            for (String url : soundCopy) {
                 System.out.println("再次爬取页面："+url);
                 pageGetter.spiderUrlAsyn(url, "sound", null, SpiderJobTypeEnum.DAILY_CHECK_URL);
             }

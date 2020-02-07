@@ -26,4 +26,26 @@ public class SpiderController {
         spiderService.spideApp();
         return JsonResult.okOf(null);
     }
+
+    @PostMapping("/checkUrl")
+    @ResponseBody
+    public JsonResult checkUrl() {
+        spiderService.checkUrl();
+        return JsonResult.okOf(null);
+    }
+
+    @PostMapping("/checkApp")
+    @ResponseBody
+    public JsonResult checkApp() {
+        spiderService.checkApp();
+        return JsonResult.okOf(null);
+    }
+
+    @PostMapping("/spideSpecialPrice")
+    @ResponseBody
+    public JsonResult spideSpecialPrice() {
+        spiderService.spideSpecialPrice();
+        return JsonResult.okOf(null);
+    }
+
 }

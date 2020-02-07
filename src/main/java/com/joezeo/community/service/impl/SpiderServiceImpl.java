@@ -19,4 +19,19 @@ public class SpiderServiceImpl implements SpiderService {
     public void spideApp() {
         steamSpider.initAppInfo();
     }
+
+    @Override
+    public void checkUrl() {
+        steamSpider.daliyChekcUrl();
+    }
+
+    @Override
+    public void checkApp() {
+        steamSpider.daliyChekcApp();
+    }
+
+    @Override
+    public void spideSpecialPrice() {
+        steamSpider.updateHistoryPrice();
+    }
 }

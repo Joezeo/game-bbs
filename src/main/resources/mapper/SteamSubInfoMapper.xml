@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joezeo.community.mapper.SteamSubInfoMapper">
+    <select id="selectByAppid" resultType="SteamSubInfo">
+        select appid from t_steam_sub_info where appid=#{appid}
+    </select>
+
+    <insert id="insert" parameterType="SteamSubInfo">
+        insert into t_steam_sub_info
+        values (default, #{appid}, #{name}, #{developer} ,#{publisher},#{date}, #{originalPrice}, #{finalPrice},
+        #{contains}, #{gmtCreate},#{gmtModify})
+    </insert>
+</mapper>
