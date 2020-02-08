@@ -27,6 +27,11 @@ public class IndexController {
         return "index";
     }
 
+    @GetMapping("/loadding")
+    public String htmLoadding(){
+        return "loadding";
+    }
+
     @PostMapping("/list")
     @ResponseBody
     public JsonResult<IndexDTO> index(@RequestBody IndexDTO<TopicDTO> indexDTO){

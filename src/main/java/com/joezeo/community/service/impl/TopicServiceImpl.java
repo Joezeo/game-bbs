@@ -188,8 +188,8 @@ public class TopicServiceImpl implements TopicService {
                 String desc = result.toString("UTF-8");
                 topicDTO.setDescription(desc);
 
-                // 将帖子内容缓存至redis中 缓存两小时的时间
-                redisDao.set("topic-" + id, desc, 60 * 60 * 2);
+                // 将帖子内容缓存至redis中 缓存一小时的时间
+                redisDao.set("topic-" + id, desc, 60 * 60);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
                 throw new CustomizeException(CustomizeErrorCode.DOWNLOAD_TOPIC_FAILED);

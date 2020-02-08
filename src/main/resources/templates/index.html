@@ -110,16 +110,16 @@
 
                     </span>
                     </h3>
-                    <div v-if="user.id==1">
-                        <button v-if="user.id==1" @click="spideUrl" class="btn btn-default" type="submit" style="background: white;">爬取Steam所有Url</button>
+                    <div th:if="${session.user.id == 1}">
+                        <button @click="spideUrl" class="btn btn-default" type="submit" style="background: white;">爬取Steam所有Url</button>
                         <br>
-                        <button v-if="user.id==1" @click="spideApp" class="btn btn-default" type="submit" style="background: white;">爬取Steam所有软件信息</button>
+                        <button @click="spideApp" class="btn btn-default" type="submit" style="background: white;">爬取Steam所有软件信息</button>
                         <br>
-                        <button v-if="user.id==1" @click="checkUrl" class="btn btn-default" type="submit" style="background: white;">检查Url</button>
+                        <button @click="checkUrl" class="btn btn-default" type="submit" style="background: white;">检查Url</button>
                         <br>
-                        <button v-if="user.id==1" @click="checkApp" class="btn btn-default" type="submit" style="background: white;">检查软件信息</button>
+                        <button @click="checkApp" class="btn btn-default" type="submit" style="background: white;">检查软件信息</button>
                         <br>
-                        <button v-if="user.id==1" @click="spideSpecialPrice" class="btn btn-default" type="submit" style="background: white;">爬取特惠价格</button>
+                        <button @click="spideSpecialPrice" class="btn btn-default" type="submit" style="background: white;">爬取特惠价格</button>
                     </div>
                 </div>
 

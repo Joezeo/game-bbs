@@ -7,7 +7,6 @@ import com.joezeo.community.pojo.UserExample;
 import com.joezeo.community.provider.UCloudProvider;
 import com.joezeo.community.service.UserService;
 import com.joezeo.community.utils.AvatarGenerator;
-import org.opencv.core.Core;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

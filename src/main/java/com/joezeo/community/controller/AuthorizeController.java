@@ -2,6 +2,7 @@ package com.joezeo.community.controller;
 
 import com.joezeo.community.dto.AccessTokenDTO;
 import com.joezeo.community.dto.GithubUser;
+import com.joezeo.community.dto.JsonResult;
 import com.joezeo.community.pojo.User;
 import com.joezeo.community.provider.GithubProvider;
 import com.joezeo.community.provider.UCloudProvider;
@@ -10,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -32,8 +35,7 @@ public class AuthorizeController {
     @Value("${github.redirect.uri}")
     private String redirectUri;
 
-
-    @GetMapping("callback")
+    @GetMapping("/callback")
     public String callback(@RequestParam("code") String code,
                            @RequestParam("state") String state,
                            HttpServletResponse response) {
@@ -81,5 +83,15 @@ public class AuthorizeController {
         session.removeAttribute("user");
 
         return "redirect:/";
+    }
+
+    @PostMapping("/authAccess")
+    @ResponseBody
+    public JsonResult authAccess(HttpServletResponse response){
+
+        Cookie access = new Cookie("__access", UUID.randomUUID().toString());
+        access.setMaxAge(60 * 60 * 24); // cookie储存一天
+        response.addCookie(access);
+        return JsonResult.okOf(null);
     }
 }

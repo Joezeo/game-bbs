@@ -31,5 +31,5 @@ build/
 .vscode/
 
 ### extend ###
-src/main/resources/application.properties
+src/main/resources/*.properties
 log/
