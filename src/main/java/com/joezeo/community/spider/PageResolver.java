@@ -60,11 +60,11 @@ public class PageResolver {
 
         Elements paginations = doc.getElementsByClass("pagination");
         int totalPage = 0;
-        for(Element e : paginations){
+        for (Element e : paginations) {
             Elements as = e.getElementsByTag("a");
             int index = 0;
-            for(Element a : as){
-                if(index == 9){
+            for (Element a : as) {
+                if (index == 9) {
                     totalPage = Integer.parseInt(a.html());
                 }
                 index++;
@@ -89,47 +89,52 @@ public class PageResolver {
 
         Element ipList = doc.getElementById("ip_list");
         Elements trs = ipList.getElementsByTag("tr");
-        for(Element tr : trs){
+        for (Element tr : trs) {
             Elements tds = tr.getElementsByTag("td");
             int index = 0;
-            for(Element td : tds){
-                if(index == 1){ // ip地址
+            for (Element td : tds) {
+                if (index == 1) { // ip地址
                     ip = td.html();
-                } else if(index == 2){ // 端口号
+                } else if (index == 2) { // 端口号
                     port = Integer.parseInt(td.html());
-                } else if (index == 5){ // 类型 HTTP/HTTPS
+                } else if (index == 5) { // 类型 HTTP/HTTPS
                     type = td.html();
-                } else if(index == 6){ // 速度
+                } else if (index == 6) { // 速度
                     Elements divs = td.getElementsByTag("div");
                     Element e = divs.get(0);
                     String speedStr = e.attr("title").replace("秒", "");
                     speed = Double.parseDouble(speedStr);
-                } else if(index == 7){ //
+                } else if (index == 7) { //
                     Elements divs = td.getElementsByTag("div");
                     Element e = divs.get(0);
                     String connectStr = e.attr("title").replace("秒", "");
                     connectTime = Double.parseDouble(connectStr);
-                } else if(index == 8){
+                } else if (index == 8) {
                     survive = td.html();
                 }
-                index ++;
+                index++;
             }
 
-            if(speed < 1 && connectTime < 1 && survive.indexOf("天") != -1){
-                // 速度小于1秒，连接时间小于1秒，存活天数至少为1天的才做记录
-                ProxyIP proxyip = new ProxyIP();
-                proxyip.setAddress(ip);
-                proxyip.setPort(port);
-                proxyip.setType(type);
-                proxyip.setSpeed(speed);
-                proxyip.setConnecttime(connectTime);
-                proxyip.setSurvive(survive);
-                proxyip.setGmtCreate(System.currentTimeMillis());
-                proxyip.setGmtModify(proxyip.getGmtCreate());
-                int idx = proxyIPMapper.insert(proxyip);
-                if(idx != 1){
-                    log.error("插入代理ip失败");
-                    throw new ServiceException("插入代理ip失败");
+            if (speed < 1 && connectTime < 1 && survive.indexOf("天") != -1) {// 速度小于1秒，连接时间小于1秒，存活天数至少为1天的才做记录
+                // 查询此ip在数据库是否存在
+                ProxyIPExample example = new ProxyIPExample();
+                example.createCriteria().andAddressEqualTo(ip);
+                List<ProxyIP> proxyIPS = proxyIPMapper.selectByExample(example);
+                if (proxyIPS == null || proxyIPS.size() == 0) {// 如果不存在再插入此条代理ip
+                    ProxyIP proxyip = new ProxyIP();
+                    proxyip.setAddress(ip);
+                    proxyip.setPort(port);
+                    proxyip.setType(type);
+                    proxyip.setSpeed(speed);
+                    proxyip.setConnecttime(connectTime);
+                    proxyip.setSurvive(survive);
+                    proxyip.setGmtCreate(System.currentTimeMillis());
+                    proxyip.setGmtModify(proxyip.getGmtCreate());
+                    int idx = proxyIPMapper.insert(proxyip);
+                    if (idx != 1) {
+                        log.error("插入代理ip失败");
+                        throw new ServiceException("插入代理ip失败");
+                    }
                 }
             }
         }

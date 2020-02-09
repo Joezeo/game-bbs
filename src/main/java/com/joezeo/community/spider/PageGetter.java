@@ -8,20 +8,63 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.Proxy;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
 public class PageGetter {
     @Autowired
-    private OkHttpClient okHttpClient;
-
+    private ProxyPool proxyPool;
     @Autowired
     private PageResolver pageResolver;
-
     @Autowired
     private SpiderComponent spiderComponent;
 
+    /**
+     * 初始化OkHttpClient
+     * 设置读取，请求时间
+     * 设置拦截器
+     * 设置代理
+     */
+    private OkHttpClient initClient(boolean useProxy) {
+        Proxy proxy = null;
+        if (useProxy) {
+            boolean usable = false;
+            while(!usable){
+                proxy = proxyPool.getProxy();//获取代理
+                usable = proxyPool.checkProxy(proxy);
+                if (usable) {
+                    proxyPool.closeProxy(proxy);//代理池回收代理,放回代理池尾部
+                } else {
+                    proxyPool.disableProxy(proxy);
+                }
+            }
+        }
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60 * 10, TimeUnit.SECONDS)
+                .writeTimeout(60 * 10, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
+                .proxy(proxy)
+                .addInterceptor(chain -> {
+                    // 设置延迟时间delay 防止ip被ban
+                    int delay = 500;
+                    try {
+                        System.out.println("爬虫 delay 500毫秒");
+                        Thread.sleep(delay);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    return chain.proceed(chain.request());
+                });
+        OkHttpClient okHttpClient = builder.build();
+
+        return okHttpClient;
+    }
+
     public void spiderUrlAsyn(String url, String type, Integer appid, SpiderJobTypeEnum jobType) {
+        OkHttpClient okHttpClient = initClient(false);
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36")
@@ -49,7 +92,7 @@ public class PageGetter {
                     pageResolver.initOrCheckAppInfo(page, type, appid, url.lastIndexOf("/sub/") != -1);
                 } else if (jobType == SpiderJobTypeEnum.DAILY_CHECK_APP_INFO) {
                     pageResolver.initOrCheckAppInfo(page, type, appid, url.lastIndexOf("/sub/") != -1);
-                } else if(jobType == SpiderJobTypeEnum.DAILY_SPIDE_SPECIAL_PRICE){
+                } else if (jobType == SpiderJobTypeEnum.DAILY_SPIDE_SPECIAL_PRICE) {
                     pageResolver.dailySpideSpecialPrice(page, appid);
                 }
             }
@@ -57,6 +100,7 @@ public class PageGetter {
     }
 
     public int getSteamTotalPage(String url) {
+        OkHttpClient okHttpClient = initClient(false);
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36")
@@ -78,6 +122,7 @@ public class PageGetter {
     }
 
     public int getIPTotalPage(String url) {
+        OkHttpClient okHttpClient = initClient(true);
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36")
@@ -97,6 +142,7 @@ public class PageGetter {
     }
 
     public void getProxyIpPage(String url) {
+        OkHttpClient okHttpClient = initClient(true);
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36")
