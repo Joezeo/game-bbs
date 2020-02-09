@@ -13,13 +13,15 @@
                     data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only" style="color:black;font-weight: bold">JOEF</span>
             </button>
-            <a class="navbar-brand" href="/" style="color:black;font-weight: bold;font-size: 35px;font-family: Lucida Console;letter-spacing: -3px;">JOEF</a>
+            <a class="navbar-brand" href="/"
+               style="color:black;font-weight: bold;font-size: 35px;font-family: Lucida Console;letter-spacing: -3px;">JOEF</a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <form class="navbar-form navbar-left" action="/" method="get">
                 <div class="form-group">
-                    <input name="condition" type="text" class="form-control" placeholder="搜索帖子" style="font-weight: bold;">
+                    <input name="condition" type="text" class="form-control" placeholder="搜索帖子"
+                           style="font-weight: bold;">
                 </div>
                 <button type="submit" class="btn btn-default" style="background: white;font-weight: bold;">搜索</button>
             </form>
@@ -27,7 +29,7 @@
             <ul class="nav navbar-nav navbar-right">
 
                 <li th:if="${session.user == null}">
-                    <a href="https://github.com/login/oauth/authorize?client_id=332735b1b85bfbb88779&scope=user&state=1" style="font-weight: bold;">登录</a>
+                    <a href="/login" style="font-weight: bold;">登录</a>
                 </li>
 
                 <li th:if="${session.user != null}">
@@ -49,8 +51,9 @@
                 </li>
 
                 <li class="dropdown" th:if="${session.user != null}">
-                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" style="background: white;font-weight: bold;">
-                       创作新主题</a>
+                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button"
+                       style="background: white;font-weight: bold;">
+                        创作新主题</a>
                     <ul class="dropdown-menu">
                         <li><a href="/publish">发帖子</a></li>
                         <li><a href="/pubEassy">发文章</a></li>

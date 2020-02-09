@@ -2,7 +2,7 @@ var indexDTO = {
     user: {},
     pagination: {},
     condition: '',
-    tab: '',
+    tab: 'news',
     loaded: false, // 页面是否异步加载完毕
     loadedUser: false
 };
@@ -20,8 +20,13 @@ var vue = new Vue({
             axios.post(url).then(function (response) {
                 var jsonResult = response.data;
                 if (jsonResult.success) {
-                    vue.user = jsonResult.data;
-                    vue.loadedUser = true;
+                    var getedUser = jsonResult.data;
+                    if (getedUser) {
+                        vue.user = getedUser;
+                        vue.loadedUser = true;
+                    } else {
+                        vue.loadedUser = false;
+                    }
                 } else {
                     vue.loadedUser = false;
                 }
@@ -38,7 +43,7 @@ var vue = new Vue({
         list: function (page, tab) {
             var url = "/list";
             if (!tab) {
-                tab = 'question';
+                tab = 'news';
             }
             var params = {
                 page: page,
@@ -53,6 +58,17 @@ var vue = new Vue({
                     vue.condition = indexdto.condition;
                     vue.tab = indexdto.tab;
                     vue.loaded = true;
+                } else {
+                    alert(jsonResult.message);
+                }
+            })
+        },
+        spideProxyIP: function () {
+            var url = 'spideProxyIP';
+            axios.post(url).then(function (response) {
+                var jsonResult = response.data;
+                if (jsonResult.success) {
+
                 } else {
                     alert(jsonResult.message);
                 }

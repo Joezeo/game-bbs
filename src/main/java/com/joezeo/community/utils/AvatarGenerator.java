@@ -14,6 +14,7 @@ import java.util.Random;
  * 头像生成器
  */
 public class AvatarGenerator {
+
     // 加载openCV核心库
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -177,7 +178,6 @@ public class AvatarGenerator {
      * 获取一个随机的头像
      */
     public InputStream getARandomAvatar() {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         // 新建一个 img 文件
         Mat img = new Mat(
                 GITHUB_AVATAR_ROWS,

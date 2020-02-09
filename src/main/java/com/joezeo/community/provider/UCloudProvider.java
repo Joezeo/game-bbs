@@ -25,7 +25,7 @@ public class UCloudProvider {
     @Autowired
     private ObjectConfig objectConfig;
 
-    @Value("${ucloud-ufile-bucketname}")
+    @Value("${ucloud.ufile.bucketname}")
     private String bucketname;
 
     public String uploadImg(InputStream fileInputStream, String mimeType, String fileName) {

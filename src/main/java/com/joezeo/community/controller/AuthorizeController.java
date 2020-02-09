@@ -35,6 +35,13 @@ public class AuthorizeController {
     @Value("${github.redirect.uri}")
     private String redirectUri;
 
+    @GetMapping("/login")
+    public String login(){
+        String url = "https://github.com/login/oauth/authorize?client_id="+clientId+"&scope=user&state=1";
+        return "redirect:" + url;
+    }
+
+
     @GetMapping("/callback")
     public String callback(@RequestParam("code") String code,
                            @RequestParam("state") String state,

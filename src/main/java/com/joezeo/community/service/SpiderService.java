@@ -10,4 +10,6 @@ public interface SpiderService {
     void checkApp();
 
     void spideSpecialPrice();
+
+    void spideProxyIP();
 }

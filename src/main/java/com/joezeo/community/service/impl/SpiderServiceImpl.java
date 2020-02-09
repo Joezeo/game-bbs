@@ -1,6 +1,7 @@
 package com.joezeo.community.service.impl;
 
 import com.joezeo.community.service.SpiderService;
+import com.joezeo.community.spider.IPSpider;
 import com.joezeo.community.spider.SteamSpider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 public class SpiderServiceImpl implements SpiderService {
     @Autowired
     private SteamSpider steamSpider;
+    @Autowired
+    private IPSpider ipSpider;
 
     @Override
     public void spideUrl() {
@@ -33,5 +36,10 @@ public class SpiderServiceImpl implements SpiderService {
     @Override
     public void spideSpecialPrice() {
         steamSpider.updateHistoryPrice();
+    }
+
+    @Override
+    public void spideProxyIP() {
+        ipSpider.spideProxyIP();
     }
 }

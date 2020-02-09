@@ -10,16 +10,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class UCloudConfig {
 
-    @Value("${ucloud-ufile-public-key}")
+    @Value("${ucloud.ufile.public.key}")
     private String publicKey;
 
-    @Value("${ucloud-ufile-private-key}")
+    @Value("${ucloud.ufile.private.key}")
     private String privateKey;
 
-    @Value("${ucloud-ufile-region}")
+    @Value("${ucloud.ufile.region}")
     private String region;
 
-    @Value("${ucloud-ufile-suffix}")
+    @Value("${ucloud.ufile.suffix}")
     private String suffix;
 
     @Bean(name = "objectAuthorization")

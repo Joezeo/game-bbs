@@ -56,7 +56,7 @@ public class PageGetter {
         });
     }
 
-    public int getTotalPage(String url) {
+    public int getSteamTotalPage(String url) {
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36")
@@ -69,11 +69,49 @@ public class PageGetter {
         // 这里不能使用异步获取，因为这里获得的总页数在接下来的逻辑中是有用的
         try {
             Response response = call.execute();
-            int totalPage = pageResolver.resolvTotalPage(response.body().string());
+            int totalPage = pageResolver.resolvSteamTotalPage(response.body().string());
             return totalPage;
         } catch (IOException e) {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    public int getIPTotalPage(String url) {
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36")
+                .get()
+                .build();
+
+        Call call = okHttpClient.newCall(request);
+        // 这里不能使用异步获取，因为这里获得的总页数在接下来的逻辑中是有用的
+        try {
+            Response response = call.execute();
+            int totalPage = pageResolver.resolvIPTotalPage(response.body().string());
+            return totalPage;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public void getProxyIpPage(String url) {
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36")
+                .get()
+                .build();
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+            }
+
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String page = response.body().string();
+                pageResolver.resolvProxyIP(page);
+            }
+        });
     }
 }

@@ -70,7 +70,7 @@ public class SteamSpider {
     /*
     每天检查特惠商品的价格，将每天的特惠商品的价格放入t_steam_history_price表中
      */
-    public void updateHistoryPrice(){
+    public void updateHistoryPrice() {
         List<SteamUrl> special = steamUrlMapper.selectAll("special");
 
         spideSpecialPrice(special, SpiderJobTypeEnum.DAILY_SPIDE_SPECIAL_PRICE);
@@ -85,7 +85,7 @@ public class SteamSpider {
         // 如果获取页面失败那么totalPage会一直为0，直到成功获取了总页数才继续
         int totalPage = 0;
         while (totalPage == 0) {
-            totalPage = pageGetter.getTotalPage(url + 1);
+            totalPage = pageGetter.getSteamTotalPage(url + 1);
         }
         for (int i = 1; i <= totalPage; i++) {
             pageGetter.spiderUrlAsyn(url + i, "game", null, jobTypeEnum);
@@ -96,7 +96,7 @@ public class SteamSpider {
         String url = "https://store.steampowered.com/search/?category1=996&ignore_preferences=1&page=";
         int totalPage = 0;
         while (totalPage == 0) {
-            totalPage = pageGetter.getTotalPage(url + 1);
+            totalPage = pageGetter.getSteamTotalPage(url + 1);
         }
         for (int i = 0; i <= totalPage; i++) {
             pageGetter.spiderUrlAsyn(url + i, "bundle", null, jobTypeEnum);
@@ -107,7 +107,7 @@ public class SteamSpider {
         String url = "https://store.steampowered.com/search/?category1=994&ignore_preferences=1&page=";
         int totalPage = 0;
         while (totalPage == 0) {
-            totalPage = pageGetter.getTotalPage(url + 1);
+            totalPage = pageGetter.getSteamTotalPage(url + 1);
         }
         for (int i = 1; i <= totalPage; i++) {
             pageGetter.spiderUrlAsyn(url + i, "software", null, jobTypeEnum);
@@ -118,7 +118,7 @@ public class SteamSpider {
         String url = "https://store.steampowered.com/search/?category1=21&ignore_preferences=1&page=";
         int totalPage = 0;
         while (totalPage == 0) {
-            totalPage = pageGetter.getTotalPage(url + 1);
+            totalPage = pageGetter.getSteamTotalPage(url + 1);
         }
         for (int i = 1; i <= totalPage; i++) {
             pageGetter.spiderUrlAsyn(url + i, "dlc", null, jobTypeEnum);
@@ -129,7 +129,7 @@ public class SteamSpider {
         String url = "https://store.steampowered.com/search/?category1=10&ignore_preferences=1&page=";
         int totalPage = 0;
         while (totalPage == 0) {
-            totalPage = pageGetter.getTotalPage(url + 1);
+            totalPage = pageGetter.getSteamTotalPage(url + 1);
         }
         for (int i = 1; i <= totalPage; i++) {
             pageGetter.spiderUrlAsyn(url + i, "demo", null, jobTypeEnum);
@@ -140,7 +140,7 @@ public class SteamSpider {
         String url = "https://store.steampowered.com/search/?category1=990&ignore_preferences=1&page=";
         int totalPage = 0;
         while (totalPage == 0) {
-            totalPage = pageGetter.getTotalPage(url + 1);
+            totalPage = pageGetter.getSteamTotalPage(url + 1);
         }
         for (int i = 1; i <= totalPage; i++) {
             pageGetter.spiderUrlAsyn(url + i, "sound", null, jobTypeEnum);
@@ -152,7 +152,7 @@ public class SteamSpider {
         String url = "https://store.steampowered.com/search/?filter=topsellers&specials=1&ignore_preferences=1&page=";
         int totalPage = 0;
         while (totalPage == 0) {
-            totalPage = pageGetter.getTotalPage(url + 1);
+            totalPage = pageGetter.getSteamTotalPage(url + 1);
         }
         for (int i = 1; i <= totalPage; i++) {
             pageGetter.spiderUrlAsyn(url + i, "special", null, jobTypeEnum);
@@ -164,46 +164,46 @@ public class SteamSpider {
      */
     private void spideAllGameInfo(List<SteamUrl> list, SpiderJobTypeEnum jobTypeEnum) {
         for (SteamUrl steamUrl : list) {
-            pageGetter.spiderUrlAsyn(steamUrl.getUrl(), "game", steamUrl.getAppid(), jobTypeEnum);
+            pageGetter.spiderUrlAsyn(steamUrl.getUrl() + "?cc=cn", "game", steamUrl.getAppid(), jobTypeEnum);
         }
     }
 
     private void spideAllSoftwareInfo(List<SteamUrl> list, SpiderJobTypeEnum jobTypeEnum) {
         for (SteamUrl steamUrl : list) {
-            pageGetter.spiderUrlAsyn(steamUrl.getUrl(), "software", steamUrl.getAppid(), jobTypeEnum);
+            pageGetter.spiderUrlAsyn(steamUrl.getUrl() + "?cc=cn", "software", steamUrl.getAppid(), jobTypeEnum);
         }
     }
 
     private void spideAllDlcInfo(List<SteamUrl> list, SpiderJobTypeEnum jobTypeEnum) {
         for (SteamUrl steamUrl : list) {
-            pageGetter.spiderUrlAsyn(steamUrl.getUrl(), "dlc", steamUrl.getAppid(), jobTypeEnum);
+            pageGetter.spiderUrlAsyn(steamUrl.getUrl() + "?cc=cn", "dlc", steamUrl.getAppid(), jobTypeEnum);
         }
     }
 
     private void spideAllDemoInfo(List<SteamUrl> list, SpiderJobTypeEnum jobTypeEnum) {
         for (SteamUrl steamUrl : list) {
-            pageGetter.spiderUrlAsyn(steamUrl.getUrl(), "demo", steamUrl.getAppid(), jobTypeEnum);
+            pageGetter.spiderUrlAsyn(steamUrl.getUrl() + "?cc=cn", "demo", steamUrl.getAppid(), jobTypeEnum);
         }
     }
 
     private void spideAllSoundInfo(List<SteamUrl> list, SpiderJobTypeEnum jobTypeEnum) {
         for (SteamUrl steamUrl : list) {
-            pageGetter.spiderUrlAsyn(steamUrl.getUrl(), "sound", steamUrl.getAppid(), jobTypeEnum);
+            pageGetter.spiderUrlAsyn(steamUrl.getUrl() + "?cc=cn", "sound", steamUrl.getAppid(), jobTypeEnum);
         }
     }
 
     private void spideAllBundleInfo(List<SteamUrl> list, SpiderJobTypeEnum jobTypeEnum) {
         for (SteamUrl steamUrl : list) {
-            pageGetter.spiderUrlAsyn(steamUrl.getUrl(), "bundle", steamUrl.getAppid(), jobTypeEnum);
+            pageGetter.spiderUrlAsyn(steamUrl.getUrl() + "?cc=cn", "bundle", steamUrl.getAppid(), jobTypeEnum);
         }
     }
 
     /*
             通过存储的url地址，获取steam当前特惠商品的价格
      */
-    private void spideSpecialPrice(List<SteamUrl> list, SpiderJobTypeEnum jobTypeEnum){
+    private void spideSpecialPrice(List<SteamUrl> list, SpiderJobTypeEnum jobTypeEnum) {
         for (SteamUrl steamUrl : list) {
-            pageGetter.spiderUrlAsyn(steamUrl.getUrl(), "special", steamUrl.getAppid(), jobTypeEnum);
+            pageGetter.spiderUrlAsyn(steamUrl.getUrl() + "?cc=cn", "special", steamUrl.getAppid(), jobTypeEnum);
         }
     }
 

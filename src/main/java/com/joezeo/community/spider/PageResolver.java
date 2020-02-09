@@ -1,17 +1,9 @@
 package com.joezeo.community.spider;
 
-import cn.ucloud.ufile.api.object.UploadStreamHitApi;
-import com.joezeo.community.exception.CustomizeErrorCode;
-import com.joezeo.community.exception.CustomizeException;
 import com.joezeo.community.exception.ServiceException;
-import com.joezeo.community.mapper.SteamAppInfoMapper;
-import com.joezeo.community.mapper.SteamHistoryPriceMapper;
-import com.joezeo.community.mapper.SteamSubInfoMapper;
-import com.joezeo.community.mapper.SteamUrlMapper;
-import com.joezeo.community.pojo.SteamAppInfo;
-import com.joezeo.community.pojo.SteamHistoryPrice;
-import com.joezeo.community.pojo.SteamSubInfo;
-import com.joezeo.community.pojo.SteamUrl;
+import com.joezeo.community.mapper.*;
+import com.joezeo.community.pojo.*;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,7 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
+@Slf4j
 public class PageResolver {
 
     @Autowired
@@ -34,11 +28,13 @@ public class PageResolver {
     private SteamSubInfoMapper steamSubInfoMapper;
     @Autowired
     private SteamHistoryPriceMapper steamHistoryPriceMapper;
+    @Autowired
+    private ProxyIPMapper proxyIPMapper;
 
     /**
-     * 获取搜索页的总页数
+     * 解析获取Steam各个搜索页的总页数
      */
-    public int resolvTotalPage(String page) {
+    public int resolvSteamTotalPage(String page) {
         Document doc = Jsoup.parse(page);
         Elements searchDivs = doc.getElementsByClass("search_pagination_right");
         String pageStr = "";
@@ -54,6 +50,89 @@ public class PageResolver {
             }
         }
         return Integer.parseInt(pageStr);
+    }
+
+    /**
+     * 解析获取西刺代理页面的总页数
+     */
+    public int resolvIPTotalPage(String string) {
+        Document doc = Jsoup.parse(string);
+
+        Elements paginations = doc.getElementsByClass("pagination");
+        int totalPage = 0;
+        for(Element e : paginations){
+            Elements as = e.getElementsByTag("a");
+            int index = 0;
+            for(Element a : as){
+                if(index == 9){
+                    totalPage = Integer.parseInt(a.html());
+                }
+                index++;
+            }
+            break;
+        }
+        return totalPage;
+    }
+
+    /**
+     * 解析代理ip
+     */
+    public void resolvProxyIP(String page) {
+        Document doc = Jsoup.parse(page);
+
+        String ip = "";
+        Integer port = 0;
+        String type = "";
+        Double speed = 0d;
+        Double connectTime = 0d;
+        String survive = "";
+
+        Element ipList = doc.getElementById("ip_list");
+        Elements trs = ipList.getElementsByTag("tr");
+        for(Element tr : trs){
+            Elements tds = tr.getElementsByTag("td");
+            int index = 0;
+            for(Element td : tds){
+                if(index == 1){ // ip地址
+                    ip = td.html();
+                } else if(index == 2){ // 端口号
+                    port = Integer.parseInt(td.html());
+                } else if (index == 5){ // 类型 HTTP/HTTPS
+                    type = td.html();
+                } else if(index == 6){ // 速度
+                    Elements divs = td.getElementsByTag("div");
+                    Element e = divs.get(0);
+                    String speedStr = e.attr("title").replace("秒", "");
+                    speed = Double.parseDouble(speedStr);
+                } else if(index == 7){ //
+                    Elements divs = td.getElementsByTag("div");
+                    Element e = divs.get(0);
+                    String connectStr = e.attr("title").replace("秒", "");
+                    connectTime = Double.parseDouble(connectStr);
+                } else if(index == 8){
+                    survive = td.html();
+                }
+                index ++;
+            }
+
+            if(speed < 1 && connectTime < 1 && survive.indexOf("天") != -1){
+                // 速度小于1秒，连接时间小于1秒，存活天数至少为1天的才做记录
+                ProxyIP proxyip = new ProxyIP();
+                proxyip.setAddress(ip);
+                proxyip.setPort(port);
+                proxyip.setType(type);
+                proxyip.setSpeed(speed);
+                proxyip.setConnecttime(connectTime);
+                proxyip.setSurvive(survive);
+                proxyip.setGmtCreate(System.currentTimeMillis());
+                proxyip.setGmtModify(proxyip.getGmtCreate());
+                int idx = proxyIPMapper.insert(proxyip);
+                if(idx != 1){
+                    log.error("插入代理ip失败");
+                    throw new ServiceException("插入代理ip失败");
+                }
+            }
+        }
     }
 
     /**

@@ -50,10 +50,11 @@
 
         <!--Springboot 热部署 ctr+F9（MakeProject）进行触发重启服务-->
 <!--        与System.loadLibaray()方法冲突-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-devtools</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <!--mybatis-->
         <dependency>
@@ -112,7 +113,7 @@
             <artifactId>opencv</artifactId>
             <version>4.2.0</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/opencv-420.jar</systemPath>
+            <systemPath>${basedir}/opencv/opencv-420.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -171,5 +172,6 @@
                 </dependencies>
             </plugin>
         </plugins>
+
     </build>
 </project>

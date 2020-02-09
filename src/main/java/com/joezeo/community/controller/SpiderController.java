@@ -13,6 +13,13 @@ public class SpiderController {
     @Autowired
     private SpiderService spiderService;
 
+    @PostMapping("/spideProxyIP")
+    @ResponseBody
+    public JsonResult spideProxyIP(){
+        spiderService.spideProxyIP();
+        return JsonResult.okOf(null);
+    }
+
     @PostMapping("/spideUrl")
     @ResponseBody
     public JsonResult spideUrl() {
