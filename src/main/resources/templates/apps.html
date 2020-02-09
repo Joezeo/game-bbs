@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Steam Apps - JOEF</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+
+<!--导航栏-->
+<div th:replace="navigation :: nav"></div>
+
+<div class="container-fluid main profile" id="profile">
+    <div class="row">
+        <!--        App 列表-->
+        <div class="col-lg-10 .col-md-12 .col-sm-12 .col-xs-12">
+            <table class="col-lg-12 .col-md-12 .col-sm-12 .col-xs-12 app-table">
+                <tr>
+                    <th style="width: 25%;"></th>
+                    <th style="width: 10%;">App id</th>
+                    <th style="width: 50%">App</th>
+                    <th style="width: 15%">促销状态</th>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="" alt="">
+                    </td>
+                    <td>app id</td>
+                    <td>
+                        <h4>test</h4>
+                    </td>
+                    <td>
+                        <span>test</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!--        搜索条件-->
+        <div class="col-lg-2 .col-md-12 .col-sm-12 .col-xs-12">
+        </div>
+    </div>
+</div>
+
+<div th:replace="footer :: foot"></div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="/jquery/jquery-3.4.1.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/profile.js"></script>
+</body>
+</html>

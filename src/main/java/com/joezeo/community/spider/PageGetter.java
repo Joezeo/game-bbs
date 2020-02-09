@@ -15,6 +15,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class PageGetter {
     @Autowired
+    private OkHttpClient client4Steam;
+    @Autowired
     private ProxyPool proxyPool;
     @Autowired
     private PageResolver pageResolver;
@@ -64,7 +66,6 @@ public class PageGetter {
     }
 
     public void spiderUrlAsyn(String url, String type, Integer appid, SpiderJobTypeEnum jobType) {
-        OkHttpClient okHttpClient = initClient(false);
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36")
@@ -73,7 +74,7 @@ public class PageGetter {
                 .get()
                 .build();
 
-        Call call = okHttpClient.newCall(request);
+        Call call = client4Steam.newCall(request);
         call.enqueue(new Callback() {
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 log.error("爬取网页失败 - 可能等待时间过长 - 将再次重试：" + url);
@@ -100,7 +101,6 @@ public class PageGetter {
     }
 
     public int getSteamTotalPage(String url) {
-        OkHttpClient okHttpClient = initClient(false);
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36")
@@ -109,7 +109,7 @@ public class PageGetter {
                 .get()
                 .build();
 
-        Call call = okHttpClient.newCall(request);
+        Call call = client4Steam.newCall(request);
         // 这里不能使用异步获取，因为这里获得的总页数在接下来的逻辑中是有用的
         try {
             Response response = call.execute();

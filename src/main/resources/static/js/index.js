@@ -2,7 +2,7 @@ var indexDTO = {
     user: {},
     pagination: {},
     condition: '',
-    tab: 'news',
+    tab: 'sales',
     loaded: false, // 页面是否异步加载完毕
     loadedUser: false
 };
@@ -43,7 +43,7 @@ var vue = new Vue({
         list: function (page, tab) {
             var url = "/list";
             if (!tab) {
-                tab = 'news';
+                tab = 'sales';
             }
             var params = {
                 page: page,

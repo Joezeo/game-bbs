@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>JOEF · FORUM</title>
+    <title>JOEF · GAME</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
@@ -21,11 +21,11 @@
                 </div>
                 <div class="col-lg-10 .col-md-12 .col-sm-12 .col-xs-12">
                     <div class="inner" id="Tabs">
-                        <a @click="list(1,'news')" :class="tab=='news'?'selectedTab':'tab'">资讯</a>
-                        <a @click="list(1,'square')" :class="tab=='square'?'selectedTab':'tab'">广场</a>
-                        <a @click="list(1,'guide')" :class="tab=='guide'?'selectedTab':'tab'">攻略</a>
                         <a @click="list(1,'sales')" :class="tab=='sales'?'selectedTab':'tab'">Steam促销</a>
+                        <a @click="list(1,'news')" :class="tab=='news'?'selectedTab':'tab'">资讯</a>
+                        <a @click="list(1,'guide')" :class="tab=='guide'?'selectedTab':'tab'">攻略</a>
                         <a @click="list(1,'essay')" :class="tab=='essay'?'selectedTab':'tab'">文章</a>
+                        <a @click="list(1,'square')" :class="tab=='square'?'selectedTab':'tab'">广场</a>
                     </div>
                 </div>
             </div>

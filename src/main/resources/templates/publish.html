@@ -43,10 +43,9 @@
                 <!--                帖子主题选择-->
                 <label for="topicType"> 主题选择：</label>
                 <select v-model="topicDTO.topicType" class="form-control" id="topicType" name="topicType">
-                    <option value="1">问题</option>
-                    <option value="2">技术</option>
-                    <option value="3">创意</option>
-                    <option value="4">好玩</option>
+                    <option value="3">攻略</option>
+                    <option value="4">文章</option>
+                    <option value="5">广场</option>
                 </select>
                 <br>
 
@@ -95,11 +94,8 @@
         </div>
 
         <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
-            <h3 class="topic-title" style="margin-top: 35px;">问题发起指南</h3>
+            <h3 class="topic-title" style="margin-top: 35px;">帖子发起指南</h3>
             <div class="topic-desc">
-                • 问题标题: 请用精简的语言描述您发布的问题，不超过25字 <br>
-                • 问题补充: 详细补充您的问题内容，并确保问题描述清晰直观, 并提供一些相关的资料<br>
-                • 选择标签: 选择一个或者多个合适的标签，用逗号隔开，每个标签不超过10个字<br>
             </div>
         </div>
     </div>

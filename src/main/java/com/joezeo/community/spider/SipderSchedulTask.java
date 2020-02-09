@@ -17,9 +17,25 @@ public class SipderSchedulTask {
 
     @Autowired
     private SpiderComponent spiderComponent;
-
     @Autowired
     private PageGetter pageGetter;
+    @Autowired
+    private SteamSpider steamSpider;
+
+    @Scheduled(cron = "0 0 0 1/1 * ?") // 每天凌晨00:00执行
+    public void checkUrl() {
+        steamSpider.daliyChekcUrl();
+    }
+
+    @Scheduled(cron = "0 0 1 1/1 * ?") // 每天凌晨01:00执行
+    public void checkSpecialPrice() {
+        steamSpider.updateHistoryPrice();
+    }
+
+    @Scheduled(cron = "0 0 2 1/3 * ?") // 每三天执行一次，凌晨2:00执行
+    public void checkAppInfo(){
+        steamSpider.daliyChekcApp();
+    }
 
     @Scheduled(cron = "0/30 * * * * ?")
     public void restorePage() {
@@ -29,7 +45,7 @@ public class SipderSchedulTask {
         game.removeAll(game);
         if (gameCopy.size() != 0) {
             for (String url : gameCopy) {
-                System.out.println("再次爬取页面："+url);
+                System.out.println("再次爬取页面：" + url);
                 pageGetter.spiderUrlAsyn(url, "game", null, SpiderJobTypeEnum.DAILY_CHECK_URL);
             }
         }
@@ -40,7 +56,7 @@ public class SipderSchedulTask {
         bundle.removeAll(bundle);
         if (bundleCopy.size() != 0) {
             for (String url : bundleCopy) {
-                System.out.println("再次爬取页面："+url);
+                System.out.println("再次爬取页面：" + url);
                 pageGetter.spiderUrlAsyn(url, "bundle", null, SpiderJobTypeEnum.DAILY_CHECK_URL);
             }
         }
@@ -50,7 +66,7 @@ public class SipderSchedulTask {
         List<String> softwareCopy = software.stream().collect(Collectors.toList());
         if (softwareCopy.size() != 0) {
             for (String url : softwareCopy) {
-                System.out.println("再次爬取页面："+url);
+                System.out.println("再次爬取页面：" + url);
                 pageGetter.spiderUrlAsyn(url, "software", null, SpiderJobTypeEnum.DAILY_CHECK_URL);
             }
         }
@@ -61,7 +77,7 @@ public class SipderSchedulTask {
         dlc.removeAll(dlc);
         if (dlcCopy.size() != 0) {
             for (String url : dlcCopy) {
-                System.out.println("再次爬取页面："+url);
+                System.out.println("再次爬取页面：" + url);
                 pageGetter.spiderUrlAsyn(url, "dlc", null, SpiderJobTypeEnum.DAILY_CHECK_URL);
             }
         }
@@ -71,7 +87,7 @@ public class SipderSchedulTask {
         List<String> demoCopy = demo.stream().collect(Collectors.toList());
         if (demoCopy.size() != 0) {
             for (String url : demoCopy) {
-                System.out.println("再次爬取页面："+url);
+                System.out.println("再次爬取页面：" + url);
                 pageGetter.spiderUrlAsyn(url, "demo", null, SpiderJobTypeEnum.DAILY_CHECK_URL);
             }
         }
@@ -82,7 +98,7 @@ public class SipderSchedulTask {
         sound.removeAll(sound);
         if (soundCopy.size() != 0) {
             for (String url : soundCopy) {
-                System.out.println("再次爬取页面："+url);
+                System.out.println("再次爬取页面：" + url);
                 pageGetter.spiderUrlAsyn(url, "sound", null, SpiderJobTypeEnum.DAILY_CHECK_URL);
             }
         }
