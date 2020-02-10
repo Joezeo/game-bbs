@@ -2,10 +2,12 @@ html{
     height: 100%;
 }
 body{
-    background-color: #efefef;
     min-height: 100%;
+    min-width: 100%;
     display: flex;
     flex-direction: column;
+    /*background-image: url(http://joezeo.cn-bj.ufileos.com/c307b3eb-b4b2-4216-a5dd-c1d5fff75751.jpg);*/
+    background-color: #efefef;
 }
 h2{
     letter-spacing: 3px;
@@ -59,10 +61,12 @@ a{
 }
 
 .main{
+    z-index: 300;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.92);
     margin-top: 30px;
     margin-left: 10%;
     margin-right: 10%;
-    background-color: white;
     flex: 1;
 }
 

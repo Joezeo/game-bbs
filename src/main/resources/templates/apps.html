@@ -13,34 +13,108 @@
 <!--导航栏-->
 <div th:replace="navigation :: nav"></div>
 
-<div class="container-fluid main profile" id="profile">
+<div class="container-fluid main profile" id="apps">
     <div class="row">
         <!--        App 列表-->
-        <div class="col-lg-10 .col-md-12 .col-sm-12 .col-xs-12">
+        <div class="col-lg-9 .col-md-12 .col-sm-12 .col-xs-12">
             <table class="col-lg-12 .col-md-12 .col-sm-12 .col-xs-12 app-table">
                 <tr>
-                    <th style="width: 25%;"></th>
-                    <th style="width: 10%;">App id</th>
+                    <th style="width: 10%;"></th>
+                    <th style="width: 15%;text-align: center">App id</th>
                     <th style="width: 50%">App</th>
                     <th style="width: 15%">促销状态</th>
                 </tr>
-                <tr>
-                    <td>
-                        <img src="" alt="">
-                    </td>
-                    <td>app id</td>
-                    <td>
-                        <h4>test</h4>
-                    </td>
-                    <td>
-                        <span>test</span>
-                    </td>
-                </tr>
+                <template v-if="loaded">
+                    <tr v-for="app in apps" class="content-tr">
+                        <td>
+                            <img :src="app.imgUrl" alt="App Pic">
+                        </td>
+                        <td v-text="app.appid" style="text-align: center;"></td>
+                        <td>
+                            <h4><a :href="'/steam/app/'+app.appid" v-text="app.name"></a></h4>
+                            <span v-text="'开发商：'+app.devloper" class="game-info-span"></span>
+                        </td>
+                        <td>
+                            <span v-if="app.originalPrice == app.finalPrice" style="color: black">原价</span>
+                            <span v-if="app.originalPrice != app.finalPrice" style="color: limegreen">特惠</span>
+                        </td>
+                    </tr>
+                    <br>
+                </template>
             </table>
+
+            <!--            分页条开始-->
+            <div>
+                <nav aria-label="Page navigation">
+                    <template v-if="loaded">
+                        <ul class="pagination">
+                            <li v-if="pagination.hasFirst">
+                                <a @click="list(1,type)" aria-label="First">
+                                    <span aria-hidden="true">&lt;&lt;</span>
+                                </a>
+                            </li>
+                            <li v-if="pagination.hasPrevious">
+                                <a @click="list(pagination.page-1,type)" aria-label="Previous">
+                                    <span aria-hidden="true">&lt;</span>
+                                </a>
+                            </li>
+
+                            <li v-for="page in pagination.pages" :class="[page==pagination.page?'active':'']"><a
+                                    @click="list(page,type)" v-text="page"></a></li>
+
+                            <li v-if="pagination.hasNext">
+                                <a @click="list(pagination.page+1,type)" aria-label="Next">
+                                    <span aria-hidden="true">&gt;</span>
+                                </a>
+                            </li>
+                            <li v-if="pagination.hasLast">
+                                <a @click="list(pagination.totalPage,type)" aria-label="Last">
+                                    <span aria-hidden="true">&gt;&gt;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </template>
+                </nav>
+            </div>
+            <!--            分页条结束-->
         </div>
 
         <!--        搜索条件-->
-        <div class="col-lg-2 .col-md-12 .col-sm-12 .col-xs-12">
+        <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
+            <div class="type-checkbox">
+                <span style="font-size: 30px;color: #999999;">选择类型</span><br>
+                <hr>
+                <div class="radio" @change="list(1,type)">
+                    <label>
+                        <input type="radio" v-model="type" value="1"> <span> 游戏</span>
+                    </label><br>
+                </div>
+                <div class="radio" @change="list(1,type)">
+                    <label>
+                        <input type="radio" v-model="type" value="2"> <span>软件</span>
+                    </label><br>
+                </div>
+                <div class="radio" @change="list(1,type)">
+                    <label>
+                        <input type="radio" v-model="type" value="3"> <span>DLC</span>
+                    </label><br>
+                </div>
+                <div class="radio" @change="list(1,type)">
+                    <label>
+                        <input type="radio" v-model="type" value="4"> <span>试玩游戏</span>
+                    </label><br>
+                </div>
+                <div class="radio" @change="list(1,type)">
+                    <label>
+                        <input type="radio" v-model="type" value="5"> <span>捆绑包</span>
+                    </label><br>
+                </div>
+                <div class="radio" @change="list(1,type)">
+                    <label>
+                        <input type="radio" v-model="type" value="6"> <span>原声带</span>
+                    </label><br>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -50,6 +124,6 @@
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="/jquery/jquery-3.4.1.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
-<script src="/js/profile.js"></script>
+<script src="/js/apps.js"></script>
 </body>
 </html>

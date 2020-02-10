@@ -14,6 +14,31 @@
         where appid = #{appid};
     </select>
 
+    <select id="selectCount" resultType="int">
+        select count(1) from
+        <choose>
+            <when test="type == 'game'">t_steam_game_info</when>
+            <when test="type == 'software'">t_steam_software_info</when>
+            <when test="type == 'demo'">t_steam_demo_game_info</when>
+            <when test="type == 'dlc'">t_steam_dlc_info</when>
+            <when test="type == 'sound'">t_steam_sound_tape_info</when>
+            <when test="type == 'bundle'">t_steam_bundle_info</when>
+        </choose>
+    </select>
+
+    <select id="selectPage" resultType="SteamAppInfo">
+        select * from
+        <choose>
+            <when test="type == 'game'">t_steam_game_info</when>
+            <when test="type == 'software'">t_steam_software_info</when>
+            <when test="type == 'demo'">t_steam_demo_game_info</when>
+            <when test="type == 'dlc'">t_steam_dlc_info</when>
+            <when test="type == 'sound'">t_steam_sound_tape_info</when>
+            <when test="type == 'bundle'">t_steam_bundle_info</when>
+        </choose>
+        limit #{index},#{size}
+    </select>
+
     <insert id="insert">
         insert into
         <choose>

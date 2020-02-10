@@ -5,4 +5,9 @@
         insert into t_steam_history_price
         values (default , #{appid}, #{price}, #{gmtCreate})
     </insert>
+
+    <select id="selectByTime" resultType="SteamHistoryPrice">
+        select appid,price from t_steam_history_price
+        where gmt_create>#{preTimeAtZero}
+    </select>
 </mapper>

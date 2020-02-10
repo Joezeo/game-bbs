@@ -32,7 +32,7 @@ public class SipderSchedulTask {
         steamSpider.updateHistoryPrice();
     }
 
-    @Scheduled(cron = "0 0 2 1/3 * ?") // 每三天执行一次，凌晨2:00执行
+    @Scheduled(cron = "0 0 3 1/3 * ?") // 每三天执行一次，凌晨3:00执行
     public void checkAppInfo(){
         steamSpider.daliyChekcApp();
     }
