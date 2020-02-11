@@ -10,4 +10,9 @@
         select appid,price from t_steam_history_price
         where gmt_create>#{preTimeAtZero}
     </select>
+
+    <delete id="deleteIllegal">
+        delete from t_steam_history_price
+        where price=0;
+    </delete>
 </mapper>

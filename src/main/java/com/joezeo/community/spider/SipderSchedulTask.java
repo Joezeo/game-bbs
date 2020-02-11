@@ -2,20 +2,23 @@ package com.joezeo.community.spider;
 
 import com.joezeo.community.enums.SpiderJobTypeEnum;
 import com.joezeo.community.mapper.SteamAppInfoMapper;
-import com.joezeo.community.pojo.SteamAppInfo;
+import com.joezeo.community.mapper.SteamHistoryPriceMapper;
+import com.joezeo.community.pojo.SteamHistoryPrice;
+import com.joezeo.community.utils.TimeUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 定时检查SiderComponent的failUrl容器是否含有上一次执行失败的url
- * 如有则继续调用PageGetter爬取网页
+ * 爬虫模块的定时任务
  */
 @Component
+@Slf4j
 public class SipderSchedulTask {
 
     @Autowired
@@ -26,29 +29,89 @@ public class SipderSchedulTask {
     private SteamSpider steamSpider;
     @Autowired
     private SteamAppInfoMapper steamAppInfoMapper;
+    @Autowired
+    private SteamHistoryPriceMapper steamHistoryPriceMapper;
 
+    /**
+     * 凌晨00:00
+     * <p>
+     * 爬取所有app的url信息
+     */
     @Scheduled(cron = "0 0 0 1/1 * ?") // 每天凌晨00:00执行
     public void spideUrl() {
         steamSpider.daliyChekcUrl();
     }
 
+    /**
+     * 凌晨01:00
+     * <p>
+     * 爬取所有特惠商品的价格
+     */
     @Scheduled(cron = "0 0 1 1/1 * ?") // 每天凌晨01:00执行
     public void spideSpecialPrice() {
         steamSpider.updateHistoryPrice();
     }
 
-    @Scheduled(cron = "0 0 3 1/3 * ?") // 每三天执行一次，凌晨3:00执行
-    public void spideAppInfo(){
-        steamSpider.daliyChekcApp();
+    /**
+     * 凌晨02:00
+     * <p>
+     * 检查t_history_price
+     * 找出price=0的商品，重新进行查询
+     */
+    @Scheduled(cron = "0 0 2 1/1 * ?") // 每天凌晨02:00执行
+    public void checkHistoryPrice() {
+        //获取当天零点的时间戳
+        try {
+            long timestampAtZero = TimeUtils.getTimestampAtZero();
+            List<SteamHistoryPrice> steamHistoryPrices = steamHistoryPriceMapper.selectByTime(timestampAtZero);
+            List<SteamHistoryPrice> failds = steamHistoryPrices.stream()
+                    .filter(price -> price.getPrice() == 0)
+                    .collect(Collectors.toList());
+            String url = "https://store.steampowered.com/app/";
+            for (SteamHistoryPrice price : failds) {
+                pageGetter.spiderUrlAsyn(url + price.getAppid() + "/?cc=cn", "special", price.getAppid(), SpiderJobTypeEnum.DAILY_SPIDE_SPECIAL_PRICE);
+            }
+        } catch (ParseException e) {
+            log.error("获取零点时间戳失败,stackTrace=" + e.getMessage());
+        }
     }
 
     /**
+     * 凌晨02:40
+     * <p>
+     * 经过第二轮查询价格依然为0的商品，从数据库中删除
+     */
+    @Scheduled(cron = "0 40 2 1/1 * ?") // 每天凌晨02:40执行
+    public void deleteIllegalHistoryPrice() {
+        int idx = steamHistoryPriceMapper.deleteIllegal();
+        if (idx < 0) {
+            log.error("数据库删除非法特惠商品价格出现异常");
+        }
+    }
+
+    /**
+     * 凌晨02:50
+     * <p>
      * 检查数据中appInfo的非法项，将非法项删除
      */
-    @Scheduled
-    public void checkAppInfoDB(){
+    @Scheduled(cron = "0 50 2 1/1 * ?") // 每天凌晨2:30执行
+    public void checkAppInfoDB() {
         int idx = steamAppInfoMapper.deleteIllegal();
+        if (idx < 0) {
+            log.error("数据库删除非法App Info出现异常");
+        }
     }
+
+    /**
+     * 凌晨03:00 每隔三天
+     * <p>
+     * 重新爬取app info
+     */
+    @Scheduled(cron = "0 0 3 1/3 * ?") // 每三天执行一次，凌晨3:00执行
+    public void spideAppInfo() {
+        steamSpider.daliyChekcApp();
+    }
+
 
     @Scheduled(cron = "0/30 * * * * ?")
     public void restorePage() {

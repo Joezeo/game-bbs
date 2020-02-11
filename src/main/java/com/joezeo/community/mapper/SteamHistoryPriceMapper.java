@@ -13,4 +13,6 @@ public interface SteamHistoryPriceMapper {
     int insert(SteamHistoryPrice historyPrice);
 
     List<SteamHistoryPrice> selectByTime(long preTimeAtZero);
+
+    int deleteIllegal();
 }

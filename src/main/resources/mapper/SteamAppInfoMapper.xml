@@ -63,7 +63,7 @@
         #{appInfo.originalPrice}, #{appInfo.finalPrice},#{appInfo.summary}, #{appInfo.gmtCreate}, #{appInfo.gmtModify})
     </insert>
 
-    <sql id="emptySpecialUrl">
+    <update id="emptySpecialUrl">
        TRUNCATE TABLE t_steam_special_url
-    </sql>
+    </update>
 </mapper>

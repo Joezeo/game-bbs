@@ -208,7 +208,11 @@ public class PageResolver {
             }
         } else { // 存储特惠商品的url
             // 清空 t_steam_special_url
-            steamAppInfoMapper.emptySpecialUrl();
+            int idx = steamAppInfoMapper.emptySpecialUrl();
+            if(idx < 0){
+                log.error("数据库发生异常");
+            }
+
             for (Map.Entry<String, String> entry : href.entrySet()) {
                 int index = steamUrlMapper.insert(entry.getKey(), entry.getValue(), type);
                 if (index != 1) {

@@ -21,13 +21,13 @@ public class TimeUtils {
     }
 
     /**
-     * 获取当前时间与下一个凌晨2点之间的时间差
+     * 获取当前时间与下一个凌晨4点之间的时间差
      * 单位秒
      */
     public static int getDifftimeFromNextZero() throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         String preDateStr = dateFormat.format(new Date(System.currentTimeMillis())); // 当天的年月日，如：20200210
-        String nextTwoStr = (Integer.parseInt(preDateStr) + 1) + "02";
+        String nextTwoStr = (Integer.parseInt(preDateStr) + 1) + "04";
         dateFormat = new SimpleDateFormat("yyyyMMddhh");
         Date nextTwoDate = dateFormat.parse(nextTwoStr);
 

@@ -22,5 +22,5 @@ public interface SteamAppInfoMapper {
 
     int deleteIllegal();
 
-    void emptySpecialUrl();
+    int emptySpecialUrl();
 }

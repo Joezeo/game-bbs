@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,15 +59,17 @@ public class SteamServiceImpl implements SteamService {
 
             // 获取当天新获取的特惠商品价格 gmt_create>preTimeAtZero
             List<SteamHistoryPrice> specials = steamHistoryPriceMapper.selectByTime(preTimeAtZero);
-            // 将特惠商品以appid为key，价格为value放入map中
-            Map<Integer, Integer> specialMap = specials.stream().distinct()
-                    .collect(Collectors.toMap(special -> special.getAppid(), special -> special.getPrice()));
+            if(specials != null && specials.size() != 0){
+                // 将特惠商品以appid为key，价格为value放入map中
+                Map<Integer, Integer> specialMap = specials.stream().distinct()
+                        .collect(Collectors.toMap(special -> special.getAppid(), special -> special.getPrice()));
 
-            // 重新设定list中特惠商品的finalPrice
-            for (SteamAppInfo appInfo : list) {
-                Integer price = specialMap.get(appInfo.getAppid());
-                if (price != null) {
-                    appInfo.setFinalPrice(price);
+                // 重新设定list中特惠商品的finalPrice
+                for (SteamAppInfo appInfo : list) {
+                    Integer price = specialMap.get(appInfo.getAppid());
+                    if (price != null) {
+                        appInfo.setFinalPrice(price);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -76,14 +77,14 @@ public class SteamServiceImpl implements SteamService {
             throw new ServiceException("获取特惠价格失败，所有商品价格将以历史记录展示");
         }
 
-        // 将获取到的所有商品放入Redis中
+        // 将获取到的所有商品放入Redis中，凌晨4点对缓存中的商品信息进行删除
         // key: app-类型-appid
         list.stream().forEach(app -> {
             String key = "app-" + type + "-" + app.getAppid();
             if (!redisDao.hasKey(key)) { // redis缓存中不存在该app信息
                 int difftime = 60 * 60; // 如果获取时间差失败则默认保存1小时
                 try {
-                    // 获取现在时间与下一天凌晨2点的时间差，单位秒
+                    // 获取现在时间与下一天凌晨4点的时间差，单位秒
                     difftime = TimeUtils.getDifftimeFromNextZero();
                 } catch (ParseException e) {
                     log.error("获取时间差失败,stackTrace=" + e.getMessage());
