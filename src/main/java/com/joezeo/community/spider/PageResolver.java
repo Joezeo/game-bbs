@@ -189,34 +189,19 @@ public class PageResolver {
                     return url.substring(0, url.lastIndexOf("?"));
                 }));
         // steam上每天搜索页的app都会加上一个不同的参数，如?snr=1_7_7_230_150_1364，存储时去掉这个参数
-        if (!"special".equals(type)) { // 当前并非存储特惠商品的url
-            for (Map.Entry<String, String> entry : href.entrySet()) {
-                List<SteamUrl> urlList = steamUrlMapper.selectByAppid(Integer.parseInt(entry.getKey()), type);
-                if (urlList == null || urlList.size() == 0) {
-                    // 说明该app地址不存在,存入数据库中
-                    int index = steamUrlMapper.insert(entry.getKey(), entry.getValue(), type);
-                } else if (urlList.size() == 1) {
-                    String memUrl = urlList.get(0).getUrl();
-                    String newUrl = entry.getValue();
-                    if (!memUrl.equals(newUrl)) { // 因为steam的礼包（sub）和软件（app）的appid有可能相同,但是url不同
-                        int index = steamUrlMapper.insert(entry.getKey(), entry.getValue(), type);
-                        if (index != 1) {
-                            log.error("存储App Url失败,appid=" + entry.getKey());
-                        }
-                    }
-                }
-            }
-        } else { // 存储特惠商品的url
-            // 清空 t_steam_special_url
-            int idx = steamAppInfoMapper.emptySpecialUrl();
-            if(idx < 0){
-                log.error("数据库发生异常");
-            }
-
-            for (Map.Entry<String, String> entry : href.entrySet()) {
+        for (Map.Entry<String, String> entry : href.entrySet()) {
+            List<SteamUrl> urlList = steamUrlMapper.selectByAppid(Integer.parseInt(entry.getKey()), type);
+            if (urlList == null || urlList.size() == 0) {
+                // 说明该app地址不存在,存入数据库中
                 int index = steamUrlMapper.insert(entry.getKey(), entry.getValue(), type);
-                if (index != 1) {
-                    log.error("存储特惠商品url失败,appid=" + entry.getKey());
+            } else if (urlList.size() == 1) {
+                String memUrl = urlList.get(0).getUrl();
+                String newUrl = entry.getValue();
+                if (!memUrl.equals(newUrl)) { // 因为steam的礼包（sub）和软件（app）的appid有可能相同,但是url不同
+                    int index = steamUrlMapper.insert(entry.getKey(), entry.getValue(), type);
+                    if (index != 1) {
+                        log.error("存储App Url失败,appid=" + entry.getKey());
+                    }
                 }
             }
         }

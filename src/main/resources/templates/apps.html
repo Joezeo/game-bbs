@@ -31,7 +31,7 @@
                         </td>
                         <td v-text="app.appid" style="text-align: center;"></td>
                         <td>
-                            <h4><a :href="'/steam/app/'+app.appid" v-text="app.name"></a></h4>
+                            <h4><a :href="'/steam/app/'+app.appid + '?type=' + type" v-text="app.name"></a></h4>
                             <span v-text="'开发商：'+app.devloper" class="game-info-span"></span>
                         </td>
                         <td>

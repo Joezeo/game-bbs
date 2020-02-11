@@ -1,7 +1,9 @@
 package com.joezeo.community.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.joezeo.community.dao.RedisDao;
 import com.joezeo.community.dto.PaginationDTO;
+import com.joezeo.community.dto.SteamAppDTO;
 import com.joezeo.community.enums.SteamAppTypeEnum;
 import com.joezeo.community.exception.ServiceException;
 import com.joezeo.community.mapper.SteamAppInfoMapper;
@@ -11,6 +13,7 @@ import com.joezeo.community.pojo.SteamHistoryPrice;
 import com.joezeo.community.service.SteamService;
 import com.joezeo.community.utils.TimeUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -74,7 +77,6 @@ public class SteamServiceImpl implements SteamService {
             }
         } catch (Exception e) {
             log.error("获取特惠价格失败，所有商品价格将以历史记录展示: stackTrace=" + e.getMessage());
-            throw new ServiceException("获取特惠价格失败，所有商品价格将以历史记录展示");
         }
 
         // 将获取到的所有商品放入Redis中，凌晨4点对缓存中的商品信息进行删除
@@ -87,10 +89,9 @@ public class SteamServiceImpl implements SteamService {
                     // 获取现在时间与下一天凌晨4点的时间差，单位秒
                     difftime = TimeUtils.getDifftimeFromNextZero();
                 } catch (ParseException e) {
-                    log.error("获取时间差失败,stackTrace=" + e.getMessage());
-                    throw new ServiceException("获取时间差失败，redis中app：" + app.getAppid() + "默认保存1小时j");
+                    log.error("获取时间差失败,将默认保存1小时,stackTrace=" + e.getMessage());
                 }
-                // 每天凌晨两点清除缓存信息
+                // 每天凌晨4点清除缓存信息
                 // 由于缓存中的信息并不需要修改，所以使用String的方式存储
                 redisDao.set(key, app, difftime);
             }
@@ -98,5 +99,36 @@ public class SteamServiceImpl implements SteamService {
 
         paginationDTO.setDatas(list);
         return paginationDTO;
+    }
+
+    @Override
+    public SteamAppDTO queryApp(Integer appid, Integer type) {
+        String typeStr = SteamAppTypeEnum.typeOf(type);
+        SteamAppDTO appDTO = new SteamAppDTO();
+        appDTO.setType(type);
+
+        /*
+            首先从redis缓存中查询是否存在该app的信息
+            key: app-类型-appid
+         */
+        String key = "app-" + typeStr + "-" +appid;
+        if(redisDao.hasKey(key)){
+            JSONObject object = (JSONObject) redisDao.get(key);
+            SteamAppInfo appInfo = JSONObject.parseObject(object.toJSONString(), SteamAppInfo.class);
+            BeanUtils.copyProperties(appInfo, appDTO);
+        } else { // 如redis中不存在该app的信息，从数据库中查询，再放入到redis缓存中
+            SteamAppInfo app = steamAppInfoMapper.selectByAppid(appid, typeStr);
+            int difftime = 60 * 60; // 如果获取时间差失败则默认保存1小时
+            try {
+                // 获取现在时间与下一天凌晨4点的时间差，单位秒
+                difftime = TimeUtils.getDifftimeFromNextZero();
+            } catch (ParseException e) {
+                log.error("获取时间差失败,将默认保存1小时,stackTrace=" + e.getMessage());
+            }
+            // 每天凌晨4点清除缓存信息
+            // 由于缓存中的信息并不需要修改，所以使用String的方式存储
+            redisDao.set(key, app, difftime);
+        }
+        return appDTO;
     }
 }

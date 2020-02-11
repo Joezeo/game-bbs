@@ -58,4 +58,8 @@
             <when test="type == 'special'">t_steam_special_url</when>
         </choose>
     </select>
+
+    <update id="emptySpecialUrl">
+       TRUNCATE TABLE t_steam_special_url
+    </update>
 </mapper>

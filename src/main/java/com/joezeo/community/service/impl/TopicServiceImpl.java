@@ -62,9 +62,6 @@ public class TopicServiceImpl implements TopicService {
         if (condition != null && !"".equals(condition)) {
             String[] conds = condition.split(" ");
             condition = Arrays.stream(conds).collect(Collectors.joining("|"));
-        } else {
-            log.error("函数listPage(index页面)：参数condition异常");
-            throw new ServiceException("参数异常");
         }
 
         int count = topicExtMapper.countSearch(condition, type);

@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Steam Apps - JOEF</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+
+<!--导航栏-->
+<div th:replace="navigation :: nav"></div>
+
+<div class="container-fluid main profile" id="app">
+    <div class="row">
+        <!--        App 信息-->
+        <div class="col-lg-7 .col-md-12 .col-sm-12 .col-xs-12">
+            <div v-if="loaded" v-cloak>
+                <h3 v-text="app.name"></h3>
+                <table>
+                    <tr>
+                    <td>App Id</td>
+                    <td v-text="app.appid"></td>
+                    </tr>
+
+                    <tr>
+                        <td>App 类型</td>
+                        <td v-text="app.typeStr"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!--        App缩略图-->
+        <div class="col-lg-5 .col-md-12 .col-sm-12 .col-xs-12">
+            <div v-if="loaded" v-cloak>
+                <img :src="app.imgUrl" alt="App pic">
+            </div>
+            <span v-text="app.description"></span>
+            <hr>
+            <span v-html="app.summary"></span>
+        </div>
+    </div>
+</div>
+
+<div th:replace="footer :: foot"></div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="/jquery/jquery-3.4.1.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,11 +1,9 @@
 package com.joezeo.community.enums;
 
 public enum TopicTypeEnum {
-    SALES(1, "sales"),
-    NEWS(2, "news"),
-    GUIDE(3, "guide"),
-    ESSAY(4, "essay"),
-    SQUARE(5, "square")
+    NEWS(1, "news"),
+    ESSAY(2, "essay"),
+    SQUARE(3, "square")
     ;
     private Integer type;
     private String name;

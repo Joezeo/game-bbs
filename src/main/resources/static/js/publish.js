@@ -5,7 +5,7 @@ var tagDTOS = {};
 var topicDTO = {
     id: isNaN(pathid)?null:pathid,
     tag: "",
-    topicType: 5 // 帖子类型默认为广场
+    topicType: 3 // 帖子类型默认为广场
 };
 
 var vue = new Vue({

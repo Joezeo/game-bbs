@@ -3,6 +3,7 @@ package com.joezeo.community.spider;
 import com.joezeo.community.enums.SpiderJobTypeEnum;
 import com.joezeo.community.mapper.SteamAppInfoMapper;
 import com.joezeo.community.mapper.SteamHistoryPriceMapper;
+import com.joezeo.community.mapper.SteamUrlMapper;
 import com.joezeo.community.pojo.SteamHistoryPrice;
 import com.joezeo.community.utils.TimeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,8 @@ public class SipderSchedulTask {
     @Autowired
     private SteamSpider steamSpider;
     @Autowired
+    private SteamUrlMapper steamUrlMapper;
+    @Autowired
     private SteamAppInfoMapper steamAppInfoMapper;
     @Autowired
     private SteamHistoryPriceMapper steamHistoryPriceMapper;
@@ -35,9 +38,23 @@ public class SipderSchedulTask {
     /**
      * 凌晨00:00
      * <p>
-     * 爬取所有app的url信息
+     * 清空特惠商品url
      */
     @Scheduled(cron = "0 0 0 1/1 * ?") // 每天凌晨00:00执行
+    public void emptySpecialUrl() {
+        // 清空 t_steam_special_url
+        int idx = steamUrlMapper.emptySpecialUrl();
+        if (idx < 0) {
+            log.error("数据库发生异常");
+        }
+    }
+
+    /**
+     * 凌晨00:05
+     * <p>
+     * 爬取所有app的url信息
+     */
+    @Scheduled(cron = "0 0 5 1/1 * ?") // 每天凌晨00:05执行
     public void spideUrl() {
         steamSpider.daliyChekcUrl();
     }
@@ -64,6 +81,11 @@ public class SipderSchedulTask {
         try {
             long timestampAtZero = TimeUtils.getTimestampAtZero();
             List<SteamHistoryPrice> steamHistoryPrices = steamHistoryPriceMapper.selectByTime(timestampAtZero);
+            int idx = steamHistoryPriceMapper.deleteIllegal();
+            if(idx < 0){
+                log.error("删除非法的特惠商品历史价格失败");
+            }
+
             List<SteamHistoryPrice> failds = steamHistoryPrices.stream()
                     .filter(price -> price.getPrice() == 0)
                     .collect(Collectors.toList());

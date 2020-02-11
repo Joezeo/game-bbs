@@ -16,4 +16,6 @@ public interface SteamUrlMapper {
     int insert(@Param("appid") String appid, @Param("url") String url, @Param("type") String type);
 
     List<SteamUrl> selectAll(String type);
+
+    int emptySpecialUrl();
 }
