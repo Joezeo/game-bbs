@@ -9,6 +9,7 @@ import com.joezeo.community.pojo.Tag;
 import com.joezeo.community.pojo.TagExample;
 import com.joezeo.community.dao.RedisDao;
 import com.joezeo.community.service.TagService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.List;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
+@Slf4j
 public class TagServiceImpl implements TagService {
 
     @Autowired
@@ -28,6 +30,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<Tag> listTagsByCategory(Integer index) {
         if (index == null || index <= 0) {
+            log.error("函数listTagsByCategory：参数index异常,=" + index);
             throw new ServiceException("参数index异常");
         }
         List<Tag> tags;

@@ -9,6 +9,7 @@ import com.joezeo.community.exception.ServiceException;
 import com.joezeo.community.mapper.*;
 import com.joezeo.community.pojo.*;
 import com.joezeo.community.service.CommentService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
+@Slf4j
 public class CommentServiceImpl implements CommentService {
 
     @Autowired
@@ -43,21 +45,26 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void addComment(CommentDTO commentDTO, User notifier) {
         if (commentDTO == null) {
+            log.error("函数addComment：参数commentDTO异常，=null");
             throw new ServiceException("参数commentDTO异常，=null");
         }
         if (notifier.getId() == null || notifier.getId() <= 0) {
+            log.error("函数addComment：参数notifier异常");
             throw new ServiceException("参数userid异常");
         }
 
         if(commentDTO.getTopicid() == null || commentDTO.getTopicid() <= 0){
+            log.error("函数addComment：参数topicId未传递");
             throw new CustomizeException(CustomizeErrorCode.QUESTION_ID_NOT_TRANSFER);
         }
 
         if (commentDTO.getParentId() == null || commentDTO.getParentId() <= 0) {
+            log.error("函数addComment：参数parentId未传递");
             throw new CustomizeException(CustomizeErrorCode.PARENT_ID_NOT_TRANSFER);
         }
 
         if (commentDTO.getParentType() == null || !CommentTypeEnum.isExist(commentDTO.getParentType())) {
+            log.error("函数addComment：参数parentType未传递");
             throw new CustomizeException(CustomizeErrorCode.PARENT_TYPE_ILEEAGUE);
         }
 
@@ -73,6 +80,7 @@ public class CommentServiceImpl implements CommentService {
         if(comment.getParentType() == CommentTypeEnum.QUESTION.getType()){ // 回复帖子
             Topic topic = topicMapper.selectByPrimaryKey(commentDTO.getParentId());
             if(topic == null){
+                log.error("函数addComment：要回复的帖子没有找到，可能已经被删除了");
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
 
@@ -80,6 +88,7 @@ public class CommentServiceImpl implements CommentService {
             topic.setCommentCount(1);
             int count = topicExtMapper.incComment(topic);
             if(count != 1){
+                log.error("函数addComment：累加评论数失败");
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_FAILD);
             }
 
@@ -88,6 +97,7 @@ public class CommentServiceImpl implements CommentService {
         } else { // 回复评论
             Comment memComment = commentMapper.selectByPrimaryKey(commentDTO.getParentId());
             if(memComment == null){
+                log.error("函数addComment：要回复的评论未找到，可能已被删除了");
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
 
@@ -95,6 +105,7 @@ public class CommentServiceImpl implements CommentService {
             memComment.setCommentCount(1);
             int count = commentExtMapper.incComment(memComment);
             if(count != 1){
+                log.error("函数addComment：累加二级评论数失败");
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_FAILD);
             }
 
@@ -104,6 +115,7 @@ public class CommentServiceImpl implements CommentService {
 
         int count = commentMapper.insertSelective(comment);
         if (count != 1) {
+            log.error("函数addCommet：新评论在插入数据库时失败");
             throw new CustomizeException(CustomizeErrorCode.COMMENT_FAILD);
         }
     }

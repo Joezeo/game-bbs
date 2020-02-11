@@ -96,7 +96,7 @@
         <!--        右侧信息条-->
         <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
             <div class="panel panel-default" style="margin-top: 30px">
-                <div class="panel-body" v-if="loadedUser">
+                <div class="panel-body" v-if="loadedUser" v-cloak>
                     <img :src="user.avatarUrl" alt="Avatar"
                          style="width: 48px;height: 48px;border-radius: 6px;">
                     <a href="#" style="color: black;font-family: Consolas;font-size: 16px">
@@ -110,7 +110,7 @@
 
                     </span>
                     </h3>
-                    <div th:if="${session.user!=null and session.user.id == 1}">
+                    <div v-if="user.id == 1" v-cloak>
                         <button @click="spideProxyIP" class="btn btn-default" type="submit"
                                 style="background: white;">爬取代理ip
                         </button>

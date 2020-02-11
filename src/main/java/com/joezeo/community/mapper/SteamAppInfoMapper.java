@@ -19,4 +19,8 @@ public interface SteamAppInfoMapper {
     List<SteamAppInfo> selectPage(@Param("index") Integer index,
                                   @Param("size") Integer size,
                                   @Param("type") String type);
+
+    int deleteIllegal();
+
+    void emptySpecialUrl();
 }

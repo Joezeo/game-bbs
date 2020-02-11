@@ -7,7 +7,6 @@ import com.joezeo.community.pojo.Topic;
 import java.util.List;
 
 public interface TopicService {
-    List<TopicDTO> list();
 
     PaginationDTO<TopicDTO> listPage(Integer page, Integer size, String condition, String tab);
 

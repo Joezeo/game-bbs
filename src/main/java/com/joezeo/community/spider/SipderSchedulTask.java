@@ -1,7 +1,10 @@
 package com.joezeo.community.spider;
 
 import com.joezeo.community.enums.SpiderJobTypeEnum;
+import com.joezeo.community.mapper.SteamAppInfoMapper;
+import com.joezeo.community.pojo.SteamAppInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -21,20 +24,30 @@ public class SipderSchedulTask {
     private PageGetter pageGetter;
     @Autowired
     private SteamSpider steamSpider;
+    @Autowired
+    private SteamAppInfoMapper steamAppInfoMapper;
 
     @Scheduled(cron = "0 0 0 1/1 * ?") // 每天凌晨00:00执行
-    public void checkUrl() {
+    public void spideUrl() {
         steamSpider.daliyChekcUrl();
     }
 
     @Scheduled(cron = "0 0 1 1/1 * ?") // 每天凌晨01:00执行
-    public void checkSpecialPrice() {
+    public void spideSpecialPrice() {
         steamSpider.updateHistoryPrice();
     }
 
     @Scheduled(cron = "0 0 3 1/3 * ?") // 每三天执行一次，凌晨3:00执行
-    public void checkAppInfo(){
+    public void spideAppInfo(){
         steamSpider.daliyChekcApp();
+    }
+
+    /**
+     * 检查数据中appInfo的非法项，将非法项删除
+     */
+    @Scheduled
+    public void checkAppInfoDB(){
+        int idx = steamAppInfoMapper.deleteIllegal();
     }
 
     @Scheduled(cron = "0/30 * * * * ?")

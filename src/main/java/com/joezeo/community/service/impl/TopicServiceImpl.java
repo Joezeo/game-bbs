@@ -15,6 +15,7 @@ import com.joezeo.community.pojo.TopicExample;
 import com.joezeo.community.pojo.User;
 import com.joezeo.community.provider.UCloudProvider;
 import com.joezeo.community.service.TopicService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
+@Slf4j
 public class TopicServiceImpl implements TopicService {
 
     @Autowired
@@ -46,42 +48,23 @@ public class TopicServiceImpl implements TopicService {
     private UCloudProvider uCloudProvider;
 
     @Override
-    public List<TopicDTO> list() {
-        TopicExample topicExample = new TopicExample();
-        topicExample.createCriteria().andIdIsNotNull();
-        List<Topic> topics = topicMapper.selectByExample(topicExample);
-        if (topics == null) {
-            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
-        }
-
-        List<TopicDTO> list = new ArrayList<>();
-        for (Topic topic : topics) {
-            User user = userMapper.selectByPrimaryKey(topic.getUserid());
-            if (user == null) {
-                throw new ServiceException("获取用户失败");
-            }
-
-            TopicDTO topicDTO = new TopicDTO();
-            BeanUtils.copyProperties(topic, topicDTO);
-            topicDTO.setUser(user);
-            list.add(topicDTO);
-        }
-
-        return list;
-    }
-
-    @Override
     public PaginationDTO<TopicDTO> listPage(Integer page, Integer size, String condition, String tab) {
         // 获取帖子主题
         Integer type = 0; // 初始值为0，为0时查询条件不包含主题
         if (tab != null && !"".equals(tab)) {
             type = TopicTypeEnum.typeOfName(tab);
+        } else {
+            log.error("函数listPage(index页面)：参数tab异常");
+            throw new ServiceException("参数异常");
         }
 
         // 判断搜索条件是否为空
         if (condition != null && !"".equals(condition)) {
             String[] conds = condition.split(" ");
             condition = Arrays.stream(conds).collect(Collectors.joining("|"));
+        } else {
+            log.error("函数listPage(index页面)：参数condition异常");
+            throw new ServiceException("参数异常");
         }
 
         int count = topicExtMapper.countSearch(condition, type);
@@ -94,7 +77,7 @@ public class TopicServiceImpl implements TopicService {
         int index = (page - 1) * size;
 
         List<Topic> topics = topicExtMapper.selectSearch(index, size, condition, type);
-        if (topics == null || topics.size() == 0) {
+        if (topics == null || topics.size() == 0) { // 帖子数量为0
             paginationDTO.setDatas(new ArrayList<>());
             return paginationDTO;
         }
@@ -103,6 +86,7 @@ public class TopicServiceImpl implements TopicService {
         for (Topic topic : topics) {
             User user = userMapper.selectByPrimaryKey(topic.getUserid());
             if (user == null) {
+                log.error("函数listPage：获取用户失败");
                 throw new ServiceException("获取用户失败");
             }
 
@@ -116,6 +100,9 @@ public class TopicServiceImpl implements TopicService {
         return paginationDTO;
     }
 
+    /*
+        用于profile页面的分页查询
+     */
     @Override
     public PaginationDTO<TopicDTO> listPage(Long userid, Integer page, Integer size) {
         TopicExample topicExample = new TopicExample();
@@ -132,14 +119,16 @@ public class TopicServiceImpl implements TopicService {
         RowBounds rowBounds = new RowBounds(index, size);
         topicExample.setOrderByClause("gmt_create desc");
         List<Topic> topics = topicMapper.selectByExampleWithRowbounds(topicExample, rowBounds);
-        if (topics == null) {
-            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        if (topics == null || topics.size() == 0) { // 帖子数量为0
+            paginationDTO.setDatas(new ArrayList<>());
+            return paginationDTO;
         }
 
         List<TopicDTO> list = new ArrayList<>();
         for (Topic topic : topics) {
             User user = userMapper.selectByPrimaryKey(topic.getUserid());
             if (user == null) {
+                log.error("函数listPage(Profile)：获取用户失败");
                 throw new ServiceException("获取用户失败");
             }
 
@@ -156,6 +145,7 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public TopicDTO queryById(Long id) {
         if (id == null || id <= 0) {
+            log.error("函数queryById：参数id异常,id=" + id);
             throw new ServiceException("TopicService-queryById 参数id异常");
         }
 
@@ -191,10 +181,10 @@ public class TopicServiceImpl implements TopicService {
                 // 将帖子内容缓存至redis中 缓存一小时的时间
                 redisDao.set("topic-" + id, desc, 60 * 60);
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                log.error("从UCloud下载帖子失败,请检查相关配置");
                 throw new CustomizeException(CustomizeErrorCode.DOWNLOAD_TOPIC_FAILED);
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("从UCloud下载帖子失败,请检查相关配置");
                 throw new CustomizeException(CustomizeErrorCode.DOWNLOAD_TOPIC_FAILED);
             }
         }
@@ -202,6 +192,7 @@ public class TopicServiceImpl implements TopicService {
         // 获取当前帖子的发起人
         User user = userMapper.selectByPrimaryKey(topic.getUserid());
         if (user == null) {
+            log.error("函数queryById：获取用户数据失败");
             throw new ServiceException("获取用户数据失败");
         }
         topicDTO.setUser(user);
@@ -221,7 +212,8 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public void createOrUpdate(Topic topic) {
         if (topic == null) {
-            throw new RuntimeException("参数question不可为null");
+            log.error("函数createOrUpdate：参数异常=null");
+            throw new ServiceException("参数question不可为null");
         }
 
         if (topic.getId() == null) { // 进行新增帖子操作
@@ -237,13 +229,15 @@ public class TopicServiceImpl implements TopicService {
 
             int count = topicMapper.insert(topic);
             if (count != 1) {
-                throw new RuntimeException("发布新帖子失败");
+                log.error("函数createOrUpdate：发布新帖子失败");
+                throw new ServiceException("发布新帖子失败");
             }
         } else { // 进行更新帖子操作
             topic.setGmtModify(System.currentTimeMillis());
 
             int count = topicMapper.updateByPrimaryKeySelective(topic);
             if (count != 1) {
+                log.error("函数createOrUpdate：编辑帖子失败");
                 throw new RuntimeException("编辑帖子失败");
             }
         }
@@ -253,6 +247,7 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public void incVie(Long id) {
         if (id == null || id <= 0) {
+            log.error("函数incVie：传入参数异常id=" + id);
             throw new ServiceException("传入id值异常");
         }
         Topic topic = new Topic();
@@ -261,6 +256,7 @@ public class TopicServiceImpl implements TopicService {
 
         int count = topicExtMapper.incView(topic);
         if (count != 1) {
+            log.error("函数incVie：累加阅读数失败");
             throw new ServiceException("累加阅读数失败");
         }
     }

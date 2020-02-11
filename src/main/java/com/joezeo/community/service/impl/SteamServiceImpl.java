@@ -10,6 +10,7 @@ import com.joezeo.community.pojo.SteamAppInfo;
 import com.joezeo.community.pojo.SteamHistoryPrice;
 import com.joezeo.community.service.SteamService;
 import com.joezeo.community.utils.TimeUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class SteamServiceImpl implements SteamService {
     @Autowired
     private SteamAppInfoMapper steamAppInfoMapper;
@@ -70,7 +72,7 @@ public class SteamServiceImpl implements SteamService {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("获取特惠价格失败，所有商品价格将以历史记录展示: stackTrace=" + e.getMessage());
             throw new ServiceException("获取特惠价格失败，所有商品价格将以历史记录展示");
         }
 
@@ -84,7 +86,7 @@ public class SteamServiceImpl implements SteamService {
                     // 获取现在时间与下一天凌晨2点的时间差，单位秒
                     difftime = TimeUtils.getDifftimeFromNextZero();
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    log.error("获取时间差失败,stackTrace=" + e.getMessage());
                     throw new ServiceException("获取时间差失败，redis中app：" + app.getAppid() + "默认保存1小时j");
                 }
                 // 每天凌晨两点清除缓存信息

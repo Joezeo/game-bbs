@@ -24,7 +24,7 @@
                     <th style="width: 50%">App</th>
                     <th style="width: 15%">促销状态</th>
                 </tr>
-                <template v-if="loaded">
+                <template v-if="loaded" v-cloak>
                     <tr v-for="app in apps" class="content-tr">
                         <td>
                             <img :src="app.imgUrl" alt="App Pic">

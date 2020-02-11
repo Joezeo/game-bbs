@@ -1,5 +1,7 @@
 package com.joezeo.community.service.impl;
 
+import com.joezeo.community.exception.CustomizeErrorCode;
+import com.joezeo.community.exception.CustomizeException;
 import com.joezeo.community.exception.ServiceException;
 import com.joezeo.community.mapper.UserMapper;
 import com.joezeo.community.pojo.User;
@@ -7,6 +9,7 @@ import com.joezeo.community.pojo.UserExample;
 import com.joezeo.community.provider.UCloudProvider;
 import com.joezeo.community.service.UserService;
 import com.joezeo.community.utils.AvatarGenerator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,7 @@ import java.util.List;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
     @Autowired
     private UCloudProvider uCloudProvider;
@@ -26,7 +30,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createOrUpadate(User user) {
         if(user == null){
-            throw new ServiceException("参数user异常，=null");
+            log.error("函数createOrUpdate()：参数user异常，=null");
+            throw new ServiceException("参数异常");
         }
 
         UserExample userExample = new UserExample();
@@ -41,22 +46,25 @@ public class UserServiceImpl implements UserService {
 
             int count = userMapper.insert(user);
             if (count != 1) {
-                throw new ServiceException("保存用户失败");
+                log.error("函数createOrUpdate：保存新用户失败");
+                throw new CustomizeException(CustomizeErrorCode.CREATE_NEW_USER_FAILD);
             }
         } else { // 执行更新操作
             user.setId(memUser.get(0).getId());
             int count = userMapper.updateByPrimaryKeySelective(user);
             if (count != 1) {
-                throw new ServiceException("更新用户信息失败");
+                log.error("函数createOrUpdate：更新用户信息失败");
+                throw new CustomizeException(CustomizeErrorCode.UPDATE_USER_FAILD);
             }
         }
     }
 
     @Override
     public User queryUserByToken(String token) {
-        if (token == null || "".equals(token)) {
-            throw new ServiceException("参数token为空");
-        }
+        // 前方已经保证token！=null 或空，不必再做判断
+//        if (token == null || "".equals(token)) {
+//            throw new ServiceException("参数token为空");
+//        }
 
         UserExample userExample = new UserExample();
         userExample.createCriteria().andTokenEqualTo(token);
@@ -70,14 +78,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User queryByAccountid(String accountId) {
         if (accountId == null || "".equals(accountId)) {
-            throw new ServiceException("参数accountId为空");
+            log.error("函数queryByAccoundid：参数accountId为空");
+            throw new ServiceException("参数异常");
         }
 
         UserExample userExample = new UserExample();
         userExample.createCriteria().andAccountIdEqualTo(accountId);
         List<User> user = userMapper.selectByExample(userExample);
         if (user == null) {
-            throw new ServiceException("by accountid, 获取user信息失败");
+            log.error("函数queryByAccountid：获取user信息失败，该accounid不存在，可能前端传参有问题");
+            throw new ServiceException("获取user失败");
         }
         return user.get(0);
     }

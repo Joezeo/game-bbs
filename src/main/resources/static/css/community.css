@@ -16,7 +16,9 @@ a{
     color: black;
     font-family: Consolas;
 }
-
+[v-cloak] {
+    display: none;
+}
 .top-row{
     border-bottom: 1px solid #ebebeb;
     margin-bottom: 20px;

@@ -75,7 +75,7 @@ public class PageResolver {
     }
 
     /**
-     * 解析代理ip
+     * 解析西刺代理网页的代理ip
      */
     public void resolvProxyIP(String page) {
         Document doc = Jsoup.parse(page);
@@ -133,7 +133,6 @@ public class PageResolver {
                     int idx = proxyIPMapper.insert(proxyip);
                     if (idx != 1) {
                         log.error("插入代理ip失败");
-                        throw new ServiceException("插入代理ip失败");
                     }
                 }
             }
@@ -165,7 +164,7 @@ public class PageResolver {
         historyPrice.setGmtCreate(System.currentTimeMillis());
         int index = steamHistoryPriceMapper.insert(historyPrice);
         if (index != 1) {
-            throw new ServiceException("存储特惠价格失败，appid=" + appid);
+            log.error("存储特惠价格失败，appid=" + appid);
         }
     }
 
@@ -190,16 +189,30 @@ public class PageResolver {
                     return url.substring(0, url.lastIndexOf("?"));
                 }));
         // steam上每天搜索页的app都会加上一个不同的参数，如?snr=1_7_7_230_150_1364，存储时去掉这个参数
-        for (Map.Entry<String, String> entry : href.entrySet()) {
-            List<SteamUrl> urlList = steamUrlMapper.selectByAppid(Integer.parseInt(entry.getKey()), type);
-            if (urlList == null || urlList.size() == 0) {
-                // 说明该app地址不存在,存入数据库中
-                int index = steamUrlMapper.insert(entry.getKey(), entry.getValue(), type);
-            } else if (urlList.size() == 1) {
-                String memUrl = urlList.get(0).getUrl();
-                String newUrl = entry.getValue();
-                if (!memUrl.equals(newUrl)) { // 因为steam的礼包（sub）和软件（app）的appid有可能相同,但是url不同
+        if (!"special".equals(type)) { // 当前并非存储特惠商品的url
+            for (Map.Entry<String, String> entry : href.entrySet()) {
+                List<SteamUrl> urlList = steamUrlMapper.selectByAppid(Integer.parseInt(entry.getKey()), type);
+                if (urlList == null || urlList.size() == 0) {
+                    // 说明该app地址不存在,存入数据库中
                     int index = steamUrlMapper.insert(entry.getKey(), entry.getValue(), type);
+                } else if (urlList.size() == 1) {
+                    String memUrl = urlList.get(0).getUrl();
+                    String newUrl = entry.getValue();
+                    if (!memUrl.equals(newUrl)) { // 因为steam的礼包（sub）和软件（app）的appid有可能相同,但是url不同
+                        int index = steamUrlMapper.insert(entry.getKey(), entry.getValue(), type);
+                        if (index != 1) {
+                            log.error("存储App Url失败,appid=" + entry.getKey());
+                        }
+                    }
+                }
+            }
+        } else { // 存储特惠商品的url
+            // 清空 t_steam_special_url
+            steamAppInfoMapper.emptySpecialUrl();
+            for (Map.Entry<String, String> entry : href.entrySet()) {
+                int index = steamUrlMapper.insert(entry.getKey(), entry.getValue(), type);
+                if (index != 1) {
+                    log.error("存储特惠商品url失败,appid=" + entry.getKey());
                 }
             }
         }
@@ -344,9 +357,9 @@ public class PageResolver {
             steamAppInfo.setGmtModify(steamAppInfo.getGmtCreate());
             int index = steamAppInfoMapper.insert(steamAppInfo, type);
             if (index != 1) {
-                throw new ServiceException("存储app信息失败");
+                log.error("存储app信息失败,appid=" + appid);
             } else {
-                System.out.println("存储app信息成功");
+                log.info("存储app信息成功,appid=" + appid);
             }
         }
     }
@@ -437,7 +450,7 @@ public class PageResolver {
             steamSubInfo.setGmtModify(steamSubInfo.getGmtCreate());
             int index = steamSubInfoMapper.insert(steamSubInfo);
             if (index != 1) {
-                throw new ServiceException("插入 steam 礼包失败");
+                log.error("插入steam礼包信息失败,appid" + appid);
             }
         }
 

@@ -39,6 +39,16 @@
         limit #{index},#{size}
     </select>
 
+    <delete id="deleteIllegal">
+        delete from t_steam_game_info where name='';
+        delete from t_steam_software_info where name='';
+        delete from t_steam_dlc_info where name='';
+        delete from t_steam_sound_tape_info where name='';
+        delete from t_steam_demo_game_info where name='';
+        delete from t_steam_bundle_info where name='';
+        delete from t_steam_sub_info where name=''
+    </delete>
+
     <insert id="insert">
         insert into
         <choose>
@@ -52,4 +62,8 @@
         values (default , #{appInfo.appid}, #{appInfo.name}, #{appInfo.imgUrl},#{appInfo.description}, #{appInfo.releaseDate}, #{appInfo.devloper}, #{appInfo.publisher},
         #{appInfo.originalPrice}, #{appInfo.finalPrice},#{appInfo.summary}, #{appInfo.gmtCreate}, #{appInfo.gmtModify})
     </insert>
+
+    <sql id="emptySpecialUrl">
+       TRUNCATE TABLE t_steam_special_url
+    </sql>
 </mapper>
