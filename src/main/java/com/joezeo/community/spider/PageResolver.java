@@ -359,6 +359,7 @@ public class PageResolver {
     private void resolvSub(String page, Integer appid) {
         Document doc = Jsoup.parse(page);
 
+        // 礼包名称
         String name = "";
         Elements nameDivs = doc.getElementsByClass("page_title_area game_title_area");
         for (Element e : nameDivs) {
@@ -368,6 +369,7 @@ public class PageResolver {
             }
         }
 
+        // 开发商 发行商 发行时间
         String developer = "";
         String publisher = "";
         String date = "";
@@ -408,12 +410,14 @@ public class PageResolver {
             publisher.substring(0, publisher.length() - 1);
         }
 
+        // 价格
         Integer price = 0;
         Elements priceDivs = doc.getElementsByClass("game_purchase_price price");
         for (Element e : priceDivs) {
             price = Integer.parseInt(e.attr("data-price-final")) / 100;
         }
 
+        // 礼包包含的app的id 以,分隔
         String contains = "";
         Elements containsDivs = doc.getElementsByClass("tab_item");
         contains = containsDivs.stream()
@@ -423,6 +427,13 @@ public class PageResolver {
                     return subappid;
                 }).collect(Collectors.joining(","));
 
+        // 礼包缩略图地址
+        String imgUrl = "";
+        Element packageHeader = doc.getElementById("package_header_container");
+        Elements as = packageHeader.getElementsByTag("a");
+        for (Element a : as) {
+            imgUrl = a.attr("src");
+        }
 
         SteamSubInfo steamSubInfo = steamSubInfoMapper.selectByAppid(appid);
         if (steamSubInfo == null || steamSubInfo.getAppid() == null) { // 数据库中没有该礼包信息，则插入
@@ -437,6 +448,7 @@ public class PageResolver {
             steamSubInfo.setContains(contains);
             steamSubInfo.setGmtCreate(System.currentTimeMillis());
             steamSubInfo.setGmtModify(steamSubInfo.getGmtCreate());
+            steamSubInfo.setImgUrl(imgUrl);
             int index = steamSubInfoMapper.insert(steamSubInfo);
             if (index != 1) {
                 log.error("插入steam礼包信息失败,appid" + appid);

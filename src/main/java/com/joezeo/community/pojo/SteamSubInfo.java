@@ -20,4 +20,5 @@ public class SteamSubInfo implements Serializable {
     private String contains;
     private Long gmtCreate;
     private Long gmtModify;
+    private String imgUrl;
 }

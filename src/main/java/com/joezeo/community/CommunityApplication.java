@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class CommunityApplication {
 
     public static void main(String[] args) {
+        System.setProperty("user.timezone","Asia/Shanghai");
         SpringApplication.run(CommunityApplication.class, args);
     }
 

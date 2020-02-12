@@ -8,11 +8,14 @@ import com.joezeo.community.enums.SteamAppTypeEnum;
 import com.joezeo.community.exception.ServiceException;
 import com.joezeo.community.mapper.SteamAppInfoMapper;
 import com.joezeo.community.mapper.SteamHistoryPriceMapper;
+import com.joezeo.community.mapper.SteamSubInfoMapper;
 import com.joezeo.community.pojo.SteamAppInfo;
 import com.joezeo.community.pojo.SteamHistoryPrice;
+import com.joezeo.community.pojo.SteamSubInfo;
 import com.joezeo.community.service.SteamService;
 import com.joezeo.community.utils.TimeUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,13 +34,20 @@ public class SteamServiceImpl implements SteamService {
     @Autowired
     private SteamHistoryPriceMapper steamHistoryPriceMapper;
     @Autowired
+    private SteamSubInfoMapper steamSubInfoMapper;
+    @Autowired
     private RedisDao redisDao;
 
     @Override
-    public PaginationDTO<SteamAppInfo>
+    public PaginationDTO<?>
     listApps(Integer page, Integer size, Integer typeIndex) {
         // 获取所要获取的软件列表的类型(String)
         String type = SteamAppTypeEnum.typeOf(typeIndex);
+
+        // 如果类型为sub 礼包，则单独处理逻辑
+        if("sub".equals(type)){
+            return listSubs(page, size);
+        }
 
         // 获取该类型软件的总数
         int totalCount = steamAppInfoMapper.selectCount(type);
@@ -83,6 +93,50 @@ public class SteamServiceImpl implements SteamService {
         // key: app-类型-appid
         list.stream().forEach(app -> {
             String key = "app-" + type + "-" + app.getAppid();
+            if (!redisDao.hasKey(key)) { // redis缓存中不存在该app信息
+                int difftime = 60 * 60; // 如果获取时间差失败则默认保存1小时
+                try {
+                    // 获取现在时间与下一天凌晨4点的时间差，单位秒
+                    difftime = TimeUtils.getDifftimeFromNextZero();
+                } catch (ParseException e) {
+                    log.error("获取时间差失败,将默认保存1小时,stackTrace=" + e.getMessage());
+                }
+                // 每天凌晨4点清除缓存信息
+                // 由于缓存中的信息并不需要修改，所以使用String的方式存储
+                redisDao.set(key, app, difftime);
+            }
+        });
+
+        paginationDTO.setDatas(list);
+        return paginationDTO;
+    }
+
+    /*
+        获取礼包信息
+     */
+    @NotNull
+    private PaginationDTO<SteamSubInfo> listSubs(Integer page, Integer size) {
+        // 获取该类型软件的总数
+        int totalCount = steamSubInfoMapper.selectCount();
+
+        // 设置分页对象
+        PaginationDTO<SteamSubInfo> paginationDTO = new PaginationDTO<>();
+        paginationDTO.setPagination(page, size, totalCount);
+        // 避免page传入异常值
+        page = paginationDTO.getPage();
+        int index = (page - 1) * size;
+
+        // 获取该页的数据list
+        List<SteamSubInfo> list = steamSubInfoMapper.selectPage(index, size);
+        if (list == null || list.size() == 0) {
+            paginationDTO.setDatas(new ArrayList<>());
+            return paginationDTO;
+        }
+
+        // 将获取到的所有商品放入Redis中，凌晨4点对缓存中的商品信息进行删除
+        // key: app-类型-appid
+        list.stream().forEach(app -> {
+            String key = "app-sub-" + app.getAppid();
             if (!redisDao.hasKey(key)) { // redis缓存中不存在该app信息
                 int difftime = 60 * 60; // 如果获取时间差失败则默认保存1小时
                 try {

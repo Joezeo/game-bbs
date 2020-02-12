@@ -20,7 +20,7 @@ public interface SteamAppInfoMapper {
                                   @Param("size") Integer size,
                                   @Param("type") String type);
 
-    int deleteIllegal();
+    int deleteIllegal(@Param("type") String type);
 
 
 }

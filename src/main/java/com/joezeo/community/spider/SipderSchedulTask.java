@@ -1,6 +1,7 @@
 package com.joezeo.community.spider;
 
 import com.joezeo.community.enums.SpiderJobTypeEnum;
+import com.joezeo.community.enums.SteamAppTypeEnum;
 import com.joezeo.community.mapper.SteamAppInfoMapper;
 import com.joezeo.community.mapper.SteamHistoryPriceMapper;
 import com.joezeo.community.mapper.SteamUrlMapper;
@@ -82,7 +83,7 @@ public class SipderSchedulTask {
             long timestampAtZero = TimeUtils.getTimestampAtZero();
             List<SteamHistoryPrice> steamHistoryPrices = steamHistoryPriceMapper.selectByTime(timestampAtZero);
             int idx = steamHistoryPriceMapper.deleteIllegal();
-            if(idx < 0){
+            if (idx < 0) {
                 log.error("删除非法的特惠商品历史价格失败");
             }
 
@@ -118,9 +119,13 @@ public class SipderSchedulTask {
      */
     @Scheduled(cron = "0 50 2 1/1 * ?") // 每天凌晨2:30执行
     public void checkAppInfoDB() {
-        int idx = steamAppInfoMapper.deleteIllegal();
-        if (idx < 0) {
-            log.error("数据库删除非法App Info出现异常");
+        int idx = 0;
+        List<String> types = SteamAppTypeEnum.listType();
+        for (String type : types) {
+            idx = steamAppInfoMapper.deleteIllegal(type);
+            if (idx < 0) {
+                log.error("数据库删除非法App Info出现异常,type=" + type);
+            }
         }
     }
 

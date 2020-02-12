@@ -21,8 +21,8 @@
                 <h3 v-text="app.name"></h3>
                 <table>
                     <tr>
-                    <td>App Id</td>
-                    <td v-text="app.appid"></td>
+                        <td>App Id</td>
+                        <td v-text="app.appid"></td>
                     </tr>
 
                     <tr>
@@ -38,7 +38,7 @@
             <div v-if="loaded" v-cloak>
                 <img :src="app.imgUrl" alt="App pic">
             </div>
-            <span v-text="app.description"></span>
+            <span v-html="app.description"></span>
             <hr>
             <span v-html="app.summary"></span>
         </div>

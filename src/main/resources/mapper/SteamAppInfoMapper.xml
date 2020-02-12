@@ -40,13 +40,17 @@
     </select>
 
     <delete id="deleteIllegal">
-        delete from t_steam_game_info where name='';
-        delete from t_steam_software_info where name='';
-        delete from t_steam_dlc_info where name='';
-        delete from t_steam_sound_tape_info where name='';
-        delete from t_steam_demo_game_info where name='';
-        delete from t_steam_bundle_info where name='';
-        delete from t_steam_sub_info where name=''
+        delete from
+        <choose>
+            <when test="type == 'game'">t_steam_game_info</when>
+            <when test="type == 'software'">t_steam_software_info</when>
+            <when test="type == 'demo'">t_steam_demo_game_info</when>
+            <when test="type == 'dlc'">t_steam_dlc_info</when>
+            <when test="type == 'sound'">t_steam_sound_tape_info</when>
+            <when test="type == 'bundle'">t_steam_bundle_info</when>
+            <when test="type == 'sub'">t_steam_sub_info</when>
+        </choose>
+        where name = "";
     </delete>
 
     <insert id="insert">

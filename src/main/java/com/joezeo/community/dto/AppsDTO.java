@@ -13,5 +13,5 @@ public class AppsDTO implements Serializable {
     private Integer size;
     private Integer page;
     private Integer appType;
-    PaginationDTO<SteamAppInfo> pagination;
+    PaginationDTO<?> pagination;
 }

@@ -31,7 +31,7 @@ public class SteamController {
     @PostMapping("/list")
     @ResponseBody
     public JsonResult<AppsDTO> listApps(@RequestBody AppsDTO appsDTO){
-        PaginationDTO<SteamAppInfo> paginationDTO = steamService.listApps(appsDTO.getPage(), appsDTO.getSize(), appsDTO.getAppType());
+        PaginationDTO<?> paginationDTO = steamService.listApps(appsDTO.getPage(), appsDTO.getSize(), appsDTO.getAppType());
         appsDTO.setPagination(paginationDTO);
         return JsonResult.okOf(appsDTO);
     }

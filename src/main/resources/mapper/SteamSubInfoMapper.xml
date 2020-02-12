@@ -8,6 +8,15 @@
     <insert id="insert" parameterType="SteamSubInfo">
         insert into t_steam_sub_info
         values (default, #{appid}, #{name}, #{developer} ,#{publisher},#{date}, #{originalPrice}, #{finalPrice},
-        #{contains}, #{gmtCreate},#{gmtModify})
+        #{contains}, #{gmtCreate},#{gmtModify},#{imgUrl})
     </insert>
+
+    <select id="selectCount" resultType="int">
+        select count(1) from t_steam_sub_info
+    </select>
+
+    <select id="selectPage" resultType="SteamSubInfo">
+        select * from t_steam_sub_info
+        limit #{index},#{size}
+    </select>
 </mapper>
