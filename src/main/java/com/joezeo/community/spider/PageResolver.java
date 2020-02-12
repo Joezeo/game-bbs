@@ -153,7 +153,7 @@ public class PageResolver {
                 for (Element subele : finDiv) {
                     String finalPriceStrWithTag = subele.html();
                     String finalPriceStr = finalPriceStrWithTag.substring(finalPriceStrWithTag.lastIndexOf(" ") + 1);
-                    finalPrice = Integer.parseInt(finalPriceStr);
+                    finalPrice = Integer.parseInt(finalPriceStr.replaceAll(",", ""));
                     break;
                 }
             }
@@ -188,6 +188,7 @@ public class PageResolver {
                     String url = link.attr("href");
                     return url.substring(0, url.lastIndexOf("?"));
                 }));
+
         // steam上每天搜索页的app都会加上一个不同的参数，如?snr=1_7_7_230_150_1364，存储时去掉这个参数
         for (Map.Entry<String, String> entry : href.entrySet()) {
             List<SteamUrl> urlList = steamUrlMapper.selectByAppid(Integer.parseInt(entry.getKey()), type);
@@ -286,13 +287,13 @@ public class PageResolver {
                 for (Element subele : oriDiv) {
                     String oriPriceStrWithTag = subele.html();
                     String oriPriceStr = oriPriceStrWithTag.substring(oriPriceStrWithTag.lastIndexOf(" ") + 1);
-                    originalPrice = Integer.parseInt(oriPriceStr);
+                    originalPrice = Integer.parseInt(oriPriceStr.replaceAll(",", ""));
                     break;
                 }
                 for (Element subele : finDiv) {
                     String finalPriceStrWithTag = subele.html();
                     String finalPriceStr = finalPriceStrWithTag.substring(finalPriceStrWithTag.lastIndexOf(" ") + 1);
-                    finalPrice = Integer.parseInt(finalPriceStr);
+                    finalPrice = Integer.parseInt(finalPriceStr.replaceAll(",",""));
                     break;
                 }
             } else { // 没有降价
@@ -312,7 +313,7 @@ public class PageResolver {
                             finalPrice = 0;
                             break;
                         } else {
-                            originalPrice = Integer.parseInt(priceStr) / 100;
+                            originalPrice = Integer.parseInt(priceStr.replaceAll(",", "")) / 100;
                             finalPrice = originalPrice;
                             break;
                         }

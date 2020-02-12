@@ -69,7 +69,7 @@ public class PageGetter {
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36")
-                .addHeader("cookie", "birthtime=470678401;steamCountry=CN%7C09aa4598793d568e5132e0ae6eed2b3a;sessionid=c2bef61856aa2dfff43f0946;steamLoginSecure=76561198102551656%7C%7C881F186195D68D0AB7108296B327ECA75E813EDB;steamMachineAuth76561198102551656=52E8A01B3441E245A9CB20640EBB584F6C0F8377;app_impressions=304212@1_7_7_2300_150_1|1167450@1_7_7_2300_150_1|625960@1_7_7_2300_150_1|227300@1_7_7_2300_150_1|994280@1_7_7_2300_150_1|1146630@1_7_7_2300_150_1|558244@1_7_7_2300_150_1|1037020@1_7_7_2300_150_1|570770@1_7_7_2300_150_1|548570@1_7_7_2300_150_1|531130@1_7_7_2300_150_1|227310@1_7_7_2300_150_1|925580@1_7_7_2300_150_1|241260@1_7_7_2300_150_1|526160@1_7_7_2300_150_1|671510@1_7_7_2300_150_1|1056760@1_7_7_2300_150_1|724970@1_7_7_2300_150_1|644930@1_7_7_2300_150_1") // 认证年龄
+                .addHeader("cookie", "birthtime=470678401") // 认证年龄
                 .addHeader("Accept-Language", "zh-CN,zh;q=0.9") // 设置语言
                 .get()
                 .build();

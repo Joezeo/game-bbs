@@ -241,3 +241,32 @@ a{
     float:right;
     margin-top: 30px;
 }
+
+/*回到顶部按钮*/
+.totop {
+    position: fixed;
+    z-index: 2;
+    right: 45px;
+    bottom: 100px;
+    height: 35px;
+    font-size: 3em;
+    padding: 0 8px;
+    font-weight: 600;
+    border-radius: 6px;
+    text-align: center;
+    border: 1px solid #ddd;
+    line-height: 1.42857143;
+    color: #009a61 !important;
+    text-decoration: none !important;
+    background-color: rgba(217, 217, 217, .6);
+    opacity: .4;
+    filter: alpha(opacity=40);
+    font-family: microsoft yahei
+}
+
+.totop:hover {
+    color: #fff !important;
+    background-color: #009a61
+}
+/*回到顶部结束*/
+
