@@ -179,33 +179,32 @@ public class PageResolver {
         // 从doc对象获取数据
         Element content = doc.getElementById("search_resultsRows");
         Elements links = content.getElementsByTag("a");
-        Map<String, String> href = links.stream()
-                .collect(Collectors.toMap(link -> {
-                    String appKey = link.attr("data-ds-itemkey");// ep:App_901583
-                    String appid = appKey.substring(appKey.lastIndexOf("_") + 1);
-                    return appid;
-                }, link -> {
-                    String url = link.attr("href");
-                    return url.substring(0, url.lastIndexOf("?"));
-                }));
+        links.stream().forEach(link -> {
+            String appKey = link.attr("data-ds-itemkey");// ep:App_901583
+            String appid = appKey.substring(appKey.lastIndexOf("_") + 1);
 
-        // steam上每天搜索页的app都会加上一个不同的参数，如?snr=1_7_7_230_150_1364，存储时去掉这个参数
-        for (Map.Entry<String, String> entry : href.entrySet()) {
-            List<SteamUrl> urlList = steamUrlMapper.selectByAppid(Integer.parseInt(entry.getKey()), type);
+            String url = link.attr("href");
+            // steam上每天搜索页的app都会加上一个不同的参数，如?snr=1_7_7_230_150_1364，存储时去掉这个参数
+            url = url.substring(0, url.lastIndexOf("?"));
+
+            List<SteamUrl> urlList = steamUrlMapper.selectByAppid(Integer.parseInt(appid), type);
             if (urlList == null || urlList.size() == 0) {
                 // 说明该app地址不存在,存入数据库中
-                int index = steamUrlMapper.insert(entry.getKey(), entry.getValue(), type);
+                int index = steamUrlMapper.insert(appid, url, type);
+                if(index < 0){
+                    log.error("url地址存储数据库时失败,appid=" + appid);
+                }
             } else if (urlList.size() == 1) {
                 String memUrl = urlList.get(0).getUrl();
-                String newUrl = entry.getValue();
+                String newUrl = url;
                 if (!memUrl.equals(newUrl)) { // 因为steam的礼包（sub）和软件（app）的appid有可能相同,但是url不同
-                    int index = steamUrlMapper.insert(entry.getKey(), entry.getValue(), type);
+                    int index = steamUrlMapper.insert(appid, url, type);
                     if (index != 1) {
-                        log.error("存储App Url失败,appid=" + entry.getKey());
+                        log.error("存储App Url失败,appid=" + appid);
                     }
                 }
             }
-        }
+        });
     }
 
     /**
