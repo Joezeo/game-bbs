@@ -4,7 +4,6 @@ import com.joezeo.community.dto.AppsDTO;
 import com.joezeo.community.dto.JsonResult;
 import com.joezeo.community.dto.PaginationDTO;
 import com.joezeo.community.dto.SteamAppDTO;
-import com.joezeo.community.pojo.SteamAppInfo;
 import com.joezeo.community.service.SteamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

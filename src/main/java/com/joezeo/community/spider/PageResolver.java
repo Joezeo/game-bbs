@@ -1,6 +1,5 @@
 package com.joezeo.community.spider;
 
-import com.joezeo.community.exception.ServiceException;
 import com.joezeo.community.mapper.*;
 import com.joezeo.community.pojo.*;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -430,9 +428,9 @@ public class PageResolver {
         // 礼包缩略图地址
         String imgUrl = "";
         Element packageHeader = doc.getElementById("package_header_container");
-        Elements as = packageHeader.getElementsByTag("a");
-        for (Element a : as) {
-            imgUrl = a.attr("src");
+        Elements imgs = packageHeader.getElementsByTag("img");
+        for (Element img : imgs) {
+            imgUrl = img.attr("src");
         }
 
         SteamSubInfo steamSubInfo = steamSubInfoMapper.selectByAppid(appid);
