@@ -1,42 +1,28 @@
 body{
-    /*background-image: url(http://joezeo.cn-bj.ufileos.com/c307b3eb-b4b2-4216-a5dd-c1d5fff75751.jpg);*/
-    /*background: rgba(255,255,255,0.7);*/
-    background-color: #efefef;
-}
-.app-table th{
-    text-align: left;
-    height: 50px;
-    font-size: 20px;
-    color: #999999;
-}
-.app-table .content-tr {
-    border-bottom: solid 1px #d9d9d9;
     font-family: Consolas;
-    font-weight: bold;
 }
-.app-table td{
-    text-align: left;
-    height: 80px;
-}
+h3{
 
-.app-table img{
-    border-radius: 8px;
-    width: 150px;
-    height: 69.6px;
 }
-
-.app-table .game-info-span{
-    color: #999999;
-    font-size: 12px;
+.left-zone{
+    margin-top: 23px;
 }
-
-.type-checkbox{
-    margin-top: 12px;
+.left-zone .app-table tr{
+    height: 53px;
+    border-top: 1px solid rgba(240,240,240,.9);
 }
-
-.type-checkbox span{
-    color: black;
-    font-family: Consolas;
-    font-weight: bold;
+.left-zone .table-zone{
+    /*background-color: rgba(227,227,227,.6);*/
     font-size: 17px;
 }
+
+.right-zone{
+    margin-top: 23px;
+}
+
+.right-zone img{
+    width: 99%;
+    border-radius: 7px;
+    margin-bottom: 10px;
+}
+

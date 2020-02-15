@@ -9,29 +9,32 @@ var vue = new Vue({
     el: "#app",
     data: {appid, type, typeStr, app, loaded},
     mounted: function () {
-        this.resolvAppType();
         this.getApp();
+        this.resolvAppType();
     },
     methods: {
         resolvAppType: function () {
-            switch (type) {
+            switch (Number.parseInt(type)) {
                 case 1:
-                    vue.typeStr = '游戏';
+                    this.typeStr = '游戏';
                     break;
                 case 2:
-                    vue.typeStr = '软件';
+                    this.typeStr = '软件';
                     break;
                 case 3:
-                    vue.typeStr = 'DLC';
+                    this.typeStr = 'DLC';
                     break;
                 case 4:
-                    vue.typeStr = '试玩游戏';
+                    this.typeStr = '试玩游戏';
                     break;
                 case 5:
-                    vue.typeStr = '捆绑包';
+                    this.typeStr = '捆绑包';
                     break;
                 case 6:
-                    vue.typeStr = '原声带';
+                    this.typeStr = '原声带';
+                    break;
+                default:
+                    this.typeStr = '';
                     break;
             }
         },

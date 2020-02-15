@@ -15,32 +15,160 @@
 
 <div class="container-fluid main profile" id="app">
     <div class="row">
-        <!--        App 信息-->
-        <div class="col-lg-7 .col-md-12 .col-sm-12 .col-xs-12">
-            <div v-if="loaded" v-cloak>
-                <h3 v-text="app.name"></h3>
-                <table>
-                    <tr>
-                        <td>App Id</td>
-                        <td v-text="app.appid"></td>
-                    </tr>
+        <!-- 左侧区域       App 信息-->
+        <div class="col-lg-7 .col-md-12 .col-sm-12 .col-xs-12 left-zone" v-if="loaded" v-cloak>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3 v-text="app.name"></h3>
+                </div>
 
-                    <tr>
-                        <td>App 类型</td>
-                        <td v-text="app.typeStr"></td>
-                    </tr>
-                </table>
+                <div class="panel-body table-zone">
+                    <table class="app-table">
+                        <tr>
+                            <td style="width: 100px;">App Id</td>
+                            <td style="width: 550px;" v-text="app.appid"></td>
+                        </tr>
+
+                        <tr>
+                            <td>App 类型</td>
+                            <td v-text="typeStr"></td>
+                        </tr>
+
+                        <tr>
+                            <td>开发商</td>
+                            <td v-text="app.devloper"></td>
+                        </tr>
+
+                        <tr>
+                            <td>发行商</td>
+                            <td v-text="app.publisher"></td>
+                        </tr>
+
+                        <tr>
+                            <td>发行时间</td>
+                            <td v-text="app.releaseDate"></td>
+                        </tr>
+
+                        <tr>
+                            <td>原始价格</td>
+                            <td v-text="'￥'+app.originalPrice"></td>
+                        </tr>
+
+                        <tr>
+                            <td>目前价格</td>
+                            <td v-text="'￥'+app.finalPrice"></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <!--        App缩略图-->
-        <div class="col-lg-5 .col-md-12 .col-sm-12 .col-xs-12">
-            <div v-if="loaded" v-cloak>
-                <img :src="app.imgUrl" alt="App pic">
+        <!-- 右侧区域       App缩略图、简介、评价-->
+        <div class="col-lg-5 .col-md-12 .col-sm-12 .col-xs-12 right-zone">
+            <div class="panel panel-default" v-if="loaded" v-cloak>
+                <div class="panel-body">
+                    <img :src="app.imgUrl" alt="App pic">
+                </div>
+                <div class="panel-heading">游戏简介</div>
+                <div class="panel-body">
+                    <span v-html="app.description"></span>
+                </div>
+                <div class="panel-heading">steam中的评价</div>
+                <div class="panel-body">
+                    <span v-html="app.summary"></span>
+                </div>
             </div>
-            <span v-html="app.description"></span>
-            <hr>
-            <span v-html="app.summary"></span>
+        </div>
+    </div>
+
+    <!-- 下侧区域   图表信息 -->
+    <div class="row bottom-zone">
+        <hr>
+        <div class="col-lg-2 .col-md-12 .col-sm-12 .col-xs-12">
+            <div class="list-group">
+                <a href="" class="list-group-item">历史价格</a>
+                <a href="" class="list-group-item">Steam 图表</a>
+            </div>
+        </div>
+        <div class="col-lg-10 .col-md-12 .col-sm-12 .col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                </div>
+            </div>
         </div>
     </div>
 </div>
