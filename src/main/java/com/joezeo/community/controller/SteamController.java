@@ -1,9 +1,6 @@
 package com.joezeo.community.controller;
 
-import com.joezeo.community.dto.AppsDTO;
-import com.joezeo.community.dto.JsonResult;
-import com.joezeo.community.dto.PaginationDTO;
-import com.joezeo.community.dto.SteamAppDTO;
+import com.joezeo.community.dto.*;
 import com.joezeo.community.service.SteamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,5 +37,12 @@ public class SteamController {
     public JsonResult<SteamAppDTO> getApp(@RequestBody SteamAppDTO appDTO){
         appDTO = steamService.queryApp(appDTO.getAppid(), appDTO.getType());
         return JsonResult.okOf(appDTO);
+    }
+
+    @PostMapping("getPrice")
+    @ResponseBody
+    public JsonResult<HistoryPriceDTO> getPrice(@RequestBody HistoryPriceDTO historyPriceDTO){
+        historyPriceDTO = steamService.queryHistoryPrice(historyPriceDTO.getAppid(), historyPriceDTO.getType());
+        return JsonResult.okOf(historyPriceDTO);
     }
 }

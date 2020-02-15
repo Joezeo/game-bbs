@@ -15,4 +15,9 @@
         delete from t_steam_history_price
         where price=0;
     </delete>
+
+    <select id="selectByAppid" resultType="SteamHistoryPrice">
+        select price,gmt_create from t_steam_history_price
+        where appid = #{appid}
+    </select>
 </mapper>

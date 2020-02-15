@@ -36,4 +36,25 @@ public class TimeUtils {
         int difftime = ((Long)(nextTwoTimestamp - nowTimestamp)).intValue();
         return difftime/1000;
     }
+
+    /**
+     *  将时间戳转化成为int类型
+     *  如：20200215
+     */
+    public static Integer timeToInt(Long gmtCreate) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        String preDateStr = dateFormat.format(new Date(gmtCreate)); // 转换时间戳，如：20200215
+        return Integer.parseInt(preDateStr);
+    }
+
+    /**
+     * 把时间从20200215转换成2020-02-15
+     */
+    public static String tansferInt(int i) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        Date date = dateFormat.parse(String.valueOf(i));
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String target = format.format(date);
+        return target;
+    }
 }

@@ -26,3 +26,13 @@ h3{
     margin-bottom: 10px;
 }
 
+
+.bottom-zone .left-nav{
+    position: fixed;
+    top: 50px;
+    left: 0;
+    width: 160px;
+    padding-top: 60px;
+    box-sizing: border-box;
+    text-align: right;
+}

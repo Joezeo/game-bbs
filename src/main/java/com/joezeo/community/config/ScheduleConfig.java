@@ -2,7 +2,6 @@ package com.joezeo.community.config;
 
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.client.reactive.JettyResourceFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
@@ -17,6 +16,7 @@ import java.util.concurrent.Executors;
 public class ScheduleConfig implements SchedulingConfigurer {
     @Override
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
+
         Method[] methods = BatchProperties.Job.class.getMethods();
         int defaultPoolSize = 3;
         int corePoolSize = 0;
@@ -32,4 +32,6 @@ public class ScheduleConfig implements SchedulingConfigurer {
         }
         scheduledTaskRegistrar.setScheduler(Executors.newScheduledThreadPool(corePoolSize));
     }
+
+
 }

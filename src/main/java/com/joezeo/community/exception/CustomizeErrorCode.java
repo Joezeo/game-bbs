@@ -18,7 +18,8 @@ public enum CustomizeErrorCode implements IExceptionErrorCode{
     TOPIC_NOT_FOUND(2013, "你查找的帖子不存在或已被删除，请换一个试试"),
     SPIDE_STEAM_URL_ERROR(2014, "爬取steam应用url失败"),
     CREATE_NEW_USER_FAILD(2015, "注册新用户失败啦，请稍后重试~"),
-    UPDATE_USER_FAILD(2016, "更新用户信息失败啦。请稍后重试~");
+    UPDATE_USER_FAILD(2016, "更新用户信息失败啦。请稍后重试~"),
+    INIT_PRICE_CHART_FAILED(2017, "Opps，初始化价格图表失败了，请稍后重试");
 
     private Integer code;
     private String message;

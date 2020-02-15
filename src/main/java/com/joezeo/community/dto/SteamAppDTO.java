@@ -3,7 +3,6 @@ package com.joezeo.community.dto;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Map;
 
 @Data
 public class SteamAppDTO implements Serializable {
@@ -21,7 +20,4 @@ public class SteamAppDTO implements Serializable {
     private Integer originalPrice;
     private Integer finalPrice;
     private String summary;
-
-    // <日期，价格> : <20200211, 102>
-    private Map<Integer, Integer> daliyPrice; // 每日价格
 }

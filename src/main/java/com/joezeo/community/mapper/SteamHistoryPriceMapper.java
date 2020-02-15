@@ -15,4 +15,6 @@ public interface SteamHistoryPriceMapper {
     List<SteamHistoryPrice> selectByTime(long preTimeAtZero);
 
     int deleteIllegal();
+
+    List<SteamHistoryPrice> selectByAppid(Integer appid);
 }
