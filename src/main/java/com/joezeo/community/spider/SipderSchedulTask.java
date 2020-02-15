@@ -45,6 +45,7 @@ public class SipderSchedulTask {
      */
     @Scheduled(cron = "0 0 0 1/1 * ?") // 每天凌晨00:00执行
     public void emptySpecialUrl() {
+        log.info("Spider定时任务 [清空特惠商品url]");
         // 清空 t_steam_special_url
         int idx = steamUrlMapper.emptySpecialUrl();
         if (idx < 0) {
@@ -59,6 +60,7 @@ public class SipderSchedulTask {
      */
     @Scheduled(cron = "0 0 5 1/1 * ?") // 每天凌晨00:05执行
     public void spideUrl() {
+        log.info("Spider定时任务 [爬取所有app的url信息]");
         steamSpider.daliyChekcUrl();
     }
 
@@ -69,6 +71,7 @@ public class SipderSchedulTask {
      */
     @Scheduled(cron = "0 0 1 1/1 * ?") // 每天凌晨01:00执行
     public void spideSpecialPrice() {
+        log.info("Spider定时任务 [爬取所有特惠商品的价格]");
         steamSpider.updateHistoryPrice();
     }
 
@@ -80,6 +83,7 @@ public class SipderSchedulTask {
      */
     @Scheduled(cron = "0 0 2 1/1 * ?") // 每天凌晨02:00执行
     public void checkHistoryPrice() {
+        log.info("Spider定时任务 [重新查询price=0的特惠商品]");
         //获取当天零点的时间戳
         try {
             long timestampAtZero = TimeUtils.getTimestampAtZero();
@@ -108,6 +112,7 @@ public class SipderSchedulTask {
      */
     @Scheduled(cron = "0 40 2 1/1 * ?") // 每天凌晨02:40执行
     public void deleteIllegalHistoryPrice() {
+        log.info("Spider定时任务 [删除price=0的特惠商品]");
         int idx = steamHistoryPriceMapper.deleteIllegal();
         if (idx < 0) {
             log.error("数据库删除非法特惠商品价格出现异常");
@@ -121,6 +126,7 @@ public class SipderSchedulTask {
      */
     @Scheduled(cron = "0 50 2 1/1 * ?") // 每天凌晨2:30执行
     public void checkAppInfoDB() {
+        log.info("Spider定时任务 [检查App Info非法项，并删除]");
         int idx = 0;
         List<String> types = SteamAppTypeEnum.listType();
         for (String type : types) {
@@ -138,6 +144,7 @@ public class SipderSchedulTask {
      */
     @Scheduled(cron = "0 0 3 1/3 * ?") // 每三天执行一次，凌晨3:00执行
     public void spideAppInfo() {
+        log.info("Spider定时任务 [重新爬取所有 app info]");
         steamSpider.daliyChekcApp();
     }
 
