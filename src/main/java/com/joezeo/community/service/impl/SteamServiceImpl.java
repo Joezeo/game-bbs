@@ -115,7 +115,7 @@ public class SteamServiceImpl implements SteamService {
     }
 
     /*
-        获取礼包信息
+        获取礼包信息list
      */
     @NotNull
     private PaginationDTO<SteamSubInfo> listSubs(Integer page, Integer size) {
@@ -161,6 +161,11 @@ public class SteamServiceImpl implements SteamService {
     @Override
     public SteamAppDTO queryApp(Integer appid, Integer type) {
         String typeStr = SteamAppTypeEnum.typeOf(type);
+
+        if ("sub".equals(typeStr)) { // 获取礼包信息
+            return querySub(appid);
+        }
+
         SteamAppDTO appDTO = new SteamAppDTO();
         appDTO.setType(type);
 
@@ -185,18 +190,74 @@ public class SteamServiceImpl implements SteamService {
             // 每天凌晨4点清除缓存信息
             // 由于缓存中的信息并不需要修改，所以使用String的方式存储
             redisDao.set(key, app, difftime);
+            BeanUtils.copyProperties(app, appDTO);
+        }
+        return appDTO;
+    }
+
+    @NotNull
+    private SteamAppDTO querySub(Integer appid) {
+        SteamAppDTO appDTO = new SteamAppDTO();
+        appDTO.setType(7);
+
+        String key = "app-sub-" + appid;
+
+        if (redisDao.hasKey(key)) {
+            JSONObject object = (JSONObject) redisDao.get(key);
+            SteamAppDTO appInfo = JSONObject.parseObject(object.toJSONString(), SteamAppDTO.class);
+            BeanUtils.copyProperties(appInfo, appDTO);
+        } else {
+            SteamSubInfo sub = steamSubInfoMapper.selectByAppid(appid);
+            int difftime = 60 * 60; // 如果获取时间差失败则默认保存1小时
+            try {
+                // 获取现在时间与下一天凌晨4点的时间差，单位秒
+                difftime = TimeUtils.getDifftimeFromNextZero();
+            } catch (ParseException e) {
+                log.error("获取时间差失败,将默认保存1小时,stackTrace=" + e.getMessage());
+            }
+            BeanUtils.copyProperties(sub, appDTO);
+
+
+            // 查询出该礼包包含的app信息，放入list中
+            List<SteamAppDTO> includes = new ArrayList<>();
+            String[] contains = sub.getContains().split(",");
+            for (String appidStr : contains) {
+                Integer type = 1; // 默认游戏
+                SteamAppInfo include = steamAppInfoMapper.selectByAppid(Integer.parseInt(appidStr), "game");
+                if (include == null) {
+                    include = steamAppInfoMapper.selectByAppid(Integer.parseInt(appidStr), "dlc");
+                    type = 3;
+                }
+                if (include != null){
+                    // 这里使用SteamAppDTO是为了记录下包含物件的类型
+                    SteamAppDTO appdto =  new SteamAppDTO();
+                    appdto.setType(type);
+                    BeanUtils.copyProperties(include, appdto);
+                    includes.add(appdto);
+                }
+            }
+            appDTO.setIncludes(includes);
+
+            // 每天凌晨4点清除缓存信息
+            // 由于缓存中的信息并不需要修改，所以使用String的方式存储
+            redisDao.set(key, appDTO, difftime);
         }
         return appDTO;
     }
 
     @Override
     public HistoryPriceDTO queryHistoryPrice(Integer appid, Integer type) {
+        String typeStr = SteamAppTypeEnum.typeOf(type);
+
+        if("sub".equals(typeStr)){// 礼包不会降价，但是为了画出图表依然返回一个HistoryPriceDTO
+            return querySubPrice(appid);
+        }
+
         HistoryPriceDTO historyPriceDTO = new HistoryPriceDTO();
         // 首先获取该appid对应的app信息
         SteamAppInfo appInfo = null;
 
         // 首先redis缓存中获取
-        String typeStr = SteamAppTypeEnum.typeOf(type);
         String key = "app-" + typeStr + "-" + appid;
         if (redisDao.hasKey(key)) {
             JSONObject object = (JSONObject) redisDao.get(key);
@@ -213,6 +274,7 @@ public class SteamServiceImpl implements SteamService {
             // 每天凌晨4点清除缓存信息
             // 由于缓存中的信息并不需要修改，所以使用String的方式存储
             redisDao.set(key, app, difftime);
+            appInfo = app;
         }
 
         // 获取该app的原价格
@@ -248,7 +310,7 @@ public class SteamServiceImpl implements SteamService {
                 Collectors.toMap(item -> TimeUtils.timeToInt(item.getGmtCreate()), item -> item.getPrice()));
 
         // 设置起始时间和当前的时间(格式:20200215)
-        Integer farTime = 20200215; // 默认起始时间2020-2-15
+        Integer farTime = 20200216; // 默认起始时间2020-2-16
         Integer preTime = TimeUtils.timeToInt(System.currentTimeMillis());
 
         List<String> times = new ArrayList<>();
@@ -261,6 +323,48 @@ public class SteamServiceImpl implements SteamService {
             try {
                 times.add(TimeUtils.tansferInt(i)); // 把时间从20200215转换成2020-02-15
                 prices.add(price);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                log.error("转换时间格式失败");
+                throw new CustomizeException(CustomizeErrorCode.INIT_PRICE_CHART_FAILED);
+            }
+        }
+
+        historyPriceDTO.setTime(times);
+        historyPriceDTO.setPrice(prices);
+        return historyPriceDTO;
+    }
+
+    private HistoryPriceDTO querySubPrice(Integer appid) {
+        HistoryPriceDTO historyPriceDTO = new HistoryPriceDTO();
+
+        SteamSubInfo subInfo = null;
+
+        // 首先从redis中获取
+        String key = "app-sub-" + appid;
+        if(redisDao.hasKey(key)){
+            JSONObject object = (JSONObject) redisDao.get(key);
+            subInfo = JSONObject.parseObject(object.toJSONString(), SteamSubInfo.class);
+        } else {
+            // redis缓存中没有则从数据库中查询
+            // 由于礼包的dto比较复杂，这里获取的只是简单的信息，所以这里就不存入redis中了
+            // 由于querySub这个方法先于本方法执行，所以存储redis缓存就在querySub中执行了
+            subInfo = steamSubInfoMapper.selectByAppid(appid);
+        }
+
+        // 获取礼包的原始价格
+        Integer oriPrice = subInfo.getOriginalPrice();
+
+        // 设置起始时间和当前的时间(格式:20200215)
+        Integer farTime = 20200216; // 默认起始时间2020-2-16
+        Integer preTime = TimeUtils.timeToInt(System.currentTimeMillis());
+
+        List<String> times = new ArrayList<>();
+        List<Integer> prices = new ArrayList<>();
+        for (int i = farTime; i <= preTime; i++) {
+            try {
+                times.add(TimeUtils.tansferInt(i)); // 把时间从20200215转换成2020-02-15
+                prices.add(oriPrice); // 礼包没有降价活动，故价格都会一样
             } catch (ParseException e) {
                 e.printStackTrace();
                 log.error("转换时间格式失败");

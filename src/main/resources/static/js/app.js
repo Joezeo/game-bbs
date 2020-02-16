@@ -10,12 +10,10 @@ var prices = {};
 var vue = new Vue({
     el: "#app",
     data: {appid, type, typeStr, app, loaded, prices, chartTitle},
-    created:function(){
-        this.getPrice();
-    },
     mounted: function () {
-        this.getApp();
         this.resolvAppType();
+        this.getApp();
+        this.getPrice();
     },
     methods: {
         resolvAppType: function () {
@@ -38,6 +36,9 @@ var vue = new Vue({
                 case 6:
                     this.typeStr = '原声带';
                     break;
+                case 7:
+                    this.typeStr = '礼包';
+                    break;
                 default:
                     this.typeStr = '';
                     break;
@@ -50,7 +51,9 @@ var vue = new Vue({
                 var jsonResult = result.data;
                 if (jsonResult.success) {
                     vue.app = jsonResult.data;
-                    vue.app.summary = vue.app.summary.replace("|", "<br>");
+                    if (type != 7) {
+                        vue.app.summary = vue.app.summary.replace("|", "<br>");
+                    }
                     vue.loaded = true;
                 } else {
                     alert(jsonResult.message);
@@ -73,6 +76,7 @@ var vue = new Vue({
         },
     }
 });
+
 function loadPriceChart(prices) {
     var time = prices.time;
     var price = prices.price;

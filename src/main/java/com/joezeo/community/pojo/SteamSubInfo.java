@@ -14,7 +14,7 @@ public class SteamSubInfo implements Serializable {
     private String name;
     private String developer;
     private String publisher;
-    private String date;
+    private String releaseDate;
     private Integer originalPrice;
     private Integer finalPrice;
     private String contains;

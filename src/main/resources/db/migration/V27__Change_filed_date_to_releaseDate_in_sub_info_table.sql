@@ -1,0 +1,1 @@
+alter table t_steam_sub_info change date releaseDate varchar(255) not null comment '发行日期';

@@ -84,11 +84,11 @@ public class SipderSchedulTask {
     @Scheduled(cron = "0 0 2 1/1 * ?") // 每天凌晨02:00执行
     public void checkHistoryPrice() {
         log.info("Spider定时任务 [重新查询price=0的特惠商品]");
-        //获取当天零点的时间戳
         try {
+            //获取当天零点的时间戳
             long timestampAtZero = TimeUtils.getTimestampAtZero();
             List<SteamHistoryPrice> steamHistoryPrices = steamHistoryPriceMapper.selectByTime(timestampAtZero);
-            int idx = steamHistoryPriceMapper.deleteIllegal();
+            int idx = steamHistoryPriceMapper.deleteIllegal(); // 这里需要先删除，否则之后会因为数据库存在相同的app而重复
             if (idx < 0) {
                 log.error("删除非法的特惠商品历史价格失败");
             }
@@ -138,11 +138,11 @@ public class SipderSchedulTask {
     }
 
     /**
-     * 凌晨03:00 每隔三天
+     * 凌晨03:00 每隔7天
      * <p>
      * 重新爬取app info
      */
-    @Scheduled(cron = "0 0 3 1/3 * ?") // 每三天执行一次，凌晨3:00执行
+    @Scheduled(cron = "0 0 3 1/7 * ?") // 每7天执行一次，凌晨3:00执行
     public void spideAppInfo() {
         log.info("Spider定时任务 [重新爬取所有 app info]");
         steamSpider.daliyChekcApp();

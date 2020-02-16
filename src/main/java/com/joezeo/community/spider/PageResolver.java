@@ -143,6 +143,10 @@ public class PageResolver {
     public void dailySpideSpecialPrice(String page, Integer appid) {
         Document doc = Jsoup.parse(page);
 
+        if(doc.getElementById("error_box")!=null){ // 此app中国地区不支持
+            return;
+        }
+
         Integer finalPrice = 0;
         Elements purchaseGameDiv = doc.getElementsByClass("game_area_purchase_game");
         for (Element ele : purchaseGameDiv) {
@@ -218,6 +222,10 @@ public class PageResolver {
         }
 
         Document doc = Jsoup.parse(page);
+
+        if(doc.getElementById("error_box")!=null){ // 此app中国地区不支持
+            return;
+        }
 
         // 软件名称
         String appName = "";
@@ -406,6 +414,10 @@ public class PageResolver {
     private void resolvSub(String page, Integer appid) {
         Document doc = Jsoup.parse(page);
 
+        if(doc.getElementById("error_box")!=null){ // 此app中国地区不支持
+            return;
+        }
+
         // 礼包名称
         String name = "";
         Elements nameDivs = doc.getElementsByClass("page_title_area game_title_area");
@@ -489,7 +501,7 @@ public class PageResolver {
             steamSubInfo.setName(name);
             steamSubInfo.setDeveloper(developer);
             steamSubInfo.setPublisher(publisher);
-            steamSubInfo.setDate(date);
+            steamSubInfo.setReleaseDate(date);
             steamSubInfo.setOriginalPrice(price);
             steamSubInfo.setFinalPrice(price);
             steamSubInfo.setContains(contains);

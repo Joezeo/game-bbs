@@ -1,8 +1,10 @@
 package com.joezeo.community.dto;
 
+import com.joezeo.community.pojo.SteamAppInfo;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 public class SteamAppDTO implements Serializable {
@@ -20,4 +22,9 @@ public class SteamAppDTO implements Serializable {
     private Integer originalPrice;
     private Integer finalPrice;
     private String summary;
+
+    /*
+    如果是sub礼包信息则需存储它所包含的app信息
+     */
+    private List<SteamAppDTO> includes;
 }
