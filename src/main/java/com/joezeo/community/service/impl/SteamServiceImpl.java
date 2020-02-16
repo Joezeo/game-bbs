@@ -141,6 +141,8 @@ public class SteamServiceImpl implements SteamService {
         list.stream().forEach(app -> {
             String key = "app-sub-" + app.getAppid();
             if (!redisDao.hasKey(key)) { // redis缓存中不存在该app信息
+                SteamAppDTO appDTO = new SteamAppDTO();
+                BeanUtils.copyProperties(app, appDTO);
                 int difftime = 60 * 60; // 如果获取时间差失败则默认保存1小时
                 try {
                     // 获取现在时间与下一天凌晨4点的时间差，单位秒
@@ -150,7 +152,26 @@ public class SteamServiceImpl implements SteamService {
                 }
                 // 每天凌晨4点清除缓存信息
                 // 由于缓存中的信息并不需要修改，所以使用String的方式存储
-                redisDao.set(key, app, difftime);
+                // 查询出该礼包包含的app信息，放入list中
+                List<SteamAppDTO> includes = new ArrayList<>();
+                String[] contains = app.getContains().split(",");
+                for (String appidStr : contains) {
+                    Integer type = 1; // 默认游戏
+                    SteamAppInfo include = steamAppInfoMapper.selectByAppid(Integer.parseInt(appidStr), "game");
+                    if (include == null) {
+                        include = steamAppInfoMapper.selectByAppid(Integer.parseInt(appidStr), "dlc");
+                        type = 3;
+                    }
+                    if (include != null){
+                        // 这里使用SteamAppDTO是为了记录下包含物件的类型
+                        SteamAppDTO appdto =  new SteamAppDTO();
+                        appdto.setType(type);
+                        BeanUtils.copyProperties(include, appdto);
+                        includes.add(appdto);
+                    }
+                }
+                appDTO.setIncludes(includes);
+                redisDao.set(key, appDTO, difftime);
             }
         });
 
