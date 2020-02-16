@@ -26,13 +26,13 @@ import java.util.stream.Collectors;
 public class SipderSchedulTask {
 
     @Autowired
-    private SpiderComponent spiderComponent;
-    @Autowired
     private PageGetter pageGetter;
     @Autowired
     private SteamSpider steamSpider;
     @Autowired
     private SteamUrlMapper steamUrlMapper;
+    @Autowired
+    private SpiderComponent spiderComponent;
     @Autowired
     private SteamAppInfoMapper steamAppInfoMapper;
     @Autowired

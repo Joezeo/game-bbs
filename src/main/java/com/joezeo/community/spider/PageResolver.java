@@ -189,7 +189,7 @@ public class PageResolver {
             if (urlList == null || urlList.size() == 0) {
                 // 说明该app地址不存在,存入数据库中
                 int index = steamUrlMapper.insert(appid, url, type);
-                if(index < 0){
+                if (index < 0) {
                     log.error("url地址存储数据库时失败,appid=" + appid);
                 }
             } else if (urlList.size() == 1) {
@@ -276,48 +276,97 @@ public class PageResolver {
 
         Integer originalPrice = 0;
         Integer finalPrice = 0;
-        Elements purchaseGameDiv = doc.getElementsByClass("game_area_purchase_game");
-        for (Element ele : purchaseGameDiv) {
-            Elements oriDiv = ele.getElementsByClass("discount_original_price");
-            Elements finDiv = ele.getElementsByClass("discount_final_price");
-            if (oriDiv.size() != 0) { // 降价了
-                for (Element subele : oriDiv) {
-                    String oriPriceStrWithTag = subele.html();
-                    String oriPriceStr = oriPriceStrWithTag.substring(oriPriceStrWithTag.lastIndexOf(" ") + 1);
-                    originalPrice = Integer.parseInt(oriPriceStr.replaceAll(",", ""));
-                    break;
-                }
-                for (Element subele : finDiv) {
-                    String finalPriceStrWithTag = subele.html();
-                    String finalPriceStr = finalPriceStrWithTag.substring(finalPriceStrWithTag.lastIndexOf(" ") + 1);
-                    finalPrice = Integer.parseInt(finalPriceStr.replaceAll(",",""));
-                    break;
-                }
-            } else { // 没有降价
-                Elements priceDiv = ele.getElementsByClass("game_purchase_price price");
-                for (Element subele : priceDiv) {
-                    if (subele.html() == null || "免费游玩".equals(subele.html())
-                            || "免费开玩".equals(subele.html())
-                            || "免费".equals(subele.html())
-                            || "".equals(subele.html())) {
-                        originalPrice = 0;
-                        finalPrice = 0;
+        Elements wrapper = doc.getElementsByClass("game_area_purchase_game_wrapper");
+        if (wrapper.size() == 0) { // 捆绑包没有这个wrapper
+            Elements purchaseGameDiv = doc.getElementsByClass("game_area_purchase_game");
+            for (Element ele : purchaseGameDiv) {
+                Elements oriDiv = ele.getElementsByClass("discount_original_price");
+                Elements finDiv = ele.getElementsByClass("discount_final_price");
+                if (oriDiv.size() != 0) { // 降价了
+                    for (Element subele : oriDiv) {
+                        String oriPriceStrWithTag = subele.html();
+                        String oriPriceStr = oriPriceStrWithTag.substring(oriPriceStrWithTag.lastIndexOf(" ") + 1);
+                        originalPrice = Integer.parseInt(oriPriceStr.replaceAll(",", ""));
                         break;
-                    } else {
-                        String priceStr = subele.attr("data-price-final");
-                        if ("".equals(priceStr)) {
+                    }
+                    for (Element subele : finDiv) {
+                        String finalPriceStrWithTag = subele.html();
+                        String finalPriceStr = finalPriceStrWithTag.substring(finalPriceStrWithTag.lastIndexOf(" ") + 1);
+                        finalPrice = Integer.parseInt(finalPriceStr.replaceAll(",", ""));
+                        break;
+                    }
+                } else { // 没有降价
+                    Elements priceDiv = ele.getElementsByClass("game_purchase_price price");
+                    for (Element subele : priceDiv) {
+                        if (subele.html() == null || "免费游玩".equals(subele.html())
+                                || "免费开玩".equals(subele.html())
+                                || "免费".equals(subele.html())
+                                || "".equals(subele.html())) {
                             originalPrice = 0;
                             finalPrice = 0;
                             break;
                         } else {
-                            originalPrice = Integer.parseInt(priceStr.replaceAll(",", "")) / 100;
-                            finalPrice = originalPrice;
-                            break;
+                            String priceStr = subele.attr("data-price-final");
+                            if ("".equals(priceStr)) {
+                                originalPrice = 0;
+                                finalPrice = 0;
+                                break;
+                            } else {
+                                originalPrice = Integer.parseInt(priceStr.replaceAll(",", "")) / 100;
+                                finalPrice = originalPrice;
+                                break;
+                            }
                         }
                     }
                 }
+                break; // 第二个是捆绑包的价格
             }
-            break; // 第二个是捆绑包的价格
+        }
+        for (Element wra : wrapper) {
+            Elements purchaseGameDiv = wra.getElementsByClass("game_area_purchase_game");
+            for (Element ele : purchaseGameDiv) {
+                Elements oriDiv = ele.getElementsByClass("discount_original_price");
+                Elements finDiv = ele.getElementsByClass("discount_final_price");
+                if (oriDiv.size() != 0) { // 降价了
+                    for (Element subele : oriDiv) {
+                        String oriPriceStrWithTag = subele.html();
+                        String oriPriceStr = oriPriceStrWithTag.substring(oriPriceStrWithTag.lastIndexOf(" ") + 1);
+                        originalPrice = Integer.parseInt(oriPriceStr.replaceAll(",", ""));
+                        break;
+                    }
+                    for (Element subele : finDiv) {
+                        String finalPriceStrWithTag = subele.html();
+                        String finalPriceStr = finalPriceStrWithTag.substring(finalPriceStrWithTag.lastIndexOf(" ") + 1);
+                        finalPrice = Integer.parseInt(finalPriceStr.replaceAll(",", ""));
+                        break;
+                    }
+                } else { // 没有降价
+                    Elements priceDiv = ele.getElementsByClass("game_purchase_price price");
+                    for (Element subele : priceDiv) {
+                        if (subele.html() == null || "免费游玩".equals(subele.html())
+                                || "免费开玩".equals(subele.html())
+                                || "免费".equals(subele.html())
+                                || "".equals(subele.html())) {
+                            originalPrice = 0;
+                            finalPrice = 0;
+                            break;
+                        } else {
+                            String priceStr = subele.attr("data-price-final");
+                            if ("".equals(priceStr)) {
+                                originalPrice = 0;
+                                finalPrice = 0;
+                                break;
+                            } else {
+                                originalPrice = Integer.parseInt(priceStr.replaceAll(",", "")) / 100;
+                                finalPrice = originalPrice;
+                                break;
+                            }
+                        }
+                    }
+                }
+                break; // 第二个是捆绑包的价格
+            }
+            break;
         }
 
         // 用户评测
