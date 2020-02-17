@@ -150,8 +150,6 @@ public class SteamServiceImpl implements SteamService {
                 } catch (ParseException e) {
                     log.error("获取时间差失败,将默认保存1小时,stackTrace=" + e.getMessage());
                 }
-                // 每天凌晨4点清除缓存信息
-                // 由于缓存中的信息并不需要修改，所以使用String的方式存储
                 // 查询出该礼包包含的app信息，放入list中
                 List<SteamAppDTO> includes = new ArrayList<>();
                 String[] contains = app.getContains().split(",");
@@ -171,6 +169,9 @@ public class SteamServiceImpl implements SteamService {
                     }
                 }
                 appDTO.setIncludes(includes);
+
+                // 每天凌晨4点清除缓存信息
+                // 由于缓存中的信息并不需要修改，所以使用String的方式存储
                 redisDao.set(key, appDTO, difftime);
             }
         });

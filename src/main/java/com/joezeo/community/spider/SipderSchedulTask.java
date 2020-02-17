@@ -58,7 +58,7 @@ public class SipderSchedulTask {
      * <p>
      * 爬取所有app的url信息
      */
-    @Scheduled(cron = "0 0 5 1/1 * ?") // 每天凌晨00:05执行
+    @Scheduled(cron = "0 5 0 1/1 * ?") // 每天凌晨00:05执行
     public void spideUrl() {
         log.info("Spider定时任务 [爬取所有app的url信息]");
         steamSpider.daliyChekcUrl();

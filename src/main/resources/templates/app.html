@@ -80,7 +80,7 @@
                 </div>
                 <div class="panel-heading" v-if="type==7">礼包包含</div>
                 <div class="panel-body">
-                    <span v-for="include in app.includes"><a :href="'/steam/app/'+include.appid+'?type=' + include.type" v-text="include.name"></a></span>
+                    <span v-for="include in app.includes"><a :href="'/steam/app/'+include.appid+'?type=' + include.type" v-text="include.name"></a><br></span>
                 </div>
             </div>
         </div>
