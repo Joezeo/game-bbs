@@ -70,16 +70,17 @@
                 <div class="panel-body">
                     <img :src="app.imgUrl" alt="App pic">
                 </div>
-                <div class="panel-heading" v-if="type!=7">游戏简介</div>
+                <div class="panel-heading" v-if="type!=7 && type!=5">游戏简介</div>
                 <div class="panel-body">
                     <span v-html="app.description"></span>
                 </div>
-                <div class="panel-heading" v-if="type!=7">steam中的评价</div>
+                <div class="panel-heading" v-if="type!=7 && type!=5">steam中的评价</div>
                 <div class="panel-body">
                     <span v-html="app.summary"></span>
                 </div>
                 <div class="panel-heading" v-if="type==7">礼包包含</div>
-                <div class="panel-body">
+                <div class="panel-heading" v-if="type==5">捆绑包包含</div>
+                <div class="panel-body" v-if="type==7 || type==5">
                     <span v-for="include in app.includes"><a :href="'/steam/app/'+include.appid+'?type=' + include.type" v-text="include.name"></a><br></span>
                 </div>
             </div>

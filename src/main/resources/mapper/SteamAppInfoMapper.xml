@@ -9,7 +9,6 @@
             <when test="type == 'demo'">t_steam_demo_game_info</when>
             <when test="type == 'dlc'">t_steam_dlc_info</when>
             <when test="type == 'sound'">t_steam_sound_tape_info</when>
-            <when test="type == 'bundle'">t_steam_bundle_info</when>
         </choose>
         where appid = #{appid}
     </select>
@@ -22,7 +21,6 @@
             <when test="type == 'demo'">t_steam_demo_game_info</when>
             <when test="type == 'dlc'">t_steam_dlc_info</when>
             <when test="type == 'sound'">t_steam_sound_tape_info</when>
-            <when test="type == 'bundle'">t_steam_bundle_info</when>
         </choose>
     </select>
 
@@ -34,7 +32,6 @@
             <when test="type == 'demo'">t_steam_demo_game_info</when>
             <when test="type == 'dlc'">t_steam_dlc_info</when>
             <when test="type == 'sound'">t_steam_sound_tape_info</when>
-            <when test="type == 'bundle'">t_steam_bundle_info</when>
         </choose>
         limit #{index},#{size}
     </select>
@@ -47,8 +44,8 @@
             <when test="type == 'demo'">t_steam_demo_game_info</when>
             <when test="type == 'dlc'">t_steam_dlc_info</when>
             <when test="type == 'sound'">t_steam_sound_tape_info</when>
-            <when test="type == 'bundle'">t_steam_bundle_info</when>
-            <when test="type == 'sub'">t_steam_sub_info</when>
+            <when test="type == 'bundle'">t_steam_sub_bundle_info</when>
+            <when test="type == 'sub'">t_steam_sub_bundle_info</when>
         </choose>
         where name=""
     </delete>
@@ -61,7 +58,6 @@
             <when test="type == 'demo'">t_steam_demo_game_info</when>
             <when test="type == 'dlc'">t_steam_dlc_info</when>
             <when test="type == 'sound'">t_steam_sound_tape_info</when>
-            <when test="type == 'bundle'">t_steam_bundle_info</when>
         </choose>
         values (default , #{appInfo.appid}, #{appInfo.name}, #{appInfo.imgUrl},#{appInfo.description}, #{appInfo.releaseDate}, #{appInfo.devloper}, #{appInfo.publisher},
         #{appInfo.originalPrice}, #{appInfo.finalPrice},#{appInfo.summary}, #{appInfo.gmtCreate}, #{appInfo.gmtModify})

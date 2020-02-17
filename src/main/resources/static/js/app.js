@@ -51,7 +51,7 @@ var vue = new Vue({
                 var jsonResult = result.data;
                 if (jsonResult.success) {
                     vue.app = jsonResult.data;
-                    if (type != 7) {
+                    if (type != 7 && type!=5) {
                         vue.app.summary = vue.app.summary.replace("|", "<br>");
                     }
                     vue.loaded = true;

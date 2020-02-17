@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joezeo.community.mapper.SteamSubBundleInfoMapper">
+    <select id="selectByAppid" resultType="SteamSubBundleInfo">
+        select * from t_steam_sub_bundle_info
+        where appid=#{appid}
+        and `type`=#{type}
+    </select>
+
+    <insert id="insert" parameterType="SteamSubBundleInfo">
+        insert into t_steam_sub_bundle_info
+        values (default, #{appid}, #{name}, #{developer} ,#{publisher},#{date}, #{originalPrice}, #{finalPrice},
+        #{contains}, #{gmtCreate},#{gmtModify},#{imgUrl},#{type})
+    </insert>
+
+    <select id="selectCount" resultType="int">
+        select count(1) from t_steam_sub_bundle_info
+        where `type`=#{type}
+    </select>
+
+    <select id="selectPage" resultType="SteamSubBundleInfo">
+        select * from t_steam_sub_bundle_info
+        where `type`=#{type}
+        limit #{index},#{size}
+    </select>
+</mapper>

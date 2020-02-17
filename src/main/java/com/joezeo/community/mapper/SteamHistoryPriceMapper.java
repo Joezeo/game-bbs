@@ -2,6 +2,7 @@ package com.joezeo.community.mapper;
 
 import com.joezeo.community.pojo.SteamHistoryPrice;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,7 +15,11 @@ public interface SteamHistoryPriceMapper {
 
     List<SteamHistoryPrice> selectByTime(long preTimeAtZero);
 
+    List<SteamHistoryPrice> selectByTimeAndType(@Param("time") long preTimeAtZero, @Param("type") String type);
+
     int deleteIllegal();
 
     List<SteamHistoryPrice> selectByAppid(Integer appid);
+
+    List<SteamHistoryPrice> selectByAppidAndType(@Param("appid") Integer appid, @Param("type") String type);
 }

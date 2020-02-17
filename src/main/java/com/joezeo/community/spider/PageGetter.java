@@ -94,7 +94,7 @@ public class PageGetter {
                 } else if (jobType == SpiderJobTypeEnum.DAILY_CHECK_APP_INFO) {
                     pageResolver.initOrCheckAppInfo(page, type, appid, url.lastIndexOf("/sub/") != -1);
                 } else if (jobType == SpiderJobTypeEnum.DAILY_SPIDE_SPECIAL_PRICE) {
-                    pageResolver.dailySpideSpecialPrice(page, appid);
+                    pageResolver.dailySpideSpecialPrice(url, page, appid);
                 }
             }
         });

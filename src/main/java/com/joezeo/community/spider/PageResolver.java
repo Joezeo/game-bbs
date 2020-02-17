@@ -23,7 +23,7 @@ public class PageResolver {
     @Autowired
     private SteamAppInfoMapper steamAppInfoMapper;
     @Autowired
-    private SteamSubInfoMapper steamSubInfoMapper;
+    private SteamSubBundleInfoMapper steamSubBundleInfoMapper;
     @Autowired
     private SteamHistoryPriceMapper steamHistoryPriceMapper;
     @Autowired
@@ -140,7 +140,7 @@ public class PageResolver {
     /**
      * 解析特惠商品的价格，存入t_steam_history_price表中
      */
-    public void dailySpideSpecialPrice(String page, Integer appid) {
+    public void dailySpideSpecialPrice(String url, String page, Integer appid) {
         Document doc = Jsoup.parse(page);
 
         if(doc.getElementById("error_box")!=null){ // 此app中国地区不支持
@@ -164,6 +164,16 @@ public class PageResolver {
         historyPrice.setAppid(appid);
         historyPrice.setPrice(finalPrice);
         historyPrice.setGmtCreate(System.currentTimeMillis());
+
+        String type = "";
+        if(url.lastIndexOf("/bundle/")!=-1){
+            type = "bundle";
+        } else if(url.lastIndexOf("/sub/")!=-1){
+            type = "sub";
+        } else if(url.lastIndexOf("/app/")!=-1){
+            type = "app";
+        }
+        historyPrice.setType(type);
         int index = steamHistoryPriceMapper.insert(historyPrice);
         if (index != 1) {
             log.error("存储特惠价格失败，appid=" + appid);
@@ -216,8 +226,8 @@ public class PageResolver {
      * @Param isSub 该页面是否是关于礼包的
      */
     public void initOrCheckAppInfo(String page, String type, Integer appid, boolean isSub) {
-        if (isSub) {
-            resolvSub(page, appid);
+        if (isSub || "sub".equals(type) || "bundle".equals(type)) { // 这里判断两个条件是因为在app列表中可能混入sub
+            resolvSub(page, appid, type);
             return;
         }
 
@@ -409,9 +419,9 @@ public class PageResolver {
     }
 
     /*
-            解析礼包信息
+            解析礼包、捆绑包信息
      */
-    private void resolvSub(String page, Integer appid) {
+    private void resolvSub(String page, Integer appid, String type) {
         Document doc = Jsoup.parse(page);
 
         if(doc.getElementById("error_box")!=null){ // 此app中国地区不支持
@@ -470,10 +480,53 @@ public class PageResolver {
         }
 
         // 价格
-        Integer price = 0;
-        Elements priceDivs = doc.getElementsByClass("game_purchase_price price");
-        for (Element e : priceDivs) {
-            price = Integer.parseInt(e.attr("data-price-final")) / 100;
+        Integer originalPrice = 0;
+        Integer finalPrice = 0;
+        Elements wrapper = doc.getElementsByClass("game_area_purchase_game_wrapper");
+        if (wrapper.size() == 0) { // 捆绑包没有这个wrapper
+            Elements purchaseGameDiv = doc.getElementsByClass("game_area_purchase_game");
+            for (Element ele : purchaseGameDiv) {
+                Elements oriDiv = ele.getElementsByClass("discount_original_price");
+                Elements finDiv = ele.getElementsByClass("discount_final_price");
+                if (oriDiv.size() != 0) { // 降价了
+                    for (Element subele : oriDiv) {
+                        String oriPriceStrWithTag = subele.html();
+                        String oriPriceStr = oriPriceStrWithTag.substring(oriPriceStrWithTag.lastIndexOf(" ") + 1);
+                        originalPrice = Integer.parseInt(oriPriceStr.replaceAll(",", ""));
+                        break;
+                    }
+                    for (Element subele : finDiv) {
+                        String finalPriceStrWithTag = subele.html();
+                        String finalPriceStr = finalPriceStrWithTag.substring(finalPriceStrWithTag.lastIndexOf(" ") + 1);
+                        finalPrice = Integer.parseInt(finalPriceStr.replaceAll(",", ""));
+                        break;
+                    }
+                } else { // 没有降价
+                    Elements priceDiv = ele.getElementsByClass("game_purchase_price price");
+                    for (Element subele : priceDiv) {
+                        if (subele.html() == null || "免费游玩".equals(subele.html())
+                                || "免费开玩".equals(subele.html())
+                                || "免费".equals(subele.html())
+                                || "".equals(subele.html())) {
+                            originalPrice = 0;
+                            finalPrice = 0;
+                            break;
+                        } else {
+                            String priceStr = subele.attr("data-price-final");
+                            if ("".equals(priceStr)) {
+                                originalPrice = 0;
+                                finalPrice = 0;
+                                break;
+                            } else {
+                                originalPrice = Integer.parseInt(priceStr.replaceAll(",", "")) / 100;
+                                finalPrice = originalPrice;
+                                break;
+                            }
+                        }
+                    }
+                }
+                break; // 第二个是捆绑包的价格
+            }
         }
 
         // 礼包包含的app的id 以,分隔
@@ -494,21 +547,22 @@ public class PageResolver {
             imgUrl = img.attr("src");
         }
 
-        SteamSubInfo steamSubInfo = steamSubInfoMapper.selectByAppid(appid);
-        if (steamSubInfo == null || steamSubInfo.getAppid() == null) { // 数据库中没有该礼包信息，则插入
-            steamSubInfo = new SteamSubInfo();
-            steamSubInfo.setAppid(appid);
-            steamSubInfo.setName(name);
-            steamSubInfo.setDeveloper(developer);
-            steamSubInfo.setPublisher(publisher);
-            steamSubInfo.setReleaseDate(date);
-            steamSubInfo.setOriginalPrice(price);
-            steamSubInfo.setFinalPrice(price);
-            steamSubInfo.setContains(contains);
-            steamSubInfo.setGmtCreate(System.currentTimeMillis());
-            steamSubInfo.setGmtModify(steamSubInfo.getGmtCreate());
-            steamSubInfo.setImgUrl(imgUrl);
-            int index = steamSubInfoMapper.insert(steamSubInfo);
+        SteamSubBundleInfo steamSubBundleInfo = steamSubBundleInfoMapper.selectByAppid(appid, type);
+        if (steamSubBundleInfo == null || steamSubBundleInfo.getAppid() == null) { // 数据库中没有该礼包信息，则插入
+            steamSubBundleInfo = new SteamSubBundleInfo();
+            steamSubBundleInfo.setAppid(appid);
+            steamSubBundleInfo.setName(name);
+            steamSubBundleInfo.setDeveloper(developer);
+            steamSubBundleInfo.setPublisher(publisher);
+            steamSubBundleInfo.setReleaseDate(date);
+            steamSubBundleInfo.setOriginalPrice(originalPrice);
+            steamSubBundleInfo.setFinalPrice(finalPrice);
+            steamSubBundleInfo.setContains(contains);
+            steamSubBundleInfo.setGmtCreate(System.currentTimeMillis());
+            steamSubBundleInfo.setGmtModify(steamSubBundleInfo.getGmtCreate());
+            steamSubBundleInfo.setImgUrl(imgUrl);
+            steamSubBundleInfo.setType(type);
+            int index = steamSubBundleInfoMapper.insert(steamSubBundleInfo);
             if (index != 1) {
                 log.error("插入steam礼包信息失败,appid" + appid);
             }

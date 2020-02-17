@@ -12,4 +12,5 @@ public class SteamHistoryPrice implements Serializable {
     private Integer appid;
     private Integer price;
     private Long gmtCreate;
+    private String type;
 }

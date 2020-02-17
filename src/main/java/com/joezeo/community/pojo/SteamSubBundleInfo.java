@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class SteamSubInfo implements Serializable {
+public class SteamSubBundleInfo implements Serializable {
 
     private static final long serialVersionUID = 4514979868624056635L;
 
@@ -21,4 +21,5 @@ public class SteamSubInfo implements Serializable {
     private Long gmtCreate;
     private Long gmtModify;
     private String imgUrl;
+    private String type;
 }
