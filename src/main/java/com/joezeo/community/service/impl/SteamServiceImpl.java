@@ -354,7 +354,7 @@ public class SteamServiceImpl implements SteamService {
                 Collectors.toMap(item -> TimeUtils.timeToInt(item.getGmtCreate()), item -> item.getPrice()));
 
         // 设置起始时间和当前的时间(格式:20200215)
-        Integer farTime = 20200216; // 默认起始时间2020-2-16
+        Integer farTime = 20200217; // 默认起始时间2020-2-17
         Integer preTime = TimeUtils.timeToInt(System.currentTimeMillis());
 
         List<String> times = new ArrayList<>();
@@ -429,7 +429,7 @@ public class SteamServiceImpl implements SteamService {
                 Collectors.toMap(item -> TimeUtils.timeToInt(item.getGmtCreate()), item -> item.getPrice()));
 
         // 设置起始时间和当前的时间(格式:20200215)
-        Integer farTime = 20200216; // 默认起始时间2020-2-16
+        Integer farTime = 20200217; // 默认起始时间2020-2-17
         Integer preTime = TimeUtils.timeToInt(System.currentTimeMillis());
 
         List<String> times = new ArrayList<>();

@@ -48,7 +48,7 @@ public class TimeUtils {
     }
 
     /**
-     * 把时间从20200215转换成2020-02-15
+     * 把时间从20200215格式转换成2020-02-15格式
      */
     public static String tansferInt(int i) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");

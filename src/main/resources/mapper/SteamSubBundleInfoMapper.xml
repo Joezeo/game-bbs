@@ -9,7 +9,7 @@
 
     <insert id="insert" parameterType="SteamSubBundleInfo">
         insert into t_steam_sub_bundle_info
-        values (default, #{appid}, #{name}, #{developer} ,#{publisher},#{date}, #{originalPrice}, #{finalPrice},
+        values (default, #{appid}, #{name}, #{developer} ,#{publisher},#{releaseDate}, #{originalPrice}, #{finalPrice},
         #{contains}, #{gmtCreate},#{gmtModify},#{imgUrl},#{type})
     </insert>
 
