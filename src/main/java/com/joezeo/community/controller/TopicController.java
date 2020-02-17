@@ -53,4 +53,11 @@ public class TopicController {
 
         return JsonResult.okOf(commentDTOS);
     }
+
+    @PostMapping("/topic/like")
+    @ResponseBody
+    public JsonResult<TopicDTO> likeTopic(@RequestBody TopicDTO topicDTO){
+        topicDTO = topicService.likeTopic(topicDTO.getId(), topicDTO.getUserid());
+        return JsonResult.okOf(topicDTO);
+    }
 }

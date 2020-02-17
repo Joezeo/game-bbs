@@ -19,4 +19,6 @@ public interface TopicService {
     void incVie(Long id);
 
     boolean isExist(Long id);
+
+    TopicDTO likeTopic(Long topicid, Long userid);
 }

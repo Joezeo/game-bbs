@@ -7,7 +7,9 @@ body{
     display: flex;
     flex-direction: column;
     /*background-image: url(http://joezeo.cn-bj.ufileos.com/c307b3eb-b4b2-4216-a5dd-c1d5fff75751.jpg);*/
-    background-color: #efefef;
+    background-color: white;
+    font-family: "幼圆";
+    font-weight: bold;
 }
 h2{
     letter-spacing: 3px;
@@ -47,7 +49,7 @@ a{
     border-radius: 5px;
 }
 .inner {
-    margin-top: 30px;
+    margin-top: 25px;
     margin-left: -30px;
     padding-left: 20px;
     padding-right: 20px;
@@ -65,7 +67,7 @@ a{
 .main{
     z-index: 300;
     height: 100%;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, .7);
     margin-top: 30px;
     margin-left: 10%;
     margin-right: 10%;

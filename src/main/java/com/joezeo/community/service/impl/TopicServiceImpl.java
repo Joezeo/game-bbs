@@ -8,11 +8,10 @@ import com.joezeo.community.exception.CustomizeErrorCode;
 import com.joezeo.community.exception.CustomizeException;
 import com.joezeo.community.exception.ServiceException;
 import com.joezeo.community.mapper.TopicExtMapper;
+import com.joezeo.community.mapper.TopicLikeUserMapper;
 import com.joezeo.community.mapper.TopicMapper;
 import com.joezeo.community.mapper.UserMapper;
-import com.joezeo.community.pojo.Topic;
-import com.joezeo.community.pojo.TopicExample;
-import com.joezeo.community.pojo.User;
+import com.joezeo.community.pojo.*;
 import com.joezeo.community.provider.UCloudProvider;
 import com.joezeo.community.service.TopicService;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +42,8 @@ public class TopicServiceImpl implements TopicService {
     private UserMapper userMapper;
     @Autowired
     private RedisDao redisDao;
+    @Autowired
+    private TopicLikeUserMapper topicLikeUserMapper;
 
     @Autowired
     private UCloudProvider uCloudProvider;
@@ -203,6 +204,14 @@ public class TopicServiceImpl implements TopicService {
         }
         topicDTO.setRelateds(related);
 
+        // 查询出该帖子所有的点赞记录
+        TopicLikeUserExample example = new TopicLikeUserExample();
+        example.createCriteria().andTopicidEqualTo(id);
+        List<TopicLikeUser> topicLikeUsers = topicLikeUserMapper.selectByExample(example);
+
+        List<Long> userids = topicLikeUsers.stream().map(item -> item.getUserid()).collect(Collectors.toList());
+        topicDTO.setLikeUsersId(userids);
+
         return topicDTO;
     }
 
@@ -265,5 +274,43 @@ public class TopicServiceImpl implements TopicService {
             return false;
         }
         return true;
+    }
+
+    /**
+     * 点赞帖子
+     * @param topicid 被点赞的帖子id
+     * @param userid 点赞的用户id
+     * @return
+     */
+    @Override
+    public TopicDTO likeTopic(Long topicid, Long userid) {
+        TopicDTO topicDTO = new TopicDTO();
+
+        // 增加点赞数
+        Topic topic = new Topic();
+        topic.setId(topicid);
+        topic.setLikeCount(1);
+        int idx = topicExtMapper.incLike(topic);
+        if(idx != 1){
+            throw new CustomizeException(CustomizeErrorCode.LIKE_TOPIC_FAILED);
+        }
+
+        // 在t_topic_like_user添加数据
+        TopicLikeUser record = new TopicLikeUser();
+        record.setTopicid(topicid);
+        record.setUserid(userid);
+        record.setGmtCreate(System.currentTimeMillis());
+        record.setGmtModify(record.getGmtCreate());
+        topicLikeUserMapper.insertSelective(record);
+
+        // 查询出该帖子所有的点赞记录
+        TopicLikeUserExample example = new TopicLikeUserExample();
+        example.createCriteria().andTopicidEqualTo(topicid);
+        List<TopicLikeUser> topicLikeUsers = topicLikeUserMapper.selectByExample(example);
+
+        List<Long> userids = topicLikeUsers.stream().map(item -> item.getUserid()).collect(Collectors.toList());
+        topicDTO.setLikeUsersId(userids);
+
+        return topicDTO;
     }
 }

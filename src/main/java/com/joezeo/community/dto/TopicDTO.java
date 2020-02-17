@@ -28,4 +28,7 @@ public class TopicDTO implements Serializable {
 
     private User user;
     private List<Topic> relateds;
+
+    // 给这篇帖子点赞过的人的id集合
+    private List<Long> likeUsersId;
 }

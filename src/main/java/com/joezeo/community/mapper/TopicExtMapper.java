@@ -17,6 +17,11 @@ public interface TopicExtMapper {
     int incComment(Topic record);
 
     /**
+     * 累加点赞数
+     */
+    int incLike(Topic record);
+
+    /**
      * 根据正则表达式获取相关帖子
      */
     List<Topic> selectRelated(@Param("curId") Long curId, @Param("tagRegex") String tagRegex);
@@ -36,4 +41,5 @@ public interface TopicExtMapper {
                              @Param("size") Integer size,
                              @Param("condition") String condition,
                              @Param("type") Integer type);
+
 }

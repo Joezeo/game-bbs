@@ -7,64 +7,65 @@
 <body>
 
 <nav class="navbar navbar-default" th:fragment="nav">
-    <div class="container-fluid" style="background-color: white">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only" style="color:black;font-weight: bold">JOEF</span>
-            </button>
-            <a class="navbar-brand" href="/"
-               style="color:black;font-weight: bold;font-size: 35px;font-family: Lucida Console;letter-spacing: -3px;">JOEF</a>
-        </div>
+    <div class="container-fluid" style="background-color: white;height: 52px;">
+        <div style="margin-top: 0px;">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only" style="color:black;font-weight: bold">JOEF</span>
+                </button>
+                <a class="navbar-brand" href="/"><img src="/imgs/icon-big.png" alt="JOEF" style="margin-top: -17px;"/></a>
+            </div>
 
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <form class="navbar-form navbar-left" action="/" method="get">
-                <div class="form-group">
-                    <input name="condition" type="text" class="form-control" placeholder="搜索..."
-                           style="font-weight: bold;">
-                </div>
-                <button type="submit" class="btn btn-default" style="background: white;font-weight: bold;">搜索</button>
-            </form>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <form class="navbar-form navbar-left" action="/" method="get">
+                    <div class="form-group">
+                        <input name="condition" type="text" class="form-control" placeholder="搜索..."
+                               style="font-weight: bold;">
+                    </div>
+                    <button type="submit" class="btn btn-default" style="background: white;font-weight: bold;">搜索</button>
+                </form>
 
 
-            <ul class="nav navbar-nav navbar-left">
-                <li><a href="/steam/apps" style="font-weight: bold;color: black;">Steam Apps</a></li>
-            </ul>
+                <ul class="nav navbar-nav navbar-left">
+                    <li><a href="/steam/apps" style="font-weight: bold;color: black;">Steam Apps</a></li>
+                </ul>
 
-            <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right">
 
-                <li th:if="${session.user == null}">
-                    <a href="/login" style="font-weight: bold;">登录</a>
-                </li>
+                    <li th:if="${session.user == null}">
+                        <a href="/login" style="font-weight: bold;">登录</a>
+                    </li>
 
-                <li th:if="${session.user != null}">
-                    <a href="/profile/notify" style="color: black;font-weight: bold;">
-                        通知 <span class="badge" th:text="${session.unreadCount}"></span></a>
-                </li>
+                    <li th:if="${session.user != null}">
+                        <a href="/profile/notify" style="color: black;font-weight: bold;">
+                            通知 <span class="badge" th:text="${session.unreadCount}"></span></a>
+                    </li>
 
-                <li class="dropdown" th:if="${session.user != null}">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false" style="color: black;font-size: 16px;">
-                        <span th:text="${session.user.getName()}" style="font-weight: bold;"></span>
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/profile/topics">个人中心 </a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="/logout">退出登录 </a></li>
-                    </ul>
-                </li>
+                    <li class="dropdown" th:if="${session.user != null}">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false" style="color: black;font-size: 16px;">
+                            <span th:text="${session.user.getName()}" style="font-weight: bold;"></span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/profile/topics">个人中心 </a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/logout">退出登录 </a></li>
+                        </ul>
+                    </li>
 
-                <li class="dropdown" th:if="${session.user != null}">
-                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button"
-                       style="background: white;font-weight: bold;">
-                        创作新主题</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/publish">发帖子</a></li>
-                        <li><a href="/pubEassy">发文章</a></li>
-                    </ul>
-                </li>
-            </ul>
+                    <li class="dropdown" th:if="${session.user != null}">
+                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button"
+                           style="background: white;font-weight: bold;">
+                            创作新主题</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/publish">发帖子</a></li>
+                            <li><a href="/pubEassy">发文章</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </nav>

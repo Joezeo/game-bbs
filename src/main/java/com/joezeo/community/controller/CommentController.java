@@ -53,6 +53,9 @@ public class CommentController {
     }
 
 
+    /**
+     * 获取二级评论
+     */
     @PostMapping("/comment/getSubcomment")
     @ResponseBody
     public JsonResult getSubComment(@RequestBody CommentDTO commentDTO) {

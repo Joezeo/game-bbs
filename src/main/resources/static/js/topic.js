@@ -1,11 +1,13 @@
 var path = window.location.href;
 var topicId = path.substr(path.lastIndexOf("/") + 1);
 
+// 当前登录用户
 var user = {};
-var topic = {};
+var topic = {}; // topic.user此篇帖子的发起用户
 var comments = {};
 var subComments = {};
 var commentContent = "";
+var likeUsersId={}; // 对当前帖子点赞的所有用户id
 
 var loadedUser = false;
 var loadedTopic = false;
@@ -16,7 +18,7 @@ axios.default.withCredentials = true;
 var vue = new Vue({
     el: "#topic",
     data: {
-        topicId, topic, comments, subComments, user,
+        topicId, topic, comments, subComments, user, likeUsersId,
         loadedTopic, loadedComments, loadedSubComments, loadedUser,
         commentContent
     },
@@ -55,6 +57,7 @@ var vue = new Vue({
                 if (jsonResult.success) {
                     vue.topic = jsonResult.data;
                     vue.loadedTopic = true;
+                    vue.likeUsersid = vue.topic.likeUsersid;
                     // Editor.md无法用vue设置，暂时使用jquery赋值
                     // $("#topic-textarea").val(vue.topic.description);
                 } else {
@@ -77,6 +80,21 @@ var vue = new Vue({
         },
         splitTag: function (tag) {
             return tag.split(",");
+        },
+        // 点赞帖子
+        likeTopic:function (topicId, userId) {
+            var url = "/topic/like";
+            var params = {id:topicId, userid:userId}; // id-帖子id userid-当前点赞人的id
+            axios.post(url, params).then(function (result) {
+                var jsonResult = result.data;
+                if(jsonResult.success){
+                    // 由于点赞数不是太重要，这里就直接静态修改帖子的点赞数就行了
+                    vue.topic.likeCount++;
+                    vue.likeUsersid = jsonResult.data.likeUsersid;
+                } else {
+                    alert(jsonResult.message);
+                }
+            })
         }
     }
 });
