@@ -7,7 +7,7 @@
     </insert>
 
     <select id="selectByTime" resultType="SteamHistoryPrice">
-        select appid,price from t_steam_history_price
+        select appid,price,type from t_steam_history_price
         where gmt_create>#{preTimeAtZero}
     </select>
 

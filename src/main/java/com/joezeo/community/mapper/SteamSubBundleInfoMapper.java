@@ -19,4 +19,6 @@ public interface SteamSubBundleInfoMapper {
     List<SteamSubBundleInfo> selectPage(@Param("index") Integer index,
                                         @Param("size") Integer size,
                                         @Param("type") String type);
+
+    int updateByAppidSelective(SteamSubBundleInfo subBundleInfo);
 }

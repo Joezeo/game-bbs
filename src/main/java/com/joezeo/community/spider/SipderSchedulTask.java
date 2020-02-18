@@ -4,8 +4,11 @@ import com.joezeo.community.enums.SpiderJobTypeEnum;
 import com.joezeo.community.enums.SteamAppTypeEnum;
 import com.joezeo.community.mapper.SteamAppInfoMapper;
 import com.joezeo.community.mapper.SteamHistoryPriceMapper;
+import com.joezeo.community.mapper.SteamSubBundleInfoMapper;
 import com.joezeo.community.mapper.SteamUrlMapper;
+import com.joezeo.community.pojo.SteamAppInfo;
 import com.joezeo.community.pojo.SteamHistoryPrice;
+import com.joezeo.community.pojo.SteamSubBundleInfo;
 import com.joezeo.community.utils.TimeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +40,8 @@ public class SipderSchedulTask {
     private SteamAppInfoMapper steamAppInfoMapper;
     @Autowired
     private SteamHistoryPriceMapper steamHistoryPriceMapper;
+    @Autowired
+    private SteamSubBundleInfoMapper steamSubBundleInfoMapper;
 
     /**
      * 凌晨00:00
@@ -116,6 +121,53 @@ public class SipderSchedulTask {
         int idx = steamHistoryPriceMapper.deleteIllegal();
         if (idx < 0) {
             log.error("数据库删除非法特惠商品价格出现异常");
+        }
+    }
+
+    /**
+     * 陵城02:45
+     * <p>
+     * 根据当天的特惠列表修改 App Info的finalPrice字段
+     */
+    @Scheduled(cron = "0 45 2 1/1 * ?") // 每天凌晨02:45执行
+    public void updateAppFinalPrice() {
+        log.info("Spider定时任务 [根据特惠商品列表,修改app的finalPrice]");
+        try {
+            // 获取当天的特惠商品集合
+            Long timeAtZero = TimeUtils.getTimestampAtZero();
+            List<SteamHistoryPrice> prices = steamHistoryPriceMapper.selectByTime(timeAtZero);
+
+            prices.stream().forEach(item -> {
+                String type = item.getType();
+                if("sub".equals(type) || "bundle".equals(type)){
+                    SteamSubBundleInfo subBundleInfo = new SteamSubBundleInfo();
+                    subBundleInfo.setType(type);
+                    subBundleInfo.setAppid(item.getAppid());
+                    subBundleInfo.setFinalPrice(item.getPrice());
+                    subBundleInfo.setGmtModify(System.currentTimeMillis());
+                    int idx = steamSubBundleInfoMapper.updateByAppidSelective(subBundleInfo);
+                    if(idx != 1){
+                        log.error("修改特惠商品info的finalPrice失败");
+                    }
+                } else {
+                    List<String> types = SteamAppTypeEnum.listType();
+                    for (String s : types) {
+                        SteamAppInfo steamAppInfo = steamAppInfoMapper.selectByAppid(item.getAppid(), type);
+                        if(steamAppInfo != null){
+                            steamAppInfo.setFinalPrice(item.getPrice());
+                            steamAppInfo.setGmtModify(System.currentTimeMillis());
+                            int idx = steamAppInfoMapper.updateByAppidSelective(steamAppInfo, s);
+                            if(idx != 1){
+                                log.error("修改特惠商品info的finalPrice失败");
+                            }
+                            break;
+                        }
+                    }
+                }
+            });
+        } catch (ParseException e) {
+            e.printStackTrace();
+            log.error("解析时间失败，修改finalPrice失败");
         }
     }
 

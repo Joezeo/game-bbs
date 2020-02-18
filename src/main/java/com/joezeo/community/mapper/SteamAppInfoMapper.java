@@ -23,4 +23,5 @@ public interface SteamAppInfoMapper {
     int deleteIllegal(@Param("type") String type);
 
 
+    int updateByAppidSelective(@Param("appInfo") SteamAppInfo steamAppInfo, @Param("type") String type);
 }
