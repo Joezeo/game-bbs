@@ -1,6 +1,5 @@
 package com.joezeo.community.dto;
 
-import com.joezeo.community.pojo.SteamAppInfo;
 import lombok.Data;
 
 import java.io.Serializable;

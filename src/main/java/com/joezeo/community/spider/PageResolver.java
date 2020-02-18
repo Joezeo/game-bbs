@@ -583,7 +583,7 @@ public class PageResolver {
             steamSubBundleInfo = new SteamSubBundleInfo();
             steamSubBundleInfo.setAppid(appid);
             steamSubBundleInfo.setName(name);
-            steamSubBundleInfo.setDeveloper(developer);
+            steamSubBundleInfo.setDevloper(developer);
             steamSubBundleInfo.setPublisher(publisher);
             steamSubBundleInfo.setReleaseDate(date);
             steamSubBundleInfo.setOriginalPrice(originalPrice);

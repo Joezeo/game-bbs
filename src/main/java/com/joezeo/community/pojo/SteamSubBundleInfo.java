@@ -12,7 +12,7 @@ public class SteamSubBundleInfo implements Serializable {
     private Integer id;
     private Integer appid;
     private String name;
-    private String developer;
+    private String devloper;
     private String publisher;
     private String releaseDate;
     private Integer originalPrice;

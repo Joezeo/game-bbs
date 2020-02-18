@@ -160,6 +160,9 @@ public class SteamServiceImpl implements SteamService {
                 List<SteamAppDTO> includes = new ArrayList<>();
                 String[] contains = app.getContains().split(",");
                 for (String appidStr : contains) {
+                    if("".equals(appidStr)){
+                        break;
+                    }
                     Integer typeInt = 1; // 默认游戏
                     SteamAppInfo include = steamAppInfoMapper.selectByAppid(Integer.parseInt(appidStr), "game");
                     if (include == null) {
