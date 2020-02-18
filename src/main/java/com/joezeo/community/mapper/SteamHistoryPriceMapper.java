@@ -22,4 +22,8 @@ public interface SteamHistoryPriceMapper {
     List<SteamHistoryPrice> selectByAppid(Integer appid);
 
     List<SteamHistoryPrice> selectByAppidAndType(@Param("appid") Integer appid, @Param("type") String type);
+
+    SteamHistoryPrice selectByTimeAndTypeAndAppid(@Param("time") Long preTimeAtZero,
+                                                  @Param("type") String type,
+                                                  @Param("appid") Integer appid);
 }

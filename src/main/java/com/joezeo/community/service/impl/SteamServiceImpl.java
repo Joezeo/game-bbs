@@ -85,7 +85,13 @@ public class SteamServiceImpl implements SteamService {
                     Integer price = specialMap.get(appInfo.getAppid());
                     if (price != null) {
                         appInfo.setFinalPrice(price);
+                    } else { // 说明没有降价
+                        appInfo.setFinalPrice(appInfo.getOriginalPrice());
                     }
+                }
+            } else {
+                for (SteamAppInfo steamAppInfo : list) {
+                    steamAppInfo.setFinalPrice(steamAppInfo.getOriginalPrice());
                 }
             }
         } catch (Exception e) {
@@ -192,7 +198,13 @@ public class SteamServiceImpl implements SteamService {
                     Integer price = specialMap.get(appInfo.getAppid());
                     if (price != null) {
                         appInfo.setFinalPrice(price);
+                    } else { // 说明没有降价
+                        appInfo.setFinalPrice(appInfo.getOriginalPrice());
                     }
+                }
+            } else {
+                for (SteamSubBundleInfo info : list) {
+                    info.setFinalPrice(info.getOriginalPrice());
                 }
             }
         } catch (Exception e) {
@@ -231,6 +243,22 @@ public class SteamServiceImpl implements SteamService {
                 difftime = TimeUtils.getDifftimeFromNextZero();
             } catch (ParseException e) {
                 log.error("获取时间差失败,将默认保存1小时,stackTrace=" + e.getMessage());
+            }
+
+            try {
+                // 获取当天零点的时间戳
+                Long preTimeAtZero = TimeUtils.getTimestampAtZero();
+
+                // 获取当天新获取的特惠商品价格 gmt_create>preTimeAtZero
+                SteamHistoryPrice special = steamHistoryPriceMapper.selectByTimeAndTypeAndAppid(preTimeAtZero, "app",appid);
+                if (special != null) {
+                    // 重新设定特惠商品的finalPrice
+                    app.setFinalPrice(special.getPrice());
+                } else { // 没有降价
+                    app.setFinalPrice(app.getOriginalPrice());
+                }
+            } catch (Exception e) {
+                log.error("获取特惠价格失败，所有商品价格将以历史记录展示: stackTrace=" + e.getMessage());
             }
             // 每天凌晨4点清除缓存信息
             // 由于缓存中的信息并不需要修改，所以使用String的方式存储
@@ -281,6 +309,22 @@ public class SteamServiceImpl implements SteamService {
                 }
             }
             appDTO.setIncludes(includes);
+
+            try {
+                // 获取当天零点的时间戳
+                Long preTimeAtZero = TimeUtils.getTimestampAtZero();
+
+                // 获取当天新获取的特惠商品价格 gmt_create>preTimeAtZero
+                SteamHistoryPrice special = steamHistoryPriceMapper.selectByTimeAndTypeAndAppid(preTimeAtZero, type, appid);
+                if (special != null) {
+                    // 重新设定特惠商品的finalPrice
+                    appDTO.setFinalPrice(special.getPrice());
+                } else { // 没有降价
+                    appDTO.setFinalPrice(appDTO.getOriginalPrice());
+                }
+            } catch (Exception e) {
+                log.error("获取特惠价格失败，所有商品价格将以历史记录展示: stackTrace=" + e.getMessage());
+            }
 
             // 每天凌晨4点清除缓存信息
             // 由于缓存中的信息并不需要修改，所以使用String的方式存储

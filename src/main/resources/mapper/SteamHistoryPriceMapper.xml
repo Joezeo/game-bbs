@@ -32,4 +32,11 @@
         where appid = #{appid}
         and type = #{type}
     </select>
+
+    <select id="selectByTimeAndTypeAndAppid" resultType="SteamHistoryPrice">
+        select price,gmt_create from t_steam_history_price
+        where appid = #{appid}
+        and type = #{type}
+        and gmt_create>#{time}
+    </select>
 </mapper>
