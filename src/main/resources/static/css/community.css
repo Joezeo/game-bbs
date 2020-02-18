@@ -7,7 +7,11 @@ body{
     display: flex;
     flex-direction: column;
     /*background-image: url(http://joezeo.cn-bj.ufileos.com/c307b3eb-b4b2-4216-a5dd-c1d5fff75751.jpg);*/
-    background-color: white;
+    background: url("/imgs/back.png") no-repeat;
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    background-position: center 0%;
+    /*background-color: white;*/
     font-family: "幼圆";
     font-weight: bold;
 }
@@ -72,6 +76,8 @@ a{
     margin-left: 10%;
     margin-right: 10%;
     flex: 1;
+    border: solid #222034 3px;
+    border-radius: 20px;
 }
 
 .footer{
@@ -249,7 +255,7 @@ a{
     position: fixed;
     z-index: 2;
     right: 45px;
-    bottom: 100px;
+    bottom: 120px;
     height: 35px;
     font-size: 3em;
     padding: 0 8px;
@@ -260,7 +266,7 @@ a{
     line-height: 1.42857143;
     color: #009a61 !important;
     text-decoration: none !important;
-    background-color: rgba(217, 217, 217, .6);
+    background-color: rgba(217, 217, 217, 1);
     opacity: .4;
     filter: alpha(opacity=40);
     font-family: microsoft yahei
@@ -272,3 +278,16 @@ a{
 }
 /*回到顶部结束*/
 
+
+.pixel-btn{
+    font-family: "幼圆";
+    font-weight: bold;
+    background: #55ff75;
+    color: black;
+    border-radius: 10px;
+}
+
+.pixel-btn:hover{
+    background: #14ff3f;
+    color: black;
+}

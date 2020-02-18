@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>发起问题 - JOEF</title>
+    <title>发起帖子 - JOEF</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
@@ -16,7 +16,7 @@
 <div class="container-fluid main" id="publish">
     <div class="row">
         <div class="col-lg-9 .col-md-12 .col-sm-12 .col-xs-12">
-            <h2><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> 发起</h2>
+            <h2><img src="/imgs/pencil.png" alt="" style="margin-top: -10px;"> 发起</h2>
             <hr>
 
             <form id="publish-form">
@@ -86,7 +86,7 @@
                         </div>
                     </div>
                 </div>
-                <button @click="doPublish" id="publish-btn" type="button" class="btn btn-success btn-publish">发布
+                <button @click="doPublish" id="publish-btn" type="button" class="btn btn-success btn-publish pixel-btn">发布
                 </button>
             </form>
         </div>
