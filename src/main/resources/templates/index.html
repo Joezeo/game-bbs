@@ -46,7 +46,7 @@
                                 <span class="text-desc"><span v-text="topic.user.name"></span> • <span
                                         v-text="topic.commentCount"></span> 个评论 • <span
                                         v-text="topic.viewCount"></span> 次浏览 • <span
-                                        v-text="topic.gmtCreate"></span></span></span>
+                                        v-text="timestampToTime(topic.gmtCreate)"></span></span></span>
                             </div>
                         </div>
                         <hr>
@@ -108,40 +108,39 @@
 
                     </span>
                     </h3>
-<!--                    <div v-if="user.id == 1" v-cloak>-->
-<!--                        <button @click="spideProxyIP" class="btn btn-default" type="submit"-->
-<!--                                style="background: white;">爬取代理ip-->
-<!--                        </button>-->
-<!--                        <br>-->
-<!--                        <button @click="spideUrl" class="btn btn-default" type="submit" style="background: white;">-->
-<!--                            爬取Steam所有Url-->
-<!--                        </button>-->
-<!--                        <br>-->
-<!--                        <button @click="spideApp" class="btn btn-default" type="submit" style="background: white;">-->
-<!--                            爬取Steam所有软件信息-->
-<!--                        </button>-->
-<!--                        <br>-->
-<!--                        <button @click="checkUrl" class="btn btn-default" type="submit" style="background: white;">-->
-<!--                            检查Url-->
-<!--                        </button>-->
-<!--                        <br>-->
-<!--                        <button @click="checkApp" class="btn btn-default" type="submit" style="background: white;">-->
-<!--                            检查软件信息-->
-<!--                        </button>-->
-<!--                        <br>-->
-<!--                        <button @click="spideSpecialPrice" class="btn btn-default" type="submit"-->
-<!--                                style="background: white;">爬取特惠价格-->
-<!--                        </button>-->
-<!--                    </div>-->
-<!--                </div>-->
-
+                    <!--                    <div v-if="user.id == 1" v-cloak>-->
+                    <!--                        <button @click="spideProxyIP" class="btn btn-default" type="submit"-->
+                    <!--                                style="background: white;">爬取代理ip-->
+                    <!--                        </button>-->
+                    <!--                        <br>-->
+                    <!--                        <button @click="spideUrl" class="btn btn-default" type="submit" style="background: white;">-->
+                    <!--                            爬取Steam所有Url-->
+                    <!--                        </button>-->
+                    <!--                        <br>-->
+                    <!--                        <button @click="spideApp" class="btn btn-default" type="submit" style="background: white;">-->
+                    <!--                            爬取Steam所有软件信息-->
+                    <!--                        </button>-->
+                    <!--                        <br>-->
+                    <!--                        <button @click="checkUrl" class="btn btn-default" type="submit" style="background: white;">-->
+                    <!--                            检查Url-->
+                    <!--                        </button>-->
+                    <!--                        <br>-->
+                    <!--                        <button @click="checkApp" class="btn btn-default" type="submit" style="background: white;">-->
+                    <!--                            检查软件信息-->
+                    <!--                        </button>-->
+                    <!--                        <br>-->
+                    <!--                        <button @click="spideSpecialPrice" class="btn btn-default" type="submit"-->
+                    <!--                                style="background: white;">爬取特惠价格-->
+                    <!--                        </button>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
+                </div>
                 <div class="panel-body" v-if="!loadedUser">
                     <span style="font-weight: bold">您还未登录，请登录</span>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 
 <div th:replace="footer :: foot"></div>

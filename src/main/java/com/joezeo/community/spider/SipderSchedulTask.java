@@ -152,7 +152,7 @@ public class SipderSchedulTask {
                 } else {
                     List<String> types = SteamAppTypeEnum.listType();
                     for (String s : types) {
-                        SteamAppInfo steamAppInfo = steamAppInfoMapper.selectByAppid(item.getAppid(), type);
+                        SteamAppInfo steamAppInfo = steamAppInfoMapper.selectByAppid(item.getAppid(), s);
                         if(steamAppInfo != null){
                             steamAppInfo.setFinalPrice(item.getPrice());
                             steamAppInfo.setGmtModify(System.currentTimeMillis());

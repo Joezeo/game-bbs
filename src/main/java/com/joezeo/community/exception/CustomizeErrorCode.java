@@ -20,7 +20,10 @@ public enum CustomizeErrorCode implements IExceptionErrorCode{
     CREATE_NEW_USER_FAILD(2015, "注册新用户失败啦，请稍后重试~"),
     UPDATE_USER_FAILD(2016, "更新用户信息失败啦。请稍后重试~"),
     INIT_PRICE_CHART_FAILED(2017, "Opps，初始化价格图表失败了，请稍后重试"),
-    LIKE_TOPIC_FAILED(2018, "ops，点赞失败了，请过会儿试试");
+    LIKE_TOPIC_FAILED(2018, "ops，点赞失败了，请过会儿试试"),
+    UNLIKE_TOPIC_FAILED(2019, "ops，取消点赞失败了，请过会儿试试"),
+    LIKE_COMMENT_FAILED(2020, "ops,点赞评论失败了，请过会儿试试"),
+    UNLIKE_COMMENT_FAILED(2021, "ops,取消点赞失败了，请过会儿试试");
 
     private Integer code;
     private String message;

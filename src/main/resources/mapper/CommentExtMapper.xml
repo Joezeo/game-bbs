@@ -7,4 +7,18 @@
       comment_count = comment_count + #{commentCount,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+    <update id="incLike" parameterType="com.joezeo.community.pojo.Comment">
+    update t_comment
+    set
+      like_count = like_count + #{likeCount,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+    <update id="decLike" parameterType="com.joezeo.community.pojo.Comment">
+    update t_comment
+    set
+      like_count = like_count - #{likeCount,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
 </mapper>

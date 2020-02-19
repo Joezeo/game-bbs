@@ -23,6 +23,13 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
+    <update id="decLike" parameterType="Topic">
+    update t_topic
+    set
+      like_count = like_count - #{likeCount,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+    </update>
+
     <select id="selectRelated" resultType="Topic">
         select * from t_topic where id != #{curId} and tag regexp #{tagRegex}
     </select>

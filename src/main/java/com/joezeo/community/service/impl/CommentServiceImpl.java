@@ -26,21 +26,18 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private CommentMapper commentMapper;
-
     @Autowired
     private CommentExtMapper commentExtMapper;
-
     @Autowired
     private TopicMapper topicMapper;
-
     @Autowired
     private TopicExtMapper topicExtMapper;
-
     @Autowired
     private UserMapper userMapper;
-
     @Autowired
     private NotificationMapper notificationMapper;
+    @Autowired
+    private CommentLikeUserMapper commentLikeUserMapper;
 
     @Override
     public void addComment(CommentDTO commentDTO, User notifier) {
@@ -167,6 +164,92 @@ public class CommentServiceImpl implements CommentService {
             commentDTO.setUser(userMap.get(comment.getUserid()));
             return commentDTO;
         }).collect(Collectors.toList());
+
+        // 查询每个评论的点赞记录
+        for (CommentDTO commentDTO : commentDTOS) {
+            // 查询出该帖子所有的点赞记录
+            CommentLikeUserExample exa = new CommentLikeUserExample();
+            exa.createCriteria().andCommentidEqualTo(commentDTO.getId());
+            List<CommentLikeUser> commentLikeUsers = commentLikeUserMapper.selectByExample(exa);
+            List<Long> likeUsersId = commentLikeUsers.stream().map(item -> item.getUserid()).collect(Collectors.toList());
+
+            commentDTO.setLikeUsersId(likeUsersId);
+        }
+
         return commentDTOS;
+    }
+
+    @Override
+    public CommentDTO like(Long commentid, Long userid) {
+        CommentDTO commentDTO = new CommentDTO();
+
+        // 增加点赞数
+        Comment comment = new Comment();
+        comment.setId(commentid);
+        comment.setLikeCount(1);
+        int idx = commentExtMapper.incLike(comment);
+        if(idx != 1){
+            log.error("函数like:增加点赞数时发生异常，累加失败");
+            throw new CustomizeException(CustomizeErrorCode.LIKE_COMMENT_FAILED);
+        }
+
+        // 在t_comment_like_user添加数据
+        CommentLikeUser commentLikeUser = new CommentLikeUser();
+        commentLikeUser.setCommentid(commentid);
+        commentLikeUser.setUserid(userid);
+        commentLikeUser.setGmtCreate(System.currentTimeMillis());
+        commentLikeUser.setGmtModify(commentLikeUser.getGmtCreate());
+
+        idx = commentLikeUserMapper.insertSelective(commentLikeUser);
+        if(idx != 1){
+            log.error("函数like:往表t_comment_like_user插入数据时异常，插入失败");
+            throw new CustomizeException(CustomizeErrorCode.LIKE_COMMENT_FAILED);
+        }
+
+        // 查询出该帖子所有的点赞记录
+        CommentLikeUserExample example = new CommentLikeUserExample();
+        example.createCriteria().andCommentidEqualTo(commentid);
+        List<CommentLikeUser> commentLikeUsers = commentLikeUserMapper.selectByExample(example);
+
+        List<Long> likeUsersId = commentLikeUsers.stream().map(item -> item.getUserid()).collect(Collectors.toList());
+
+        commentDTO.setLikeUsersId(likeUsersId);
+
+        return commentDTO;
+    }
+
+    @Override
+    public CommentDTO unlike(Long commentid, Long userid) {
+        CommentDTO commentDTO = new CommentDTO();
+
+        // 减少点赞数
+        Comment comment = new Comment();
+        comment.setId(commentid);
+        comment.setLikeCount(1);
+        int idx = commentExtMapper.decLike(comment);
+        if(idx != 1){
+            log.error("函数like:减少点赞数时发生异常，累减失败");
+            throw new CustomizeException(CustomizeErrorCode.UNLIKE_COMMENT_FAILED);
+        }
+
+        // 在t_comment_like_user删除数据
+        CommentLikeUserExample cluExample = new CommentLikeUserExample();
+        cluExample.createCriteria().andCommentidEqualTo(commentid).andUseridEqualTo(userid);
+        idx = commentLikeUserMapper.deleteByExample(cluExample);
+        if(idx != 1){
+            log.error("函数like:从表t_comment_like_user删除数据时异常，删除失败");
+            throw new CustomizeException(CustomizeErrorCode.UNLIKE_COMMENT_FAILED);
+        }
+
+        // 查询出该帖子所有的点赞记录
+        CommentLikeUserExample example = new CommentLikeUserExample();
+        example.createCriteria().andCommentidEqualTo(commentid);
+        List<CommentLikeUser> commentLikeUsers = commentLikeUserMapper.selectByExample(example);
+
+        List<Long> likeUsersId = commentLikeUsers.stream().map(item -> item.getUserid()).collect(Collectors.toList());
+
+        commentDTO.setLikeUsersId(likeUsersId);
+
+        return commentDTO;
     }
 }

@@ -7,12 +7,15 @@ var topic = {}; // topic.user此篇帖子的发起用户
 var comments = {};
 var subComments = {};
 var commentContent = "";
-var likeUsersId={}; // 对当前帖子点赞的所有用户id
+var likeUsersId = {}; // 对当前帖子点赞的所有用户id
 
 var loadedUser = false;
 var loadedTopic = false;
 var loadedComments = false;
 var loadedSubComments = false;
+
+var likeStatus = false;
+var liked = "";
 
 axios.default.withCredentials = true;
 var vue = new Vue({
@@ -20,7 +23,7 @@ var vue = new Vue({
     data: {
         topicId, topic, comments, subComments, user, likeUsersId,
         loadedTopic, loadedComments, loadedSubComments, loadedUser,
-        commentContent
+        commentContent, likeStatus, liked
     },
     mounted: function () {
         this.getUser();
@@ -57,9 +60,10 @@ var vue = new Vue({
                 if (jsonResult.success) {
                     vue.topic = jsonResult.data;
                     vue.loadedTopic = true;
-                    vue.likeUsersid = vue.topic.likeUsersid;
+                    vue.likeUsersId = vue.topic.likeUsersId;
                     // Editor.md无法用vue设置，暂时使用jquery赋值
                     // $("#topic-textarea").val(vue.topic.description);
+                    loadLikeStatus(vue.user, vue.likeUsersId);
                 } else {
                     alert(jsonResult.message);
                 }
@@ -73,6 +77,9 @@ var vue = new Vue({
                 if (jsonResult.success) {
                     vue.comments = jsonResult.data;
                     vue.loadedComments = true;
+                    for (var idx in vue.comments) {
+                        loadCommentLikeStatus(vue.user, vue.comments[idx]);
+                    }
                 } else {
                     alert(jsonResult.message);
                 }
@@ -82,19 +89,93 @@ var vue = new Vue({
             return tag.split(",");
         },
         // 点赞帖子
-        likeTopic:function (topicId, userId) {
-            var url = "/topic/like";
-            var params = {id:topicId, userid:userId}; // id-帖子id userid-当前点赞人的id
-            axios.post(url, params).then(function (result) {
-                var jsonResult = result.data;
-                if(jsonResult.success){
-                    // 由于点赞数不是太重要，这里就直接静态修改帖子的点赞数就行了
-                    vue.topic.likeCount++;
-                    vue.likeUsersid = jsonResult.data.likeUsersid;
-                } else {
-                    alert(jsonResult.message);
-                }
-            })
+        likeTopic: function (topicId, userId, likeStatus) {
+            // 如果还未登录
+            if (!vue.loadedUser) {
+                alert("此操作需要登录，请登录后继续操作");
+                return false;
+            }
+            if (likeStatus) { // 已点赞取消点赞
+                var url = "/topic/unlike";
+                var params = {id: topicId, userid: userId}; // id-帖子id userid-当前点赞人的id
+                axios.post(url, params).then(function (result) {
+                    var jsonResult = result.data;
+                    if (jsonResult.success) {
+                        // 由于点赞数不是太重要，这里就直接静态修改帖子的点赞数就行了
+                        vue.topic.likeCount--;
+                        vue.likeUsersId = jsonResult.data.likeUsersId;
+                        vue.likeStatus = false;
+                        loadLikeStatus(vue.user, vue.likeUsersId);
+                    } else {
+                        alert(jsonResult.message);
+                    }
+                })
+            } else {
+                var url = "/topic/like";
+                var params = {id: topicId, userid: userId}; // id-帖子id userid-当前点赞人的id
+                axios.post(url, params).then(function (result) {
+                    var jsonResult = result.data;
+                    if (jsonResult.success) {
+                        // 由于点赞数不是太重要，这里就直接静态修改帖子的点赞数就行了
+                        vue.topic.likeCount++;
+                        vue.likeUsersId = jsonResult.data.likeUsersId;
+                        vue.likeStatus = true;
+                        loadLikeStatus(vue.user, vue.likeUsersId);
+                    } else {
+                        alert(jsonResult.message);
+                    }
+                })
+            }
+        },
+        // 点赞评论
+        likeComment: function (commentID, userID, idx) {
+            // 如果还未登录
+            if (!vue.loadedUser) {
+                alert("此操作需要登录，请登录后继续操作");
+                return false;
+            }
+            if (vue.comments[idx].likeStatus) { // 取消点赞
+                var url = "/comment/unlike";
+                var params = {id: commentID, userid: userID}; // id-帖子id userid-当前点赞人的id
+                axios.post(url, params).then(function (result) {
+                    var jsonResult = result.data;
+                    if (jsonResult.success) {
+                        // 由于点赞数不是太重要，这里就直接静态修改帖子的点赞数就行了
+                        vue.comments[idx].likeCount--;
+                        vue.comments[idx].likeUsersId = jsonResult.data.likeUsersId;
+                        vue.comments[idx].likeStatus = false;
+                        loadCommentLikeStatus(vue.user, vue.comments[idx]);
+                    } else {
+                        alert(jsonResult.message);
+                    }
+                })
+            } else {
+                var url = "/comment/like";
+                var params = {id: commentID, userid: userID};
+                axios.post(url, params).then(function (result) {
+                    var jsonResult = result.data;
+                    if (jsonResult.success) {
+                        vue.comments[idx].likeUsersId = jsonResult.data;
+                        vue.comments[idx].likeCount++;
+                        vue.comments[idx].likeStatus = true;
+                        loadCommentLikeStatus(vue.user, vue.comments[idx]);
+                    } else {
+                        alert(jsonResult.message);
+                    }
+                });
+            }
+        },
+        // 处理时间戳
+        timestampToTime: function (timestamp) {
+            var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+            var Y = date.getFullYear() + '-';
+            var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+            var D = date.getDate() + ' ';
+            var h = date.getHours() + ':';
+            var m = date.getMinutes() + ':';
+            var s = date.getSeconds();
+
+            return Y + M + D + h + m + s;
         }
     }
 });
@@ -212,3 +293,35 @@ function doSubcomment(commentId) {
         }
     });
 }
+
+// 为当前用户加载此帖子的点赞状态
+function loadLikeStatus(user, likeUsersId) {
+    var userid = user.id;
+    likeUsersId = JSON.parse(JSON.stringify(likeUsersId));
+    for (var idx in likeUsersId) {
+        if (likeUsersId[idx] == userid) {
+            vue.likeStatus = true;
+        }
+    }
+    if (vue.likeStatus) {
+        vue.liked = "liked";
+    } else {
+        vue.liked = "";
+    }
+}
+
+function loadCommentLikeStatus(user, comment) {
+    var likeUsersId = comment.likeUsersId;
+
+    for (var idx in likeUsersId) {
+        if (likeUsersId[idx] == user.id) {
+            comment.likeStatus = true;
+        }
+    }
+    if (comment.likeStatus) {
+        comment.likeClass = "liked";
+    } else {
+        comment.likeClass = "";
+    }
+}
+

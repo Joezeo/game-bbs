@@ -24,7 +24,7 @@ public class CommentController {
      */
     @PostMapping("/comment")
     @ResponseBody
-    public JsonResult comment(@RequestBody CommentDTO commentDTO,
+    public JsonResult<?> comment(@RequestBody CommentDTO commentDTO,
                               HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
@@ -41,7 +41,7 @@ public class CommentController {
      */
     @PostMapping("/comment/subComment")
     @ResponseBody
-    public JsonResult subComment(@RequestBody CommentDTO commentDTO, HttpSession session){
+    public JsonResult<?> subComment(@RequestBody CommentDTO commentDTO, HttpSession session){
         User user = (User) session.getAttribute("user");
         if (user == null) {
             return JsonResult.errorOf(CustomizeErrorCode.USER_NOT_LOGIN);
@@ -58,11 +58,25 @@ public class CommentController {
      */
     @PostMapping("/comment/getSubcomment")
     @ResponseBody
-    public JsonResult getSubComment(@RequestBody CommentDTO commentDTO) {
+    public JsonResult<List<CommentDTO>> getSubComment(@RequestBody CommentDTO commentDTO) {
 
         // 查询当前id评论全部二级评论
         List<CommentDTO> commentDTOS = commentService.listByParentId(commentDTO.getId(), CommentTypeEnum.COMMENT);
 
         return JsonResult.okOf(commentDTOS);
+    }
+
+    @PostMapping("/comment/like")
+    @ResponseBody
+    public JsonResult<CommentDTO> like(@RequestBody CommentDTO commentDTO){
+        commentDTO = commentService.like(commentDTO.getId(), commentDTO.getUserid());
+        return JsonResult.okOf(commentDTO);
+    }
+
+    @PostMapping("/comment/unlike")
+    @ResponseBody
+    public JsonResult<CommentDTO> unlike(@RequestBody CommentDTO commentDTO){
+        commentDTO = commentService.unlike(commentDTO.getId(), commentDTO.getUserid());
+        return JsonResult.okOf(commentDTO);
     }
 }

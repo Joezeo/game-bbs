@@ -313,4 +313,33 @@ public class TopicServiceImpl implements TopicService {
 
         return topicDTO;
     }
+
+    @Override
+    public TopicDTO unlikeTopic(Long topicid, Long userid) {
+        TopicDTO topicDTO = new TopicDTO();
+
+        // 减少点赞数
+        Topic topic = new Topic();
+        topic.setId(topicid);
+        topic.setLikeCount(1);
+        int idx = topicExtMapper.decLike(topic);
+        if(idx != 1){
+            throw new CustomizeException(CustomizeErrorCode.UNLIKE_TOPIC_FAILED);
+        }
+
+        // 在t_topic_like_user删除数据
+        TopicLikeUserExample example1 = new TopicLikeUserExample();
+        example1.createCriteria().andUseridEqualTo(userid).andTopicidEqualTo(topicid);
+        topicLikeUserMapper.deleteByExample(example1);
+
+        // 查询出该帖子所有的点赞记录
+        TopicLikeUserExample example2 = new TopicLikeUserExample();
+        example2.createCriteria().andTopicidEqualTo(topicid);
+        List<TopicLikeUser> topicLikeUsers = topicLikeUserMapper.selectByExample(example2);
+
+        List<Long> userids = topicLikeUsers.stream().map(item -> item.getUserid()).collect(Collectors.toList());
+        topicDTO.setLikeUsersId(userids);
+
+        return topicDTO;
+    }
 }

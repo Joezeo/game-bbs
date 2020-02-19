@@ -34,5 +34,6 @@
         <table tableName="t_notification" domainObjectName="Notification" ></table>
         <table tableName="t_proxy_ip" domainObjectName="ProxyIP" ></table>
         <table tableName="t_topic_like_user" domainObjectName="TopicLikeUser" ></table>
+        <table tableName="t_comment_like_user" domainObjectName="CommentLikeUser" ></table>
     </context>
 </generatorConfiguration>

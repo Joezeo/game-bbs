@@ -22,6 +22,11 @@ public interface TopicExtMapper {
     int incLike(Topic record);
 
     /**
+     * 减少点赞数
+     */
+    int decLike(Topic topic);
+
+    /**
      * 根据正则表达式获取相关帖子
      */
     List<Topic> selectRelated(@Param("curId") Long curId, @Param("tagRegex") String tagRegex);

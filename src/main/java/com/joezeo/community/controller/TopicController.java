@@ -60,4 +60,11 @@ public class TopicController {
         topicDTO = topicService.likeTopic(topicDTO.getId(), topicDTO.getUserid());
         return JsonResult.okOf(topicDTO);
     }
+
+    @PostMapping("/topic/unlike")
+    @ResponseBody
+    public JsonResult<TopicDTO> unlikeTopic(@RequestBody TopicDTO topicDTO){
+        topicDTO = topicService.unlikeTopic(topicDTO.getId(), topicDTO.getUserid());
+        return JsonResult.okOf(topicDTO);
+    }
 }

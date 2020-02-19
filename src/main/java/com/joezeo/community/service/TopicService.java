@@ -21,4 +21,6 @@ public interface TopicService {
     boolean isExist(Long id);
 
     TopicDTO likeTopic(Long topicid, Long userid);
+
+    TopicDTO unlikeTopic(Long topicid, Long userid);
 }
