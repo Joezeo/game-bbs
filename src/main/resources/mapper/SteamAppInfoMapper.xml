@@ -75,9 +75,9 @@
         </choose>
         <set>
             <if test="appInfo.finalPrice != null">
-                finalPrice = #{appInfo.finalPrice},
+                final_price = #{appInfo.finalPrice},
             </if>
-            <if test="appInfo.gmt_modify != null">
+            <if test="appInfo.gmtModify != null">
                 gmt_modify = #{appInfo.gmtModify},
             </if>
         </set>

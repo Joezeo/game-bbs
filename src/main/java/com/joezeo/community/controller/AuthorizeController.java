@@ -36,12 +36,25 @@ public class AuthorizeController {
     private String redirectUri;
 
     @GetMapping("/login")
-    public String login(){
+    public String htmLogin(){
+        return "login";
+    }
+
+    /**
+     * 进行github三方验证登录
+     * @return
+     */
+    @GetMapping("/githubLogin")
+    public String githubLogin(){
         String url = "https://github.com/login/oauth/authorize?client_id="+clientId+"&scope=user&state=1";
         return "redirect:" + url;
     }
 
-
+    /**
+     * github
+     * @param code github要求的接收参数
+     * @param state 同上
+     */
     @GetMapping("/callback")
     public String callback(@RequestParam("code") String code,
                            @RequestParam("state") String state,

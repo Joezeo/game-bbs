@@ -45,7 +45,7 @@
                                                          v-text="topic.title"></a></h4>
                             <span class="text-desc"><span v-text="topic.commentCount"></span> 个评论 • <span
                                     v-text="topic.viewCount"></span> 次浏览 • <span
-                                    v-text="topic.gmtCreate"></span></span></span>
+                                    v-text="timestampToTime(topic.gmtCreate)"></span></span></span>
                         </div>
                         <hr>
                     </div>

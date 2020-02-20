@@ -18,7 +18,7 @@ public class ScheduleConfig implements SchedulingConfigurer {
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
 
         Method[] methods = BatchProperties.Job.class.getMethods();
-        int defaultPoolSize = 3;
+        int defaultPoolSize = 4;
         int corePoolSize = 0;
         if (methods != null && methods.length > 0) {
             for (Method method : methods) {

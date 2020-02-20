@@ -1,0 +1,55 @@
+.back-index{
+    position: fixed;
+    top: 30px;
+    left: 20px;
+    font-size: 20px;
+}
+.back-index a{
+    text-decoration: none;
+}
+
+.left-div{
+    margin-top: 0px;
+}
+
+.login-ico{
+    margin-left: 150px;
+}
+
+.login-div{
+    margin: 3% 15%;
+}
+.panel{
+    margin-top: 20px;
+    border: 2px #222034 solid;
+    border-radius: 20px;
+    padding: 10px;
+    height: 300px;
+    text-align: center;
+}
+.panel a{
+    padding: 10px;
+    color: #999999;
+    font-weight: lighter;
+    font-family: "幼圆";
+}
+
+label{
+    font-family: "幼圆";
+    font-size: 17px;
+}
+
+.right-div{
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+.login-ico-1{
+    margin-left: 88px;
+    margin-top: 88px;
+}
+
+.login-ico-2{
+    margin-top: 442px;
+    margin-left: 44px;
+}
