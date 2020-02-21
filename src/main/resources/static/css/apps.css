@@ -11,7 +11,7 @@ body{
 }
 .app-table .content-tr {
     border-bottom: solid 2px #d9d9d9;
-    font-family: Consolas;
+    font-family: "幼圆",sans-serif;
     font-weight: bold;
 }
 .app-table td{
@@ -37,7 +37,7 @@ body{
 
 .type-checkbox span{
     color: black;
-    font-family: Consolas;
+    font-family: "幼圆",sans-serif;
     font-weight: bold;
     font-size: 17px;
 }

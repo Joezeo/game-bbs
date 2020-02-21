@@ -13,7 +13,7 @@ body{
     background-attachment: fixed;
     background-position: center 0%;
     /*background-color: white;*/
-    font-family: "幼圆";
+    font-family: "幼圆",sans-serif;
     font-weight: bold;
 }
 h2{
@@ -21,7 +21,7 @@ h2{
 }
 a{
     color: black;
-    font-family: Consolas;
+    font-family: "幼圆",sans-serif;
 }
 [v-cloak] {
     display: none;
@@ -105,12 +105,12 @@ a{
 .footer .inner-1{
     margin-left: 7%;
     text-align: left;
-    font-family: Consolas;
+    font-family: "幼圆",sans-serif;
 }
 .footer .inner-2{
     margin-left: 10%;
     text-align: left;
-    font-family: Consolas;
+    font-family: "幼圆",sans-serif;
 }
 
 .btn-publish{
@@ -308,7 +308,7 @@ a{
     background-color: rgba(217, 217, 217, 1);
     opacity: .4;
     filter: alpha(opacity=40);
-    font-family: microsoft yahei
+    font-family: "幼圆",sans-serif;
 }
 
 .totop:hover {
@@ -319,7 +319,7 @@ a{
 
 
 .pixel-btn{
-    font-family: "幼圆";
+    font-family: "幼圆",sans-serif;
     font-weight: bold;
     background: #55ff75;
     color: black;
@@ -341,6 +341,6 @@ a{
     padding: 5px;
 }
 .nav-person-panel li a{
-    font-family: "幼圆";
+    font-family: "幼圆",sans-serif;
     font-weight: bold;
 }

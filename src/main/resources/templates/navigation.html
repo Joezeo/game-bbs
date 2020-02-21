@@ -19,13 +19,28 @@
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
-
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a href="/forum" style="font-weight: bold;color: black;"><img src="/imgs/forum.png" alt="" style="height: 21px;width: 21px;margin-top: -2px;"> 社区</a></li>
-                    <li><a href="/steam/apps" style="font-weight: bold;color: black;"><img src="/imgs/steam.png" alt=""> Steam 数据库</a></li>
+                    <li th:if="${session.user != null}">
+                        <a href="/home" style="font-weight: bold;color: black;">
+                            <img src="/imgs/home.png" alt="" style="height: 21px;width: 21px;margin-top: -2px;"> 小窝</a></li>
+                    <li>
+                        <a href="/forum" style="font-weight: bold;color: black;">
+                            <img src="/imgs/forum.png" alt="" style="height: 21px;width: 21px;margin-top: -2px;"> 社区</a></li>
+                    <li>
+                        <a href="/steam/apps" style="font-weight: bold;color: black;">
+                            <img src="/imgs/steam.png" alt=""> Steam 数据库</a></li>
                 </ul>
 
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right" th:if="${#httpServletRequest.requestURI != '/login' and #httpServletRequest.requestURI != '/signup'}">
+                    <li>
+                        <form class="navbar-form navbar-right" action="/" method="get">
+                            <a href="" id="search-icon"><img src="/imgs/search.png" alt="" style="width: 28px;height: 28px;margin-top: 2px;margin-right: -10px;"></a>
+                            <div class="form-group">
+                                <input id="input-condition" name="condition" type="text" class="form-control" placeholder="搜索..."
+                                       style="font-weight: bold;display: none;">
+                            </div>
+                        </form>
+                    </li>
 
                     <li th:if="${session.user == null}">
                         <a href="/login" style="font-weight: bold;">登录</a>
@@ -55,14 +70,6 @@
                     </li>
                 </ul>
 
-                <form class="navbar-form navbar-right" action="/" method="get">
-                    <a href="" id="search-icon"><img src="/imgs/search.png" alt="" style="width: 28px;height: 28px;margin-top: 2px;margin-right: -10px;"></a>
-                    <div class="form-group">
-                        <input id="input-condition" name="condition" type="text" class="form-control" placeholder="搜索..."
-                               style="font-weight: bold;display: none;">
-                    </div>
-<!--                    <button type="submit" class="btn btn-default" style="background: white;font-weight: bold;">搜索</button>-->
-                </form>
             </div>
         </div>
     </div>

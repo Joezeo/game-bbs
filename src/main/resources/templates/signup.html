@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>注册 - JOEF</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+<!--导航栏-->
+<div th:replace="navigation :: nav"></div>
+
+<div class="container-fluid signup-main login" style="margin-bottom: 30px;">
+    <div class="row">
+        <div class="up-div">
+            <div class="login-div">
+                <img src="/imgs/signup.png" alt="" class="login-ico" style="margin-left:70px; ">
+                <div class="panel" style="text-align: left;">
+                    <br>
+                    <div class="form-group">
+                        <label for="username">请输入用户名</label>
+                        <input type="text" class="form-control" id="username" placeholder="请输入用户名">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">请输入邮箱</label>
+                        <input type="email" class="form-control" id="email" placeholder="请输入邮箱">
+                    </div>
+                    <div class="input-group">
+                        <label for="authcode">请输入验证码</label>
+                        <input type="text" class="form-control" id="authcode" placeholder="点击 Go!,获取确认邮件">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default getMail-btn" type="button">Go!</button></span>
+                    </div><!-- /input-group -->
+                    <br>
+                    <div class="form-group">
+                        <label for="password">请输入密码</label>
+                        <input type="password" class="form-control" id="password" placeholder="请输入密码">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">请确认密码</label>
+                        <input type="password" class="form-control" id="confirm-password" placeholder="请确认密码">
+                    </div>
+
+                    <br>
+                    <button type="button" class="btn pixel-btn">注册</button>
+                    <br>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="signup-bottom-btn">
+    已经有账号了？<a href="/login">登录</a>
+</div>
+<script src="/jquery/jquery-3.4.1.js"></script>
+<script src="/jquery/jquery-form.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/search.js"></script>
+</body>
+</html>

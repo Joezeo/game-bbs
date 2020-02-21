@@ -9,15 +9,14 @@
     <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
-<div class="back-index">
-    <a href="/">< 回到主页</a>
-</div>
-<div class="container-fluid main login" style="margin-bottom: 30px;">
-    <div class="row gallery">
-        <div class="col-lg-8 .col-md-12 .col-sm-12 .col-xs-12 left-div">
+<!--导航栏-->
+<div th:replace="navigation :: nav"></div>
+
+<div class="container-fluid login-main login" style="margin-bottom: 30px;">
+    <div class="row">
+        <div class="up-div">
             <div class="login-div">
-                <img src="/imgs/login.png" alt="" class="login-ico">
-                <br>
+            <img src="/imgs/login.png" alt="" class="login-ico">
                 <div class="panel">
                     <br>
                     <div class="form-group">
@@ -35,27 +34,28 @@
                     </div>
                     <button type="button" class="btn pixel-btn">登录</button>
                     <br>
-                    <a href="">注册账号</a>
+                    <br>
+                    <a href="/signup">注册账号</a>
                     <a href="">忘记密码</a>
                 </div>
             </div>
-
-            <img src="/imgs/witch.png" alt="" class="login-ico-1">
         </div>
 
-        <div class="col-lg-4 .col-md-12 .col-sm-12 .col-xs-12 right-div">
+        <div class="row down-div">
             <div><h2>第三方登录</h2></div>
             <hr>
-            <div>
-                <img src="/imgs/github.png" alt="Gitub">
-                <a href="/githubLogin">Github登录</a>
+            <div class="github-login">
+                <div class="github-login-sub">
+                    <img src="/imgs/github.png" alt="Gitub">
+                    <a href="/githubLogin">Github登录</a>
+                </div>
             </div>
-            <img src="/imgs/duck.png" alt="" class="login-ico-2">
         </div>
     </div>
 </div>
 <script src="/jquery/jquery-3.4.1.js"></script>
 <script src="/jquery/jquery-form.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/search.js"></script>
 </body>
 </html>

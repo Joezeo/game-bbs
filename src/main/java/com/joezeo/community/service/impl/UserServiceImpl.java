@@ -35,13 +35,13 @@ public class UserServiceImpl implements UserService {
         }
 
         UserExample userExample = new UserExample();
-        userExample.createCriteria().andAccountIdEqualTo(user.getAccountId());
+        userExample.createCriteria().andGithubAccountIdEqualTo(user.getGithubAccountId());
         List<User> memUser = userMapper.selectByExample(userExample);
 
         if(memUser == null || memUser.size() == 0){ // 执行插入操作
             // 随机生成头像
             InputStream avatar = new AvatarGenerator().getARandomAvatar();
-            String avatarUrl = uCloudProvider.uploadAvatar(avatar, "image/jpeg", "avatar-" + user.getAccountId() + ".jpg");
+            String avatarUrl = uCloudProvider.uploadAvatar(avatar, "image/jpeg", "avatar-" + user.getGithubAccountId() + ".jpg");
             user.setAvatarUrl(avatarUrl);
 
             int count = userMapper.insert(user);
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
         }
 
         UserExample userExample = new UserExample();
-        userExample.createCriteria().andAccountIdEqualTo(accountId);
+        userExample.createCriteria().andGithubAccountIdEqualTo(accountId);
         List<User> user = userMapper.selectByExample(userExample);
         if (user == null) {
             log.error("函数queryByAccountid：获取user信息失败，该accounid不存在，可能前端传参有问题");

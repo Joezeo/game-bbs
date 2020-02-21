@@ -40,6 +40,11 @@ public class AuthorizeController {
         return "login";
     }
 
+    @GetMapping("/signup")
+    public String htmSignup(){
+        return "signup";
+    }
+
     /**
      * 进行github三方验证登录
      * @return
@@ -75,7 +80,7 @@ public class AuthorizeController {
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setName(githubUser.getName());
-            user.setAccountId(githubUser.getId());
+            user.setGithubAccountId(githubUser.getId());
             user.setBio(githubUser.getBio());
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModify(user.getGmtCreate());

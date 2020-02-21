@@ -4,12 +4,12 @@ body{
     display: flex;
     flex-direction: column;
     /*background-image: url(http://joezeo.cn-bj.ufileos.com/c307b3eb-b4b2-4216-a5dd-c1d5fff75751.jpg);*/
-    background: url("/imgs/back.png") no-repeat;
+    /*background: url("/imgs/back.png") no-repeat;*/
     background-size: 100% 100%;
     background-attachment: fixed;
     background-position: center 0%;
     /*background-color: white;*/
-    font-family: "幼圆";
+    font-family: "幼圆",sans-serif;
     font-weight: bold;
 }
 
