@@ -53,6 +53,12 @@ a{
     text-decoration: none;
     border-radius: 5px;
 }
+
+/*搜索输入框*/
+#input-condition{
+    border-radius: 10px;
+}
+
 .inner {
     margin-top: 25px;
     margin-left: -30px;
@@ -83,7 +89,7 @@ a{
 
 .footer{
     margin-top: 50px;
-    border-top: 1px solid rgba(0,0,0,.22);
+    /*border-top: 1px solid rgba(0,0,0,.22);*/
     background-color: white;
     color: #999;
     text-align: center;

@@ -53,3 +53,12 @@ label{
     margin-top: 442px;
     margin-left: 44px;
 }
+
+.pixel-btn{
+    background: #e7513b !important;
+    color: white !important;
+}
+
+.pixel-btn:hover{
+    background: #d13d2a !important;
+}

@@ -159,6 +159,7 @@ public class PageResolver {
                     break;
                 }
             }
+            break;
         }
         SteamHistoryPrice historyPrice = new SteamHistoryPrice();
         historyPrice.setAppid(appid);

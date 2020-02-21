@@ -14,17 +14,10 @@
                         data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                     <span class="sr-only" style="color:black;font-weight: bold">JOEF</span>
                 </button>
-                <a class="navbar-brand" href="/"><img src="/imgs/icon-big.png" alt="JOEF" style="margin-top: -9px;"/></a>
+                <a class="navbar-brand" href="/"><span style="letter-spacing: 2px;color: black;font-family: aktiv-grotesk, sans-serif;font-size: 16px;-webkit-font-smoothing: antialiased;text-rendering: optimizelegibility;">JOEF GAME</span></a>
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <form class="navbar-form navbar-left" action="/" method="get">
-                    <div class="form-group">
-                        <input name="condition" type="text" class="form-control" placeholder="搜索..."
-                               style="font-weight: bold;">
-                    </div>
-                    <button type="submit" class="btn btn-default" style="background: white;font-weight: bold;">搜索</button>
-                </form>
 
 
                 <ul class="nav navbar-nav navbar-left">
@@ -38,8 +31,9 @@
                     </li>
 
                     <li th:if="${session.user != null}">
-                        <a href="/profile/notify" style="color: black;font-weight: bold;">
-                            通知 <span class="badge" th:text="${session.unreadCount}"></span></a>
+                        <a href="/profile/notify" style="color: black;font-weight: bold;margin-top: -5px;" aria-placeholder="通知">
+                            <img src="/imgs/message.png" alt="" style="width: 28px;height: 28px;margin-right: -5px;">
+                            <span th:text="${session.unreadCount}"></span></a>
                     </li>
 
                     <li class="dropdown" th:if="${session.user != null}">
@@ -65,6 +59,15 @@
                         </ul>
                     </li>
                 </ul>
+
+                <form class="navbar-form navbar-right" action="/" method="get">
+                    <a href="" id="search-icon"><img src="/imgs/search.png" alt="" style="width: 28px;height: 28px;margin-top: 2px;"></a>
+                    <div class="form-group">
+                        <input id="input-condition" name="condition" type="text" class="form-control" placeholder="搜索..."
+                               style="font-weight: bold;display: none;">
+                    </div>
+<!--                    <button type="submit" class="btn btn-default" style="background: white;font-weight: bold;">搜索</button>-->
+                </form>
             </div>
         </div>
     </div>
