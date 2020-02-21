@@ -7,7 +7,8 @@ body{
     display: flex;
     flex-direction: column;
     /*background-image: url(http://joezeo.cn-bj.ufileos.com/c307b3eb-b4b2-4216-a5dd-c1d5fff75751.jpg);*/
-    background: url("/imgs/back.png") no-repeat;
+    /*background: url("/imgs/back.png") no-repeat;*/
+    background: white;
     background-size: 100% 100%;
     background-attachment: fixed;
     background-position: center 0%;
@@ -83,7 +84,7 @@ a{
     margin-left: 10%;
     margin-right: 10%;
     flex: 1;
-    border: solid #222034 3px;
+    border: solid #222034 2px;
     border-radius: 20px;
 }
 
@@ -333,4 +334,13 @@ a{
 /*已点赞*/
 .liked{
     color: #499ef3 !important;
+}
+
+/* 导航栏上个人下拉菜单 */
+.nav-person-panel li{
+    padding: 5px;
+}
+.nav-person-panel li a{
+    font-family: "幼圆";
+    font-weight: bold;
 }

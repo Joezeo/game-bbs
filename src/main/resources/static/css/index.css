@@ -1,0 +1,19 @@
+row-1{
+    height: 600px;
+}
+
+row-2{
+    height: 600px;
+    background: #d9d9d9;
+}
+
+.index-joinus-btn{
+    background: #e7513b;
+    color: white;
+    width: 150px;
+    height: 50px;
+    border-radius: 20px;
+}
+.index-joinus-btn:hover{
+    background: #c94634;
+}

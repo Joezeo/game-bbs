@@ -1,0 +1,151 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>社区 - JOEF · GAME</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/community.css">
+</head>
+<body>
+
+<!--导航栏-->
+<div th:replace="navigation :: nav"></div>
+
+<div class="container-fluid main" id="forum">
+    <div class="row">
+        <div class="col-lg-9 .col-md-12 .col-sm-12 .col-xs-12">
+            <div class="row top-row">
+                <div class="col-lg-1 .col-md-12 .col-sm-12 .col-xs-12">
+                    <h2><img src="/imgs/find.png" alt="" style="margin-top: -10px;"></h2>
+                </div>
+                <div class="col-lg-11 .col-md-12 .col-sm-12 .col-xs-12">
+                    <div class="inner" id="Tabs">
+                        <a @click="list(1,'square')" :class="tab=='square'?'selectedTab':'tab'">广场</a>
+                        <a @click="list(1,'news')" :class="tab=='news'?'selectedTab':'tab'">资讯</a>
+                        <a @click="list(1,'essay')" :class="tab=='essay'?'selectedTab':'tab'">文章</a>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <!-- 显示主要内容 -->
+                <template v-if="loaded">
+                    <div class="media" v-for="topic in pagination.datas">
+                        <div :if="topic">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object head-img" :src="topic.user.avatarUrl"
+                                         alt="用户头像" style="border-radius: 8px;">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading"><a :href="'/topic/'+topic.id"
+                                                             style="color: black;padding-top: 10px;font-size: 16px;"
+                                                             v-text="topic.title"></a></h4>
+                                <span class="text-desc"><span v-text="topic.user.name"></span> • <span
+                                        v-text="topic.commentCount"></span> 个评论 • <span
+                                        v-text="topic.viewCount"></span> 次浏览 • <span
+                                        v-text="timestampToTime(topic.gmtCreate)"></span></span></span>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </template>
+            </div>
+
+            <!--            分页条开始-->
+            <div>
+                <nav aria-label="Page navigation">
+                    <template v-if="loaded">
+                        <ul class="pagination">
+                            <li v-if="pagination.hasFirst">
+                                <a @click="list(1,tab)" aria-label="First">
+                                    <span aria-hidden="true">&lt;&lt;</span>
+                                </a>
+                            </li>
+                            <li v-if="pagination.hasPrevious">
+                                <a @click="list(pagination.page-1,tab)" aria-label="Previous">
+                                    <span aria-hidden="true">&lt;</span>
+                                </a>
+                            </li>
+
+                            <li v-for="page in pagination.pages" :class="[page==pagination.page?'active':'']"><a
+                                    @click="list(page,tab)" v-text="page"></a></li>
+
+                            <li v-if="pagination.hasNext">
+                                <a @click="list(pagination.page+1,tab)" aria-label="Next">
+                                    <span aria-hidden="true">&gt;</span>
+                                </a>
+                            </li>
+                            <li v-if="pagination.hasLast">
+                                <a @click="list(pagination.totalPage,tab)" aria-label="Last">
+                                    <span aria-hidden="true">&gt;&gt;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </template>
+                </nav>
+            </div>
+            <!--            分页条结束-->
+
+        </div>
+
+        <!--        右侧信息条-->
+        <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
+            <div class="panel panel-default" style="margin-top: 30px">
+                <div class="panel-body" v-if="loadedUser" v-cloak>
+                    <img :src="user.avatarUrl" alt="Avatar"
+                         style="width: 48px;height: 48px;border-radius: 6px;">
+                    <a href="#" style="color: black;font-family: Consolas;font-size: 16px">
+                        <span v-text="user.name"></span>
+                    </a>
+                    <hr>
+                    <h3>
+                    <span class="label label-default" style="background: #efefef;height: 30px;">
+                    </span>
+                    </h3>
+                    <!--                                        <div v-if="user.id == 1" v-cloak>-->
+                    <!--                        <button @click="spideProxyIP" class="btn btn-default" type="submit"-->
+                    <!--                                style="background: white;">爬取代理ip-->
+                    <!--                        </button>-->
+                    <!--                        <br>-->
+                    <!--                        <button @click="spideUrl" class="btn btn-default" type="submit" style="background: white;">-->
+                    <!--                            爬取Steam所有Url-->
+                    <!--                        </button>-->
+                    <!--                        <br>-->
+                    <!--                        <button @click="spideApp" class="btn btn-default" type="submit" style="background: white;">-->
+                    <!--                            爬取Steam所有软件信息-->
+                    <!--                        </button>-->
+                    <!--                        <br>-->
+                    <!--                        <button @click="checkUrl" class="btn btn-default" type="submit" style="background: white;">-->
+                    <!--                            检查Url-->
+                    <!--                        </button>-->
+                    <!--                        <br>-->
+                    <!--                                            <button @click="checkApp" class="btn btn-default" type="submit" style="background: white;">-->
+                    <!--                                                检查软件信息-->
+                    <!--                                            </button>-->
+                    <!--                        <br>-->
+                    <!--                        <button @click="spideSpecialPrice" class="btn btn-default" type="submit"-->
+                    <!--                                style="background: white;">爬取特惠价格-->
+                    <!--                        </button>-->
+                    <!--                    </div>-->
+                    <!--                                    </div>-->
+                </div>
+                <div class="panel-body" v-if="!loadedUser">
+                    <span style="font-weight: bold">您还未登录，请登录</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="footer :: foot"></div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="jquery/jquery-3.4.1.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/forum.js"></script>
+<script src="/js/search.js"></script>
+</body>
+</html>

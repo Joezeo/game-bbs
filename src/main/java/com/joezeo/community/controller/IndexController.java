@@ -27,6 +27,11 @@ public class IndexController {
         return "index";
     }
 
+    @GetMapping("/forum")
+    public String htmForum(){
+        return "forum";
+    }
+
     @GetMapping("/loadding")
     public String htmLoadding(){
         return "loadding";

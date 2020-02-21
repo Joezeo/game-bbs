@@ -21,7 +21,8 @@
 
 
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a href="/steam/apps" style="font-weight: bold;color: black;"><img src="/imgs/steam.png" alt=""> Steam Apps</a></li>
+                    <li><a href="/forum" style="font-weight: bold;color: black;"><img src="/imgs/forum.png" alt="" style="height: 21px;width: 21px;margin-top: -2px;"> 社区</a></li>
+                    <li><a href="/steam/apps" style="font-weight: bold;color: black;"><img src="/imgs/steam.png" alt=""> Steam 数据库</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -36,32 +37,26 @@
                             <span th:text="${session.unreadCount}"></span></a>
                     </li>
 
-                    <li class="dropdown" th:if="${session.user != null}">
+                    <li class="dropdown nav-person-panel" th:if="${session.user != null}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false" style="color: black;font-size: 16px;">
-                            <span th:text="${session.user.getName()}" style="font-weight: bold;"></span>
-                            <span class="caret"></span>
+                           aria-expanded="false" style="margin-top: -7px;">
+                            <img th:src="${session.user.avatarUrl}" alt="" style="border-radius: 20px;width: 32px;height: 32px;">
                         </a>
                         <ul class="dropdown-menu">
+                            <li th:text="${session.user.name}"></li>
                             <li><a href="/profile/topics">个人中心 </a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="/logout">退出登录 </a></li>
-                        </ul>
-                    </li>
-
-                    <li class="dropdown" th:if="${session.user != null}">
-                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button"
-                           style="background: white;font-weight: bold;">
-                            创作新主题</a>
-                        <ul class="dropdown-menu">
+                            <hr>
+                            <li>创作新主题</li>
                             <li><a href="/publish">发帖子</a></li>
                             <li><a href="/pubEassy">发文章</a></li>
+                            <hr>
+                            <li><a href="/logout">退出登录 </a></li>
                         </ul>
                     </li>
                 </ul>
 
                 <form class="navbar-form navbar-right" action="/" method="get">
-                    <a href="" id="search-icon"><img src="/imgs/search.png" alt="" style="width: 28px;height: 28px;margin-top: 2px;"></a>
+                    <a href="" id="search-icon"><img src="/imgs/search.png" alt="" style="width: 28px;height: 28px;margin-top: 2px;margin-right: -10px;"></a>
                     <div class="form-group">
                         <input id="input-condition" name="condition" type="text" class="form-control" placeholder="搜索..."
                                style="font-weight: bold;display: none;">
