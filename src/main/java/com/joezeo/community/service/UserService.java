@@ -8,4 +8,8 @@ public interface UserService {
     User queryByAccountid(String accountId);
 
     void createOrUpadate(User user);
+
+    void signup(User user);
+
+    void login(User user);
 }

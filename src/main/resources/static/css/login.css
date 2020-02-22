@@ -42,7 +42,8 @@
     text-align: center;
 }
 .panel a{
-    padding: 55px;
+    padding-left: 55px;
+    padding-right: 55px;
     color: #e7513b;
     font-weight: lighter;
     font-family: "幼圆",sans-serif;
@@ -64,6 +65,7 @@ label{
     color: white !important;
     width: 365px;
     border-radius: 20px;
+    margin-bottom: 10px;
 }
 .pixel-btn:hover{
     background: #d13d2a !important;

@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>社区 - JOEF · GAME</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/community.css">
+    <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+
+<!--导航栏-->
+<div th:replace="navigation :: nav"></div>
+
+<div class="container-fluid" id="home">
+    <div class="row" v-if="loadedUser" v-cloak>
+        <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
+            <div class="left">
+                <div class="user-info">
+                    <img :src="user.avatarUrl" alt=""><br>
+                    <span v-text="user.name"></span>
+                </div>
+                <hr>
+                <span>关注</span>
+                <hr>
+            </div>
+        </div>
+
+        <div class="col-lg-6 .col-md-12 .col-sm-12 .col-xs-12">
+            <div class="middle">
+
+            </div>
+        </div>
+        <!--        右侧信息条-->
+        <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
+            <div class="right">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="footer :: foot"></div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="jquery/jquery-3.4.1.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/search.js"></script>
+<script src="/js/home.js"></script>
+</body>
+</html>

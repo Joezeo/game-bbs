@@ -23,7 +23,9 @@ public enum CustomizeErrorCode implements IExceptionErrorCode{
     LIKE_TOPIC_FAILED(2018, "ops，点赞失败了，请过会儿试试"),
     UNLIKE_TOPIC_FAILED(2019, "ops，取消点赞失败了，请过会儿试试"),
     LIKE_COMMENT_FAILED(2020, "ops,点赞评论失败了，请过会儿试试"),
-    UNLIKE_COMMENT_FAILED(2021, "ops,取消点赞失败了，请过会儿试试");
+    UNLIKE_COMMENT_FAILED(2021, "ops,取消点赞失败了，请过会儿试试"),
+    USER_LOGIN_FALIED(2022, "用户名或密码错误，请检查后重试"),
+    USER_LOGIN_FALIED_UNKONWN(2023, "登录发生未知错误，请稍后重试");
 
     private Integer code;
     private String message;

@@ -23,23 +23,28 @@ public class IndexController {
     private TopicService topicService;
 
     @GetMapping("/")
-    public String htmIndex() {
-        return "index";
+    public String htmIndex(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return "index";
+        } else {
+            return "redirect:/home";
+        }
     }
 
     @GetMapping("/forum")
-    public String htmForum(){
+    public String htmForum() {
         return "forum";
     }
 
     @GetMapping("/loadding")
-    public String htmLoadding(){
+    public String htmLoadding() {
         return "loadding";
     }
 
     @PostMapping("/list")
     @ResponseBody
-    public JsonResult<IndexDTO> index(@RequestBody IndexDTO<TopicDTO> indexDTO){
+    public JsonResult<IndexDTO> index(@RequestBody IndexDTO<TopicDTO> indexDTO) {
         PaginationDTO<TopicDTO> paginationDTO = topicService.listPage(indexDTO.getPage(), indexDTO.getSize(), indexDTO.getCondition(), indexDTO.getTab());
 
         indexDTO.setPagination(paginationDTO);
@@ -49,7 +54,7 @@ public class IndexController {
 
     @PostMapping("/getUser")
     @ResponseBody
-    public JsonResult<User> getUser(HttpSession session){
+    public JsonResult<User> getUser(HttpSession session) {
         User user = (User) session.getAttribute("user");
 
         return JsonResult.okOf(user);
@@ -57,12 +62,13 @@ public class IndexController {
 
     /**
      * 获取当前session用户的未读通知数量
+     *
      * @param session
      * @return
      */
     @PostMapping("/getUnreadCount")
     @ResponseBody
-    public JsonResult<Integer> getUnreadCount(HttpSession session){
+    public JsonResult<Integer> getUnreadCount(HttpSession session) {
         Integer unreadCount = (Integer) session.getAttribute("unreadCount");
 
         return JsonResult.okOf(unreadCount);

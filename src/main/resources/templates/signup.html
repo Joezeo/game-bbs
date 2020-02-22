@@ -12,7 +12,7 @@
 <!--导航栏-->
 <div th:replace="navigation :: nav"></div>
 
-<div class="container-fluid signup-main login" style="margin-bottom: 30px;">
+<div class="container-fluid signup-main signup" style="margin-bottom: 30px;" id="signup">
     <div class="row">
         <div class="up-div">
             <div class="login-div">
@@ -21,22 +21,22 @@
                     <br>
                     <div class="form-group">
                         <label for="username">请输入用户名</label>
-                        <input type="text" class="form-control" id="username" placeholder="请输入用户名">
+                        <input v-model="name" type="text" class="form-control" id="username" placeholder="请输入用户名">
                     </div>
                     <div class="form-group">
                         <label for="email">请输入邮箱</label>
-                        <input type="email" class="form-control" id="email" placeholder="请输入邮箱">
+                        <input v-model="email" type="email" class="form-control" id="email" placeholder="请输入邮箱">
                     </div>
                     <div class="input-group">
                         <label for="authcode">请输入验证码</label>
-                        <input type="text" class="form-control" id="authcode" placeholder="点击 Go!,获取确认邮件">
+                        <input v-model="authCode" type="text" class="form-control" id="authcode" placeholder="点击 Go!,获取确认邮件">
                         <span class="input-group-btn">
                         <button class="btn btn-default getMail-btn" type="button">Go!</button></span>
                     </div><!-- /input-group -->
                     <br>
                     <div class="form-group">
                         <label for="password">请输入密码</label>
-                        <input type="password" class="form-control" id="password" placeholder="请输入密码">
+                        <input v-model="password" type="password" class="form-control" id="password" placeholder="请输入密码">
                     </div>
                     <div class="form-group">
                         <label for="confirm-password">请确认密码</label>
@@ -44,7 +44,7 @@
                     </div>
 
                     <br>
-                    <button type="button" class="btn pixel-btn">注册</button>
+                    <button @click="signup(name,email,password,authCode)" type="button" class="btn pixel-btn">注册</button>
                     <br>
                     <br>
                 </div>
@@ -55,9 +55,12 @@
 <div class="signup-bottom-btn">
     已经有账号了？<a href="/login">登录</a>
 </div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="/jquery/jquery-3.4.1.js"></script>
 <script src="/jquery/jquery-form.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <script src="/js/search.js"></script>
+<script src="/js/signup.js"></script>
 </body>
 </html>

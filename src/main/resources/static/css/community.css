@@ -84,7 +84,7 @@ a{
     margin-left: 10%;
     margin-right: 10%;
     flex: 1;
-    border: solid #222034 2px;
+    border: solid #999999 1px;
     border-radius: 20px;
 }
 
@@ -150,7 +150,7 @@ a{
     color: #333;
     /*margin-left: 5px;*/
     /*margin-top: 17px;*/
-    border: 1px solid #999999;
+    border: 1px solid #d7cedb;
     border-radius: 8px;
     margin-left:-5px;
     margin-right:-5px;
@@ -160,7 +160,7 @@ a{
 }
 
 .topic-sub{
-    border: 1px solid #999999;
+    border: 1px solid #d7cedb;
     /*border-top: 1px solid #222034 !important;*/
     border-radius: 8px;
     margin: 10px -5px;
@@ -170,7 +170,7 @@ a{
 }
 
 .reply-zone{
-    border: 1px solid #999999;
+    border: 1px solid #d7cedb;
     border-radius: 8px;
     margin: 10px -5px;
     padding: 10px;
@@ -223,7 +223,7 @@ a{
     /*margin-bottom: 45px;*/
     /*border-bottom: 1px solid #eee;*/
 
-    border: 1px solid #999999;
+    border: 1px solid #d7cedb;
     border-radius: 8px;
     margin: 10px -5px;
     padding: 10px;

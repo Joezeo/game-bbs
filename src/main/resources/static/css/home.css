@@ -1,0 +1,38 @@
+/*左侧区域开始*/
+.left {
+    border: solid #d7cedb 1px;
+    border-radius: 5px;
+    height: 500px;
+    width: 266px;
+}
+.user-info {
+    text-align: center;
+    margin-top: 20px;
+}
+.user-info img {
+    width: 80px;
+    height: 80px;
+    border-radius: 80px;
+    margin-bottom: 10px;
+}
+.user-info span{
+    font-weight: bold !important;
+    font-size: 16px !important;
+    color: rgb(36, 30, 18) !important;
+}
+/* 左侧区域结束 */
+
+.middle {
+    border: solid #d7cedb 1px;
+    border-radius: 5px;
+    height: 500px;
+    width: 552px;
+}
+
+.right {
+    border: solid #d7cedb 1px;
+    border-radius: 5px;
+    height: 500px;
+    width: 266px;
+}
+
