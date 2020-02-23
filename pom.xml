@@ -8,11 +8,12 @@
         <version>2.2.2.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.joezeo.community</groupId>
-    <artifactId>community</artifactId>
+    <groupId>com.joezeo.joefgame</groupId>
+    <artifactId>joefgame</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>community</name>
-    <description>community project for Spring Boot</description>
+    <name>joefgame</name>
+    <description>joefgame community project for Spring Boot</description>
+<!--    <packaging>pom</packaging>-->
 
     <properties>
         <java.version>1.8</java.version>

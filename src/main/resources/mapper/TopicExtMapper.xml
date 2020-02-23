@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.joezeo.community.mapper.TopicExtMapper">
-    <update id="incView" parameterType="com.joezeo.community.pojo.Topic">
+<mapper namespace="com.joezeo.joefgame.mapper.TopicExtMapper">
+    <update id="incView" parameterType="com.joezeo.joefgame.pojo.Topic">
     update t_topic
     set
       view_count = view_count + #{viewCount,jdbcType=INTEGER}
@@ -9,14 +9,14 @@
   </update>
 
 
-    <update id="incComment" parameterType="com.joezeo.community.pojo.Topic">
+    <update id="incComment" parameterType="com.joezeo.joefgame.pojo.Topic">
     update t_topic
     set
       comment_count = comment_count + #{commentCount,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
-    <update id="incLike" parameterType="com.joezeo.community.pojo.Topic">
+    <update id="incLike" parameterType="com.joezeo.joefgame.pojo.Topic">
     update t_topic
     set
       like_count = like_count + #{likeCount,jdbcType=INTEGER}
