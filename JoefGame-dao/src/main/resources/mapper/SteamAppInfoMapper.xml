@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joezeo.joefgame.dao.mapper.SteamAppInfoMapper">
+    <select id="selectByAppid" resultType="SteamAppInfo">
+        select * from
+        <choose>
+            <when test="type == 'game'">t_steam_game_info</when>
+            <when test="type == 'software'">t_steam_software_info</when>
+            <when test="type == 'demo'">t_steam_demo_game_info</when>
+            <when test="type == 'dlc'">t_steam_dlc_info</when>
+            <when test="type == 'sound'">t_steam_sound_tape_info</when>
+        </choose>
+        where appid = #{appid}
+    </select>
+
+    <select id="selectCount" resultType="int">
+        select count(1) from
+        <choose>
+            <when test="type == 'game'">t_steam_game_info</when>
+            <when test="type == 'software'">t_steam_software_info</when>
+            <when test="type == 'demo'">t_steam_demo_game_info</when>
+            <when test="type == 'dlc'">t_steam_dlc_info</when>
+            <when test="type == 'sound'">t_steam_sound_tape_info</when>
+        </choose>
+    </select>
+
+    <select id="selectPage" resultType="SteamAppInfo">
+        select * from
+        <choose>
+            <when test="type == 'game'">t_steam_game_info</when>
+            <when test="type == 'software'">t_steam_software_info</when>
+            <when test="type == 'demo'">t_steam_demo_game_info</when>
+            <when test="type == 'dlc'">t_steam_dlc_info</when>
+            <when test="type == 'sound'">t_steam_sound_tape_info</when>
+        </choose>
+        order by gmt_modify desc
+        limit #{index},#{size}
+    </select>
+
+    <delete id="deleteIllegal">
+        delete from
+        <choose>
+            <when test="type == 'game'">t_steam_game_info</when>
+            <when test="type == 'software'">t_steam_software_info</when>
+            <when test="type == 'demo'">t_steam_demo_game_info</when>
+            <when test="type == 'dlc'">t_steam_dlc_info</when>
+            <when test="type == 'sound'">t_steam_sound_tape_info</when>
+            <when test="type == 'bundle'">t_steam_sub_bundle_info</when>
+            <when test="type == 'sub'">t_steam_sub_bundle_info</when>
+        </choose>
+        where name=""
+    </delete>
+
+    <insert id="insert">
+        insert into
+        <choose>
+            <when test="type == 'game'">t_steam_game_info</when>
+            <when test="type == 'software'">t_steam_software_info</when>
+            <when test="type == 'demo'">t_steam_demo_game_info</when>
+            <when test="type == 'dlc'">t_steam_dlc_info</when>
+            <when test="type == 'sound'">t_steam_sound_tape_info</when>
+        </choose>
+        values (default , #{appInfo.appid}, #{appInfo.name}, #{appInfo.imgUrl},#{appInfo.description}, #{appInfo.releaseDate}, #{appInfo.devloper}, #{appInfo.publisher},
+        #{appInfo.originalPrice}, #{appInfo.finalPrice},#{appInfo.summary}, #{appInfo.gmtCreate}, #{appInfo.gmtModify})
+    </insert>
+
+    <update id="updateByAppidSelective" parameterType="SteamAppInfo">
+        update
+        <choose>
+            <when test="type == 'game'">t_steam_game_info</when>
+            <when test="type == 'software'">t_steam_software_info</when>
+            <when test="type == 'demo'">t_steam_demo_game_info</when>
+            <when test="type == 'dlc'">t_steam_dlc_info</when>
+            <when test="type == 'sound'">t_steam_sound_tape_info</when>
+        </choose>
+        <set>
+            <if test="appInfo.finalPrice != null">
+                final_price = #{appInfo.finalPrice},
+            </if>
+            <if test="appInfo.gmtModify != null">
+                gmt_modify = #{appInfo.gmtModify},
+            </if>
+        </set>
+        where appid = #{appInfo.appid}
+    </update>
+</mapper>

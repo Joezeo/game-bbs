@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joezeo.joefgame.dao.mapper.SteamUrlMapper">
+    <insert id="insertMap" parameterType="map">
+        insert into
+        <choose>
+            <when test="type == 'game'">t_steam_game_url</when>
+            <when test="type == 'software'">t_steam_software_url</when>
+            <when test="type == 'demo'">t_steam_demo_game_url</when>
+            <when test="type == 'dlc'">t_steam_dlc_url</when>
+            <when test="type == 'sound'">t_steam_sound_tape_url</when>
+            <when test="type == 'bundle'">t_steam_bundle_url</when>
+            <when test="type == 'special'">t_steam_special_url</when>
+        </choose>
+        values
+        <foreach collection="map" index="key" item="value" separator=",">
+            (default, #{key},#{value})
+        </foreach>
+    </insert>
+
+    <insert id="insert">
+        insert into
+        <choose>
+            <when test="type == 'game'">t_steam_game_url</when>
+            <when test="type == 'software'">t_steam_software_url</when>
+            <when test="type == 'demo'">t_steam_demo_game_url</when>
+            <when test="type == 'dlc'">t_steam_dlc_url</when>
+            <when test="type == 'sound'">t_steam_sound_tape_url</when>
+            <when test="type == 'bundle'">t_steam_bundle_url</when>
+            <when test="type == 'special'">t_steam_special_url</when>
+        </choose>
+        values (default , #{appid}, #{url})
+    </insert>
+
+    <select id="selectByAppid" resultType="SteamUrl">
+        select appid,url from
+        <choose>
+            <when test="type == 'game'">t_steam_game_url</when>
+            <when test="type == 'software'">t_steam_software_url</when>
+            <when test="type == 'demo'">t_steam_demo_game_url</when>
+            <when test="type == 'dlc'">t_steam_dlc_url</when>
+            <when test="type == 'sound'">t_steam_sound_tape_url</when>
+            <when test="type == 'bundle'">t_steam_bundle_url</when>
+            <when test="type == 'special'">t_steam_special_url</when>
+        </choose>
+        where appid = #{appid}
+    </select>
+
+    <select id="selectAll" resultType="SteamUrl">
+        select appid,url from
+        <choose>
+            <when test="type == 'game'">t_steam_game_url</when>
+            <when test="type == 'software'">t_steam_software_url</when>
+            <when test="type == 'demo'">t_steam_demo_game_url</when>
+            <when test="type == 'dlc'">t_steam_dlc_url</when>
+            <when test="type == 'sound'">t_steam_sound_tape_url</when>
+            <when test="type == 'bundle'">t_steam_bundle_url</when>
+            <when test="type == 'special'">t_steam_special_url</when>
+        </choose>
+    </select>
+
+    <update id="emptySpecialUrl">
+       TRUNCATE TABLE t_steam_special_url
+    </update>
+</mapper>

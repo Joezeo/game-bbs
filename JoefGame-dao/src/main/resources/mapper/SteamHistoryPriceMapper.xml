@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joezeo.joefgame.dao.mapper.SteamHistoryPriceMapper">
+    <insert id="insert" parameterType="SteamHistoryPrice">
+        insert into t_steam_history_price
+        values (default , #{appid}, #{price}, #{gmtCreate}, #{type})
+    </insert>
+
+    <select id="selectByTime" resultType="SteamHistoryPrice">
+        select appid,price,type from t_steam_history_price
+        where gmt_create>#{preTimeAtZero}
+    </select>
+
+    <select id="selectByTimeAndType" resultType="SteamHistoryPrice">
+        select appid,price from t_steam_history_price
+        where gmt_create>#{time}
+        and type=#{type}
+    </select>
+
+    <delete id="deleteIllegal">
+        delete from t_steam_history_price
+        where price=0;
+    </delete>
+
+    <select id="selectByAppid" resultType="SteamHistoryPrice">
+        select price,gmt_create from t_steam_history_price
+        where appid = #{appid}
+    </select>
+
+    <select id="selectByAppidAndType" resultType="SteamHistoryPrice">
+        select price,gmt_create from t_steam_history_price
+        where appid = #{appid}
+        and type = #{type}
+    </select>
+
+    <select id="selectByTimeAndTypeAndAppid" resultType="SteamHistoryPrice">
+        select price,gmt_create from t_steam_history_price
+        where appid = #{appid}
+        and type = #{type}
+        and gmt_create>#{time}
+    </select>
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joezeo.joefgame.dao.mapper.SteamSubBundleInfoMapper">
+    <select id="selectByAppid" resultType="SteamSubBundleInfo">
+        select * from t_steam_sub_bundle_info
+        where appid=#{appid}
+        and `type`=#{type}
+    </select>
+
+    <insert id="insert" parameterType="SteamSubBundleInfo">
+        insert into t_steam_sub_bundle_info
+        values (default, #{appid}, #{name}, #{devloper} ,#{publisher},#{releaseDate}, #{originalPrice}, #{finalPrice},
+        #{contains}, #{gmtCreate},#{gmtModify},#{imgUrl},#{type})
+    </insert>
+
+    <select id="selectCount" resultType="int">
+        select count(1) from t_steam_sub_bundle_info
+        where `type`=#{type}
+    </select>
+
+    <select id="selectPage" resultType="SteamSubBundleInfo">
+        select * from t_steam_sub_bundle_info
+        where `type`=#{type}
+        order by gmt_modify desc
+        limit #{index},#{size}
+    </select>
+
+    <update id="updateByAppidSelective" parameterType="SteamSubBundleInfo">
+        update t_steam_sub_bundle_info
+        <set>
+            <if test="appid != null">
+                appid = #{appid},
+            </if>
+            <if test="name != null">
+                `name` = #{name},
+            </if>
+            <if test="devloper != null">
+                devloper = #{devloper},
+            </if>
+            <if test="publisher != null">
+                publisher = #{publisher},
+            </if>
+            <if test="releaseDate != null">
+                releaseDate = #{releaseDate},
+            </if>
+            <if test="originalPrice != null">
+                originalPrice = #{originalPrice},
+            </if>
+            <if test="finalPrice != null">
+                finalPrice = #{finalPrice},
+            </if>
+            <if test="gmtModify != null">
+                gmt_modify = #{gmtModify},
+            </if>
+            <if test="imgUrl != null">
+                imgUrl = #{imgUrl},
+            </if>
+            <if test="type != null">
+                `type` = #{type},
+            </if>
+        </set>
+        where appid = #{appid}
+        and `type` = #{type}
+    </update>
+</mapper>
