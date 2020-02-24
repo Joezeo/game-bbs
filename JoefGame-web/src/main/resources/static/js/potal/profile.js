@@ -1,20 +1,20 @@
 var path = window.location.href;
-var section = path.substr(path.lastIndexOf("/")+1);
+var section = path.substr(path.lastIndexOf("/") + 1);
 var sectionName = "";
 var pagination = {};
 var loaded = false;
 var unreadCount = 0;
 
 var vue = new Vue({
-    el:"#profile",
-    data:{
-        section:section,
+    el: "#profile",
+    data: {
+        section: section,
         sectionName,
         pagination,
         loaded,
         unreadCount
     },
-    mounted:function () {
+    mounted: function () {
         switch (this.section) {
             case "topics":
                 this.sectionName = "我的帖子";
@@ -23,16 +23,16 @@ var vue = new Vue({
                 this.sectionName = "最新回复";
                 break;
         }
-        this.getDatas(this.section,1);
+        this.getDatas(this.section, 1);
         this.getUnreadCount();
     },
-    methods:{
-        readAllNotification:readAllNotification,
-        getDatas:function (section, page) {
+    methods: {
+        readAllNotification: readAllNotification,
+        getDatas: function (section, page) {
             var url = "";
-            var params={
-                page:page,
-                size:10 // 默认显示为10
+            var params = {
+                page: page,
+                size: 10 // 默认显示为10
             };
             switch (section) {
                 case "topics":
@@ -45,23 +45,34 @@ var vue = new Vue({
 
             axios.post(url, params).then(function (response) {
                 var jsonResult = response.data;
-                if(jsonResult.success){
+                if (jsonResult.success) {
                     vue.pagination = jsonResult.data;
                     vue.loaded = true;
                 }
             });
         },
-        getUnreadCount:function () {
-            var url = "/getUnredCount";
+        getUnreadCount: function () {
+            var url = "/getUnreadCount";
             axios.post(url).then(function (response) {
                 var jsonResult = response.data;
-                if(jsonResult.success){
+                if (jsonResult.success) {
                     vue.unreadCount = jsonResult.data;
                 } else {
                     // 用户未登录，无法获取unreadCount
                     vue.unreadCount = 0;
                 }
             });
+        },
+        readNotify: function (notifyid) {
+            var url = "/notification/" + notifyid;
+            axios.post(url).then(function (result) {
+                var jsonResult = result.data;
+                if (jsonResult.success) {
+                    window.location.href = "/topic/" + jsonResult.data;
+                } else {
+                    alert(jsonResult.message);
+                }
+            })
         },
         // 处理时间戳
         timestampToTime: function (timestamp) {
@@ -84,10 +95,10 @@ function readAllNotification() {
         dataType: 'json',
         contentType: 'application/json',
         success: function (jsonResult) {
-            if(jsonResult.success){
+            if (jsonResult.success) {
                 window.location.reload();
             } else {
-                if (jsonResult.code == 2004){ // 未登录
+                if (jsonResult.code == 2004) { // 未登录
                     var flag = confirm("当前操作需用户登录后进行，点击确定自动登录");
                     if (flag) {
                         window.open("https://github.com/login/oauth/authorize?client_id=332735b1b85bfbb88779&scope=user&state=1");

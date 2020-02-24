@@ -1,19 +1,21 @@
 package com.joezeo.joefgame.potal.controller;
 
-import com.joezeo.joefgame.potal.dto.CommentDTO;
 import com.joezeo.joefgame.common.dto.JsonResult;
 import com.joezeo.joefgame.common.enums.CommentTypeEnum;
 import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
 import com.joezeo.joefgame.dao.pojo.User;
+import com.joezeo.joefgame.potal.dto.CommentDTO;
 import com.joezeo.joefgame.potal.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-@Controller
+@RestController
 public class CommentController {
 
     @Autowired

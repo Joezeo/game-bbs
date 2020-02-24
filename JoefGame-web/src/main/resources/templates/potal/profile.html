@@ -59,7 +59,7 @@
                         <p>
                             <a href="#" v-text="notify.notifiername"></a>
                             <span v-text="notify.type"></span>
-                            <a :href="'/notification/'+notify.id" v-text="notify.relatedname"></a>
+                            <a @click="readNotify(notify.id)" v-text="notify.relatedname"></a>
                             <span class="label label-warning" v-if="notify.status == 0">未读</span>
                         </p>
                     </div>
@@ -115,7 +115,8 @@
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="/jquery/jquery-3.4.1.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
-<script src="/js/profile.js"></script>
-<script src="/js/search.js"></script>
+<script src="/js/potal/profile.js"></script>
+<script src="/js/potal/search.js"></script>
+<script src="/js/potal/logout.js"></script>
 </body>
 </html>

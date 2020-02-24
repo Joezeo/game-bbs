@@ -8,6 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>com.joezeo.joefgame</groupId>
     <artifactId>potal</artifactId>
     <version>0.0.1-SNAPSHOT</version>

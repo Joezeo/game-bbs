@@ -7,14 +7,25 @@ import okhttp3.*;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class GithubProvider {
+
+    private static OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+    static {
+        builder.connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true);
+    }
+
     public String getAccessToken(AccessTokenDTO accessTokenDTO){
         MediaType mediaType
                 = MediaType.get("application/json; charset=utf-8");
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = builder.build();
 
         RequestBody body = RequestBody.create(JSON.toJSONString(accessTokenDTO), mediaType);
         Request request = new Request.Builder()
@@ -31,7 +42,7 @@ public class GithubProvider {
     }
 
     public GithubUser getGithubUser(String access_token){
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = builder.build();
 
         Request request = new Request.Builder()
                 .url("https://api.github.com/user?access_token="+access_token)

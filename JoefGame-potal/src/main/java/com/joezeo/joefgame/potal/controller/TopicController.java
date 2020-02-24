@@ -1,20 +1,20 @@
 package com.joezeo.joefgame.potal.controller;
 
-import com.joezeo.joefgame.potal.dto.CommentDTO;
 import com.joezeo.joefgame.common.dto.JsonResult;
-import com.joezeo.joefgame.potal.dto.TopicDTO;
 import com.joezeo.joefgame.common.enums.CommentTypeEnum;
-import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
-import com.joezeo.joefgame.common.exception.CustomizeException;
+import com.joezeo.joefgame.potal.dto.CommentDTO;
+import com.joezeo.joefgame.potal.dto.TopicDTO;
 import com.joezeo.joefgame.potal.service.CommentService;
 import com.joezeo.joefgame.potal.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class TopicController {
 
     @Autowired
@@ -22,14 +22,6 @@ public class TopicController {
 
     @Autowired
     CommentService commentService;
-
-    @GetMapping("/topic/{id}")
-    public String topic(@PathVariable("id") Long id) {
-        if(!topicService.isExist(id)){ // 不存在抛异常
-            throw new CustomizeException(CustomizeErrorCode.TOPIC_NOT_FOUND);
-        }
-        return "topic";
-    }
 
     @PostMapping("/topic/getTopic")
     @ResponseBody

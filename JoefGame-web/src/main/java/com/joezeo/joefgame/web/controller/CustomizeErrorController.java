@@ -1,4 +1,4 @@
-package com.joezeo.joefgame.potal.controller;
+package com.joezeo.joefgame.web.controller;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;

@@ -6,22 +6,22 @@ import com.joezeo.joefgame.common.exception.CustomizeException;
 import com.joezeo.joefgame.dao.pojo.User;
 import com.joezeo.joefgame.potal.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 
-@Controller
+@RestController
 public class NotificationController {
 
     @Autowired
     private NotificationService notificationService;
 
-    @GetMapping("/notification/{id}")
-    public String notification(@PathVariable("id") Long id, HttpSession session){
+    @PostMapping("/notification/{id}")
+    @ResponseBody
+    public JsonResult<Long> notification(@PathVariable("id") Long id, HttpSession session){
         User user = (User) session.getAttribute("user");
         if(user == null){
             throw new CustomizeException(CustomizeErrorCode.USER_NOT_LOGIN);
@@ -30,7 +30,7 @@ public class NotificationController {
         // 读取该条通知 , 修改通知status、获取该条通知所属帖子id
         Long topicid = notificationService.readNotification(id, user.getId());
 
-        return "redirect:/topic/" + topicid;
+        return JsonResult.okOf(topicid);
     }
 
     @PostMapping("/notification/allRead")

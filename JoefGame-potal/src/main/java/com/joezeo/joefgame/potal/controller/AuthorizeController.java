@@ -1,57 +1,26 @@
 package com.joezeo.joefgame.potal.controller;
 
-import com.joezeo.joefgame.common.dto.AccessTokenDTO;
-import com.joezeo.joefgame.common.dto.GithubUser;
 import com.joezeo.joefgame.common.dto.JsonResult;
-import com.joezeo.joefgame.potal.dto.UserDTO;
 import com.joezeo.joefgame.dao.pojo.User;
-import com.joezeo.joefgame.common.provider.GithubProvider;
+import com.joezeo.joefgame.potal.dto.UserDTO;
 import com.joezeo.joefgame.potal.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.UUID;
 
-@Controller
+@RestController
 public class AuthorizeController {
 
     @Autowired
-    private GithubProvider githubProvider;
-    @Autowired
     private UserService userService;
-
-    @Value("${github.client.id}")
-    private String clientId;
-    @Value("${github.client.secret}")
-    private String clientSecret;
-    @Value("${github.redirect.uri}")
-    private String redirectUri;
-
-    @GetMapping("/login")
-    public String htmLogin(){
-        return "login";
-    }
-
-    @GetMapping("/signup")
-    public String htmSignup(){
-        return "signup";
-    }
-
-    /**
-     * 进行github三方验证登录
-     * @return
-     */
-    @GetMapping("/githubLogin")
-    public String githubLogin(){
-        String url = "https://github.com/login/oauth/authorize?client_id="+clientId+"&scope=user&state=1";
-        return "redirect:" + url;
-    }
 
     @PostMapping("login")
     @ResponseBody
@@ -72,49 +41,9 @@ public class AuthorizeController {
         return JsonResult.okOf(null);
     }
 
-    /**
-     * github
-     * @param code github要求的接收参数
-     * @param state 同上
-     */
-    @GetMapping("/callback")
-    public String callback(@RequestParam("code") String code,
-                           @RequestParam("state") String state,
-                           HttpServletResponse response) {
-        AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
-        accessTokenDTO.setClient_id(clientId);
-        accessTokenDTO.setClient_secret(clientSecret);
-        accessTokenDTO.setCode(code);
-        accessTokenDTO.setState(state);
-        accessTokenDTO.setRedirect_uri(redirectUri);
-
-        String accessToken = githubProvider.getAccessToken(accessTokenDTO);
-        GithubUser githubUser = githubProvider.getGithubUser(accessToken);
-
-        if (githubUser != null) {
-            User user = new User();
-            // 生成token令牌，用于判断用户是否已登录
-            String token = UUID.randomUUID().toString();
-            user.setToken(token);
-            user.setName(githubUser.getName());
-            user.setGithubAccountId(githubUser.getId());
-            user.setBio(githubUser.getBio());
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModify(user.getGmtCreate());
-
-            // 先进行检查数据库中是否已经有该条github用户数据，如果有则更新信息，没有则存入数据
-            userService.createOrUpadate(user);
-
-            response.addCookie(new Cookie("token", token));
-            return "redirect:/";
-        } else {
-            return "redirect:/";
-        }
-    }
-
-
-    @GetMapping("/logout")
-    public String logout(HttpServletResponse response,
+    @PostMapping("/logout")
+    @ResponseBody
+    public JsonResult<?> logout(HttpServletResponse response,
                          HttpSession session){
         // 移除cookie
         Cookie token = new Cookie("token", null);
@@ -125,7 +54,7 @@ public class AuthorizeController {
         // 移除session
         session.removeAttribute("user");
 
-        return "redirect:/";
+        return JsonResult.okOf(null);
     }
 
     @PostMapping("/signup")

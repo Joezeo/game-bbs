@@ -5,10 +5,9 @@ import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
 import com.joezeo.joefgame.common.exception.CustomizeException;
 import com.joezeo.joefgame.common.provider.UCloudProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -18,16 +17,11 @@ import java.io.IOException;
 /**
  * 图床
  */
-@Controller
+@RestController
 public class GalleryController {
 
     @Autowired
     private UCloudProvider uCloudProvider;
-
-    @GetMapping("/gallery")
-    public String htmGallery() {
-        return "gallery";
-    }
 
     @PostMapping("/gallery/upload")
     @ResponseBody

@@ -1,41 +1,23 @@
 package com.joezeo.joefgame.potal.controller;
 
-import com.joezeo.joefgame.potal.dto.IndexDTO;
 import com.joezeo.joefgame.common.dto.JsonResult;
 import com.joezeo.joefgame.common.dto.PaginationDTO;
-import com.joezeo.joefgame.potal.dto.TopicDTO;
 import com.joezeo.joefgame.dao.pojo.User;
+import com.joezeo.joefgame.potal.dto.IndexDTO;
+import com.joezeo.joefgame.potal.dto.TopicDTO;
 import com.joezeo.joefgame.potal.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 
-@Controller
+@RestController
 public class IndexController {
     @Autowired
     private TopicService topicService;
-
-    @GetMapping("/")
-    public String htmIndex(HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            return "index";
-        } else {
-            return "redirect:/home";
-        }
-    }
-
-    @GetMapping("/forum")
-    public String htmForum() {
-        return "forum";
-    }
-
-    @GetMapping("/loadding")
-    public String htmLoadding() {
-        return "loadding";
-    }
 
     @PostMapping("/list")
     @ResponseBody

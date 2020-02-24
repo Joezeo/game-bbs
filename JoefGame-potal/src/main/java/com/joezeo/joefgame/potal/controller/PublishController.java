@@ -1,22 +1,23 @@
 package com.joezeo.joefgame.potal.controller;
 
-import com.joezeo.joefgame.potal.cache.TagCache;
 import com.joezeo.joefgame.common.dto.JsonResult;
-import com.joezeo.joefgame.potal.dto.TagDTO;
-import com.joezeo.joefgame.potal.dto.TopicDTO;
 import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
 import com.joezeo.joefgame.dao.pojo.Topic;
 import com.joezeo.joefgame.dao.pojo.User;
+import com.joezeo.joefgame.potal.cache.TagCache;
+import com.joezeo.joefgame.potal.dto.TagDTO;
+import com.joezeo.joefgame.potal.dto.TopicDTO;
 import com.joezeo.joefgame.potal.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-@Controller
+@RestController
 public class PublishController {
 
     @Autowired
@@ -24,20 +25,6 @@ public class PublishController {
 
     @Autowired
     private TagCache tagCache;
-
-    // 获取新增帖子页面
-    @GetMapping("/publish")
-    public String htmPublish(Model model) {
-        return "publish";
-    }
-
-    // 获取编辑帖子页面
-    @GetMapping("/publish/{id}")
-    public String htmEdit(@PathVariable(name = "id") Long id,
-                       Model model) {
-        model.addAttribute("id", id);
-        return "publish";
-    }
 
     // 获取标签信息
     @PostMapping("/publish/getTags")
