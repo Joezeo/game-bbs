@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>控制面板 - JOEF GAME</title>
+    <link rel="stylesheet" href="/css/manager.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+</head>
+<body>
+
+<!--导航栏-->
+<div th:replace="navigation :: nav"></div>
+
+<div id="panel">
+
+    <div class="panel-left">
+        <ul>
+            <h3>后台管理面板</h3>
+            <hr>
+            <li><a href="/manager/spider">爬虫管理</a></li>
+
+            <li><a href="/manager/process">流程管理</a></li>
+        </ul>
+    </div>
+
+    <div class="wrapper">
+        <div class="panel-right">
+            <div class="title">
+                <h4>控制面板</h4>
+            </div>
+            <hr>
+            <div class="content">
+                当前在线人数...
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="/jquery/jquery-3.4.1.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/potal/search.js"></script>
+<script src="/js/potal/logout.js"></script>
+<script src="/js/manager/panel.js"></script>
+</html>

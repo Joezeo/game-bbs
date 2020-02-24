@@ -65,6 +65,10 @@
                             <li><a href="/publish">发帖子</a></li>
                             <li><a href="/write">发文章</a></li>
                             <hr>
+                            <th:block th:if="${session.user.id == 1}">
+                                <li>管理员</li>
+                                <li><a href="/manager/panel">后台管理系统</a></li>
+                            </th:block>
                             <li><a id="logout">退出登录 </a></li>
                         </ul>
                     </li>

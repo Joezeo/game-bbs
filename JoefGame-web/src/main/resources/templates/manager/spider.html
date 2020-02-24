@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>爬虫管理 - JOEF GAME</title>
+    <link rel="stylesheet" href="/css/manager.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+</head>
+<body>
+
+<!--导航栏-->
+<div th:replace="navigation :: nav"></div>
+
+<div id="spider">
+
+    <div class="panel-left">
+        <ul>
+            <h3>后台管理面板</h3>
+            <hr>
+            <li><a href="/manager/spider">爬虫管理</a></li>
+
+            <li><a href="/manager/process">流程管理</a></li>
+        </ul>
+    </div>
+
+    <div class="wrapper">
+        <div class="panel-right">
+            <div class="title">
+                <h4>爬虫管理</h4>
+            </div>
+            <hr>
+            <div class="content container-fluid">
+                <div class="row">
+                    <div class="btns col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
+                        <ul>
+                            <li>
+                                <button @click="spideProxyIP" class="btn btn-default" type="submit"
+                                        style="background: white;">爬取代理ip
+                                </button>
+                            </li>
+                            <li>
+                                <button @click="spideUrl" class="btn btn-default" type="submit" style="background: white;">
+                                    爬取Steam所有Url
+                                </button>
+                            </li>
+                            <li>
+                                <button @click="spideApp" class="btn btn-default" type="submit" style="background: white;">
+                                    爬取Steam所有软件信息
+                                </button>
+                            </li>
+                            <li>
+                                <button @click="checkUrl" class="btn btn-default" type="submit" style="background: white;">
+                                    检查Url
+                                </button>
+                            </li>
+                            <li>
+                                <button @click="checkApp" class="btn btn-default" type="submit" style="background: white;">
+                                    检查软件信息
+                                </button>
+                            </li>
+                            <li>
+                                <button @click="spideSpecialPrice" class="btn btn-default" type="submit"
+                                        style="background: white;">爬取特惠价格
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="show-zone col-lg-9 .col-md-12 .col-sm-12 .col-xs-12"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="/jquery/jquery-3.4.1.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/potal/search.js"></script>
+<script src="/js/potal/logout.js"></script>
+<script src="/js/manager/spider.js"></script>
+</html>
