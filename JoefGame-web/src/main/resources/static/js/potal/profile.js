@@ -15,6 +15,7 @@ var vue = new Vue({
         unreadCount
     },
     mounted: function () {
+        this.removeStorage();
         switch (this.section) {
             case "topics":
                 this.sectionName = "我的帖子";
@@ -27,6 +28,11 @@ var vue = new Vue({
         this.getUnreadCount();
     },
     methods: {
+        // 移除apps页面存储的page、type信息
+        removeStorage:function(){
+            window.sessionStorage.removeItem("page");
+            window.sessionStorage.removeItem("type");
+        },
         readAllNotification: readAllNotification,
         getDatas: function (section, page) {
             var url = "";

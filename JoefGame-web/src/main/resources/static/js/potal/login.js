@@ -6,9 +6,14 @@ var vue = new Vue({
     el:"#login",
     data:{email, password, rememberMe},
     mounted:function () {
-
+        this.removeStorage();
     },
     methods:{
+        // 移除apps页面存储的page、type信息
+        removeStorage:function(){
+            window.sessionStorage.removeItem("page");
+            window.sessionStorage.removeItem("type");
+        },
         login:function (email, password, rememberMe) {
             var url = "/login";
             var params = {

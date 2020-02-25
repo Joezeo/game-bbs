@@ -1,7 +1,14 @@
 $(function () {
+    removeStorage();
     $("#img-select").click(loadFile);
     $("#file-input").change(uploadFile);
 });
+
+// 移除apps页面存储的page、type信息
+function removeStorage(){
+    window.sessionStorage.removeItem("page");
+    window.sessionStorage.removeItem("type");
+}
 
 function loadFile() {
     $("#file-input").click();

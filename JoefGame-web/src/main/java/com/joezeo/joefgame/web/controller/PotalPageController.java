@@ -114,7 +114,7 @@ public class PotalPageController {
      */
     @GetMapping("/loadding")
     public String htmLoadding() {
-        return "potal/loadding";
+        return "loadding";
     }
 
     /**

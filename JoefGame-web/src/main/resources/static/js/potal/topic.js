@@ -26,12 +26,18 @@ var vue = new Vue({
         commentContent, likeStatus, liked
     },
     mounted: function () {
+        this.removeStorage();
         this.getUser();
         this.getTopic(this.topicId);
         this.getComments(this.topicId);
         this.subComment(0);
     },
     methods: {
+        // 移除apps页面存储的page、type信息
+        removeStorage:function(){
+            window.sessionStorage.removeItem("page");
+            window.sessionStorage.removeItem("type");
+        },
         // 回复问题
         doComment: doComment,
         // 点击回复评论功能

@@ -10,11 +10,17 @@ var vue = new Vue({
         el: "#forum",
         data: indexDTO,
         mounted: function () { // 表示这个vue对象加载成功了
+            this.removeStorage();
             this.closable();
             this.getUser();
             this.list(1);
         },
         methods: {
+            // 移除apps页面存储的page、type信息
+            removeStorage:function(){
+                window.sessionStorage.removeItem("page");
+                window.sessionStorage.removeItem("type");
+            },
             getUser: function () {
                 var url = "/getUser";
                 axios.post(url).then(function (response) {

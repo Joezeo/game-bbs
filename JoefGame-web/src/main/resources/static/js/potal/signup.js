@@ -7,9 +7,14 @@ var vue = new Vue({
     el:"#signup",
     data:{name, email, password, authCode},
     mounted:function () {
-
+        this.removeStorage();
     },
     methods:{
+        // 移除apps页面存储的page、type信息
+        removeStorage:function(){
+            window.sessionStorage.removeItem("page");
+            window.sessionStorage.removeItem("type");
+        },
         signup:function (name, email, password, authCode) {
             var url = "/signup";
             var params = {

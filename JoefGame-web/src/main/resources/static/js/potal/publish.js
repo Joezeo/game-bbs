@@ -14,6 +14,7 @@ var vue = new Vue({
         tagDTOS, topicDTO
     },
     mounted: function () { // vue对象加载完毕
+        this.removeStorage();
         // 加载md编辑器
         var editor = editormd("topic-editor", {
             width: "100%",
@@ -30,6 +31,11 @@ var vue = new Vue({
         this.getTopic(topicDTO.id);
     },
     methods: {
+        // 移除apps页面存储的page、type信息
+        removeStorage:function(){
+            window.sessionStorage.removeItem("page");
+            window.sessionStorage.removeItem("type");
+        },
         getTags: function () {
             var url = "/publish/getTags";
             axios.post(url).then(function (response) {
