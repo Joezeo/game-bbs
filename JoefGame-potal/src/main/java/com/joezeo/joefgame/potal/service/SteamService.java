@@ -10,4 +10,6 @@ public interface SteamService {
     SteamAppDTO queryApp(Integer appid, Integer type);
 
     HistoryPriceDTO queryHistoryPrice(Integer appid, Integer type);
+
+    boolean isExist(Integer appid);
 }

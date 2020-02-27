@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -160,7 +161,7 @@ public class SteamServiceImpl implements SteamService {
                 List<SteamAppDTO> includes = new ArrayList<>();
                 String[] contains = app.getContains().split(",");
                 for (String appidStr : contains) {
-                    if("".equals(appidStr)){
+                    if ("".equals(appidStr)) {
                         break;
                     }
                     Integer typeInt = 1; // 默认游戏
@@ -220,70 +221,56 @@ public class SteamServiceImpl implements SteamService {
 
     @Override
     public SteamAppDTO queryApp(Integer appid, Integer type) {
-        String typeStr = SteamAppTypeEnum.typeOf(type);
-
-        if ("sub".equals(typeStr) || "bundle".equals(typeStr)) { // 获取礼包、捆绑包信息
-            return querySubOrBundle(appid, typeStr);
+        if (type == 0) {
+            return queryWithoutType(appid);
         }
 
-        SteamAppDTO appDTO = new SteamAppDTO();
-        appDTO.setType(type);
-
-        /*
-            首先从redis缓存中查询是否存在该app的信息
-            key: app-类型-appid
-         */
-        String key = "app-" + typeStr + "-" + appid;
-        if (redisUtil.hasKey(key)) {
-            JSONObject object = (JSONObject) redisUtil.get(key);
-            SteamAppInfo appInfo = JSONObject.parseObject(object.toJSONString(), SteamAppInfo.class);
-            BeanUtils.copyProperties(appInfo, appDTO);
-        } else { // 如redis中不存在该app的信息，从数据库中查询，再放入到redis缓存中
-            SteamAppInfo app = steamAppInfoMapper.selectByAppid(appid, typeStr);
-            int difftime = 60 * 60; // 如果获取时间差失败则默认保存1小时
-            try {
-                // 获取现在时间与下一天凌晨4点的时间差，单位秒
-                difftime = TimeUtils.getDifftimeFromNextZero();
-            } catch (ParseException e) {
-                log.error("获取时间差失败,将默认保存1小时,stackTrace=" + e.getMessage());
-            }
-
-            try {
-                // 获取当天零点的时间戳
-                Long preTimeAtZero = TimeUtils.getTimestampAtZero();
-
-                // 获取当天新获取的特惠商品价格 gmt_create>preTimeAtZero
-                SteamHistoryPrice special = steamHistoryPriceMapper.selectByTimeAndTypeAndAppid(preTimeAtZero, "app",appid);
-                if (special != null) {
-                    // 重新设定特惠商品的finalPrice
-                    app.setFinalPrice(special.getPrice());
-                } else { // 没有降价
-                    app.setFinalPrice(app.getOriginalPrice());
-                }
-            } catch (Exception e) {
-                log.error("获取特惠价格失败，所有商品价格将以历史记录展示: stackTrace=" + e.getMessage());
-            }
-            // 每天凌晨4点清除缓存信息
-            // 由于缓存中的信息并不需要修改，所以使用String的方式存储
-            redisUtil.set(key, app, difftime);
-            BeanUtils.copyProperties(app, appDTO);
+        if (type == 5 || type == 7) { // 获取礼包、捆绑包信息
+            return querySubOrBundle(appid, type);
         }
-        return appDTO;
+
+        return queryOthers(appid, type);
+    }
+
+    private SteamAppDTO queryWithoutType(Integer appid) {
+        SteamAppDTO appDTO;
+        List<Integer> typeIdxes = Arrays.asList(1, 2, 3, 4, 5);
+
+        for (Integer typeIdx : typeIdxes) {
+            appDTO = queryOthers(appid, typeIdx);
+            if (appDTO != null) {
+                return appDTO;
+            }
+        }
+
+        typeIdxes = Arrays.asList(6,7);
+        for (Integer typeIdx : typeIdxes) {
+            appDTO = querySubOrBundle(appid, typeIdx);
+            if(appDTO != null){
+                return appDTO;
+            }
+        }
+
+        throw new CustomizeException(CustomizeErrorCode.APP_NOT_FOUND);
     }
 
     @NotNull
-    private SteamAppDTO querySubOrBundle(Integer appid, String type) {
+    private SteamAppDTO querySubOrBundle(Integer appid, Integer type) {
         SteamAppDTO appDTO = new SteamAppDTO();
-        appDTO.setType(7);
 
-        String key = "app-" + type + "-" + appid;
+        String typeStr = SteamAppTypeEnum.typeOf(type);
+
+        String key = "app-" + typeStr + "-" + appid;
 
         if (redisUtil.hasKey(key)) {
             JSONObject object = (JSONObject) redisUtil.get(key);
             SteamAppDTO appInfo = JSONObject.parseObject(object.toJSONString(), SteamAppDTO.class);
             BeanUtils.copyProperties(appInfo, appDTO);
         } else {
-            SteamSubBundleInfo sub = steamSubBundleInfoMapper.selectByAppid(appid, type);
+            SteamSubBundleInfo sub = steamSubBundleInfoMapper.selectByAppid(appid, typeStr);
+            if (sub == null) {
+                return null;
+            }
             int difftime = 60 * 60; // 如果获取时间差失败则默认保存1小时
             try {
                 // 获取现在时间与下一天凌晨4点的时间差，单位秒
@@ -318,7 +305,7 @@ public class SteamServiceImpl implements SteamService {
                 Long preTimeAtZero = TimeUtils.getTimestampAtZero();
 
                 // 获取当天新获取的特惠商品价格 gmt_create>preTimeAtZero
-                SteamHistoryPrice special = steamHistoryPriceMapper.selectByTimeAndTypeAndAppid(preTimeAtZero, type, appid);
+                SteamHistoryPrice special = steamHistoryPriceMapper.selectByTimeAndTypeAndAppid(preTimeAtZero, typeStr, appid);
                 if (special != null) {
                     // 重新设定特惠商品的finalPrice
                     appDTO.setFinalPrice(special.getPrice());
@@ -333,20 +320,102 @@ public class SteamServiceImpl implements SteamService {
             // 由于缓存中的信息并不需要修改，所以使用String的方式存储
             redisUtil.set(key, appDTO, difftime);
         }
+        appDTO.setType(type);
+        return appDTO;
+    }
+
+    private SteamAppDTO queryOthers(Integer appid, Integer type) {
+        SteamAppDTO appDTO = new SteamAppDTO();
+
+        String typeStr = SteamAppTypeEnum.typeOf(type);
+
+        /*
+            首先从redis缓存中查询是否存在该app的信息
+            key: app-类型-appid
+         */
+        String key = "app-" + typeStr + "-" + appid;
+        if (redisUtil.hasKey(key)) {
+            JSONObject object = (JSONObject) redisUtil.get(key);
+            SteamAppInfo appInfo = JSONObject.parseObject(object.toJSONString(), SteamAppInfo.class);
+            BeanUtils.copyProperties(appInfo, appDTO);
+        } else { // 如redis中不存在该app的信息，从数据库中查询，再放入到redis缓存中
+            SteamAppInfo app = steamAppInfoMapper.selectByAppid(appid, typeStr);
+            if (app == null) {
+                return null;
+            }
+            int difftime = 60 * 60; // 如果获取时间差失败则默认保存1小时
+            try {
+                // 获取现在时间与下一天凌晨4点的时间差，单位秒
+                difftime = TimeUtils.getDifftimeFromNextZero();
+            } catch (ParseException e) {
+                log.error("获取时间差失败,将默认保存1小时,stackTrace=" + e.getMessage());
+            }
+
+            try {
+                // 获取当天零点的时间戳
+                Long preTimeAtZero = TimeUtils.getTimestampAtZero();
+
+                // 获取当天新获取的特惠商品价格 gmt_create>preTimeAtZero
+                SteamHistoryPrice special = steamHistoryPriceMapper.selectByTimeAndTypeAndAppid(preTimeAtZero, "app", appid);
+                if (special != null) {
+                    // 重新设定特惠商品的finalPrice
+                    app.setFinalPrice(special.getPrice());
+                } else { // 没有降价
+                    app.setFinalPrice(app.getOriginalPrice());
+                }
+            } catch (Exception e) {
+                log.error("获取特惠价格失败，所有商品价格将以历史记录展示: stackTrace=" + e.getMessage());
+            }
+            // 每天凌晨4点清除缓存信息
+            // 由于缓存中的信息并不需要修改，所以使用String的方式存储
+            redisUtil.set(key, app, difftime);
+            BeanUtils.copyProperties(app, appDTO);
+        }
+        appDTO.setType(type);
         return appDTO;
     }
 
     @Override
     public HistoryPriceDTO queryHistoryPrice(Integer appid, Integer type) {
-        String typeStr = SteamAppTypeEnum.typeOf(type);
-
-        if ("sub".equals(typeStr) || "bundle".equals(typeStr)) {
-            return querySubOrBundlePrice(appid, typeStr);
+        if(type == 0){
+            return queryPriceWithoutType(appid);
         }
 
+        if (type == 5 || type ==7) {
+            return querySubOrBundlePrice(appid, type);
+        }
+
+        return queryOthersPrice(appid, type);
+    }
+
+    private HistoryPriceDTO queryPriceWithoutType(Integer appid) {
+        HistoryPriceDTO historyPriceDTO;
+        List<Integer> typeIdxes = Arrays.asList(1, 2, 3, 4, 5);
+
+        for (Integer typeIdx : typeIdxes) {
+            historyPriceDTO = queryOthersPrice(appid, typeIdx);
+            if (historyPriceDTO != null) {
+                return historyPriceDTO;
+            }
+        }
+
+        typeIdxes = Arrays.asList(6,7);
+        for (Integer typeIdx : typeIdxes) {
+            historyPriceDTO = querySubOrBundlePrice(appid, typeIdx);
+            if(historyPriceDTO != null){
+                return historyPriceDTO;
+            }
+        }
+
+        return null;
+    }
+
+    private HistoryPriceDTO queryOthersPrice(Integer appid, Integer type){
         HistoryPriceDTO historyPriceDTO = new HistoryPriceDTO();
         // 首先获取该appid对应的app信息
         SteamAppInfo appInfo = null;
+
+        String typeStr = SteamAppTypeEnum.typeOf(type);
 
         // 首先redis缓存中获取
         String key = "app-" + typeStr + "-" + appid;
@@ -426,13 +495,15 @@ public class SteamServiceImpl implements SteamService {
         return historyPriceDTO;
     }
 
-    private HistoryPriceDTO querySubOrBundlePrice(Integer appid, String type) {
+    private HistoryPriceDTO querySubOrBundlePrice(Integer appid, Integer type) {
         HistoryPriceDTO historyPriceDTO = new HistoryPriceDTO();
 
         SteamSubBundleInfo subInfo = null;
 
+        String typeStr = SteamAppTypeEnum.typeOf(type);
+
         // 首先从redis中获取
-        String key = "app-" + type + "-" + appid;
+        String key = "app-" + typeStr + "-" + appid;
         if (redisUtil.hasKey(key)) {
             JSONObject object = (JSONObject) redisUtil.get(key);
             subInfo = JSONObject.parseObject(object.toJSONString(), SteamSubBundleInfo.class);
@@ -440,7 +511,7 @@ public class SteamServiceImpl implements SteamService {
             // redis缓存中没有则从数据库中查询
             // 由于礼包的dto比较复杂，这里获取的只是简单的信息，所以这里就不存入redis中了
             // 由于querySub这个方法先于本方法执行，所以存储redis缓存就在querySub中执行了
-            subInfo = steamSubBundleInfoMapper.selectByAppid(appid, type);
+            subInfo = steamSubBundleInfoMapper.selectByAppid(appid, typeStr);
         }
 
         // 获取该app的原价格
@@ -455,7 +526,7 @@ public class SteamServiceImpl implements SteamService {
                 historyPriceList.add(JSONObject.parseObject(jsonArray.getJSONObject(i).toJSONString(), SteamHistoryPrice.class));
             }
         } else {// redis缓存中不存在数据，从数据库中获取数据
-            historyPriceList = steamHistoryPriceMapper.selectByAppidAndType(appid, type);
+            historyPriceList = steamHistoryPriceMapper.selectByAppidAndType(appid, typeStr);
             if (historyPriceList.size() != 0) {
                 // 将获取的数据放入redis缓存中
                 int difftime = 60 * 60; // 如果获取时间差失败则默认保存1小时
@@ -500,4 +571,27 @@ public class SteamServiceImpl implements SteamService {
         historyPriceDTO.setPrice(prices);
         return historyPriceDTO;
     }
+
+    @Override
+    public boolean isExist(Integer appid) {
+        List<String> types = SteamAppTypeEnum.listType();
+        types.remove("bundle");
+        types.remove("sub");
+        boolean flag = false;
+        for (String type : types) {
+            SteamAppInfo steamAppInfo = steamAppInfoMapper.selectByAppid(appid, type);
+            if (steamAppInfo != null) {
+                flag = true;
+                break;
+            }
+        }
+        if (steamSubBundleInfoMapper.selectByAppid(appid, "bundle") != null) {
+            flag = true;
+        }
+        if (steamSubBundleInfoMapper.selectByAppid(appid, "sub") != null) {
+            flag = true;
+        }
+        return flag;
+    }
+
 }

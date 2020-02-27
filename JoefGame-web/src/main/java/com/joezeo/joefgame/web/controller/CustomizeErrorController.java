@@ -1,5 +1,9 @@
 package com.joezeo.joefgame.web.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.joezeo.joefgame.common.dto.JsonResult;
+import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
+import com.joezeo.joefgame.common.exception.CustomizeException;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,6 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * 如果不定义此ErrorController
@@ -29,6 +35,25 @@ public class CustomizeErrorController implements ErrorController {
         // 需判断前端的请求类型是不是application/json
         String contentType = request.getContentType();
         HttpStatus status = getStatus(request);
+
+        if("application/json;charset=UTF-8".equals(contentType)) { // 如果以前后端分离的方式访问服务器
+            JsonResult result;
+            if (ex instanceof CustomizeException) {
+                result = JsonResult.errorOf((CustomizeException) ex);
+            } else { // 处理包括 ServiceException 在内的异常情况
+                ex.printStackTrace(); // 此处异常是系统异常，需打印异常信息排查错误
+                result = JsonResult.errorOf(CustomizeErrorCode.SERVER_ERROR);
+            }
+            response.setContentType("application/json");
+            response.setStatus(200);
+            response.setCharacterEncoding("utf-8");
+            try (PrintWriter writer = response.getWriter()) {
+                writer.write(JSON.toJSONString(result));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
 
         ModelAndView modelAndView = new ModelAndView("error");
         if (status.is4xxClientError()) {

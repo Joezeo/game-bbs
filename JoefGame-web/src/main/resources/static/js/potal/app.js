@@ -1,6 +1,14 @@
 var url = window.location.href.split("#")[0];
-var appid = url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf("?"));
-var type = url.substr(url.lastIndexOf("=") + 1);
+var appid = "0";
+if (url.lastIndexOf("?") != -1) {
+    appid = url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf("?"));
+} else {
+    appid = url.substring(url.lastIndexOf("/") + 1);
+}
+var type = "0";
+if (url.lastIndexOf("type=") != -1) {
+    type = url.substr(url.lastIndexOf("=") + 1);
+}
 var typeStr = '';
 var app = {};
 var loaded = false;
@@ -46,12 +54,14 @@ var vue = new Vue({
         },
         getApp: function () {
             var url = "/steam/getApp";
+            debugger;
             var params = {appid: appid, type: type};
             axios.post(url, params).then(function (result) {
                 var jsonResult = result.data;
                 if (jsonResult.success) {
                     vue.app = jsonResult.data;
-                    if (type != 7 && type!=5) {
+                    vue.type = vue.app.type;
+                    if (vue.type != 7 && vue.type != 5) {
                         vue.app.summary = vue.app.summary.replace("|", "<br>");
                     }
                     vue.loaded = true;

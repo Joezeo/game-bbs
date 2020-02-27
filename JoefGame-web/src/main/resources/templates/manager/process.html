@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>流程管理 - JOEF GAME</title>
-    <link rel="stylesheet" href="/css/manager.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/community.css">
+    <link rel="stylesheet" href="/css/manager.css">
 </head>
 <body>
 
 <!--导航栏-->
 <div th:replace="navigation :: nav"></div>
 
-<div id="panel">
+<div id="process">
 
     <div class="panel-left">
         <ul>
@@ -32,6 +32,106 @@
             </div>
             <hr>
             <div class="content">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <button @click="selectFile()" type="button" class="btn btn-primary pixel-btn-red"
+                                style="float:right;"><i
+                                class="glyphicon glyphicon-upload"></i> 上传流程定义文件
+                        </button>
+                        <form @change="uploadProcess()" id="process-upload-form" method="post" action=""
+                              enctype="multipart/form-data">
+                            <input type="file" class="form-control" id="process-upload-file" name="processBpmn"
+                                   style="display: none;" accept=".bpmn">
+                        </form>
+                        <br>
+                        <hr style="clear:both;">
+                        <div id="mymodal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">流程定义图片</h4>
+                                    </div>
+
+                                    <div class="modal-body" style="text-align: left;">
+                                        <img id="process-pic-img" alt="流程定义图片"
+                                             src="/imgs/loadding.gif">
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default model-close" data-dismiss="modal">关闭</button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+
+                        <div class="table-responsive">
+                            <table class="table  table-bordered">
+                                <thead>
+                                <tr>
+                                    <th width="30px;">#</th>
+                                    <th>流程名称</th>
+                                    <th>流程版本</th>
+                                    <th>流程KEY</th>
+                                    <th width="100px;">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="process_table_body" v-if="loadedProcess" v-cloak>
+                                <tr v-for="process,index in processes">
+                                    <td v-text="index+1"></td>
+                                    <td v-text="process.name"></td>
+                                    <td v-text="process.version"></td>
+                                    <td v-text="process.key"></td>
+                                    <td>
+                                        <button type="button" class="process-see" @click="viewProcessPic(process.id)">
+                                            <i class="glyphicon glyphicon-eye-open"></i></button>
+                                        <button type="button" class="process-delete" @click="deleteProcess(process.id,process.name)">
+                                            <i class="glyphicon glyphicon-remove"></i></button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                </tfoot>
+                            </table>
+                            <!--            分页条开始-->
+                            <div>
+                                <nav aria-label="Page navigation">
+                                    <template v-if="loadedProcess" v-cloak>
+                                        <ul class="pagination">
+                                            <li v-if="pagination.hasFirst">
+                                                <a @click="list(1)" aria-label="First">
+                                                    <span aria-hidden="true">&lt;&lt;</span>
+                                                </a>
+                                            </li>
+                                            <li v-if="pagination.hasPrevious">
+                                                <a @click="list(pagination.page-1)" aria-label="Previous">
+                                                    <span aria-hidden="true">&lt;</span>
+                                                </a>
+                                            </li>
+
+                                            <li v-for="page in pagination.pages"
+                                                :class="[page==pagination.page?'active':'']"><a
+                                                    @click="list(page)" v-text="page"></a></li>
+
+                                            <li v-if="pagination.hasNext">
+                                                <a @click="list(pagination.page+1)" aria-label="Next">
+                                                    <span aria-hidden="true">&gt;</span>
+                                                </a>
+                                            </li>
+                                            <li v-if="pagination.hasLast">
+                                                <a @click="list(pagination.totalPage)" aria-label="Last">
+                                                    <span aria-hidden="true">&gt;&gt;</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </template>
+                                </nav>
+                            </div>
+                            <!--            分页条结束-->
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -39,10 +139,11 @@
 </body>
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="/jquery/jquery-3.4.1.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <script src="/js/potal/search.js"></script>
 <script src="/js/potal/logout.js"></script>
 <script src="/js/manager/process.js"></script>
+<script src="/jquery/jquery-form/jquery-form.min.js"></script>
 </html>

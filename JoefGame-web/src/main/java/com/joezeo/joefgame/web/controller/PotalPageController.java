@@ -6,6 +6,7 @@ import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
 import com.joezeo.joefgame.common.exception.CustomizeException;
 import com.joezeo.joefgame.common.provider.GithubProvider;
 import com.joezeo.joefgame.dao.pojo.User;
+import com.joezeo.joefgame.potal.service.SteamService;
 import com.joezeo.joefgame.potal.service.TopicService;
 import com.joezeo.joefgame.potal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,10 @@ public class PotalPageController {
     @Autowired
     private UserService userService;
     @Autowired
-    TopicService topicService;
+    private TopicService topicService;
+    @Autowired
+    private SteamService steamService;
+
 
     @Value("${github.client.id}")
     private String clientId;
@@ -188,7 +192,10 @@ public class PotalPageController {
      *  指定appid的steam app页面
      */
     @GetMapping("/steam/app/{appid}")
-    public String htmApp(){
+    public String htmApp(@PathVariable("appid") Integer appid){
+        if(!steamService.isExist(appid)){ // 不存在抛异常
+            throw new CustomizeException(CustomizeErrorCode.APP_NOT_FOUND);
+        }
         return "potal/app";
     }
 

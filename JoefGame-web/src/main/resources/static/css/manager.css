@@ -25,7 +25,7 @@
 .panel-right{
     border: #999999 solid 1px;
     border-radius: 7px;
-    width: 1100px;
+    width: 1150px;
     height: 550px;
     margin-left: 300px;
     margin-top: 20px;
@@ -37,6 +37,7 @@
 }
 .panel-right .content{
     margin-left: 10px;
+    margin-right: 10px;
 }
 .panel-right .btn{
     width: 170px !important;
@@ -51,9 +52,36 @@
 .panel-right .show-zone{
     border: #efefef solid 1px;
     border-radius: 7px;
-    width: 700px;
+    width: 780px;
     height: 400px;
     margin-left: 20px;
     margin-top: 5px;
     box-sizing: border-box;
+}
+
+.pixel-btn-red{
+    background: #e7513b !important;
+    color: white !important;
+    border-radius: 7px !important;
+}
+.process-heading{
+    background: white !important;
+}
+.process-see{
+    width: 40px !important;
+    background: #0088ff !important;
+    color: white;
+    border-radius: 7px;
+}
+.process-delete{
+    width: 40px !important;
+    background: #e7513b !important;
+    color: white;
+    border-radius: 7px;
+    float: right;
+}
+.model-close{
+    background: #004c81 !important;
+    color: white !important;
+    border-radius: 7px;
 }
