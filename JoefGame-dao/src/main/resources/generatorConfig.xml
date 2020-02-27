@@ -35,5 +35,6 @@
         <table tableName="t_proxy_ip" domainObjectName="ProxyIP" ></table>
         <table tableName="t_topic_like_user" domainObjectName="TopicLikeUser" ></table>
         <table tableName="t_comment_like_user" domainObjectName="CommentLikeUser" ></table>
+        <table tableName="t_spider_failed_url" domainObjectName="SpiderFailedUrl" ></table>
     </context>
 </generatorConfiguration>

@@ -64,6 +64,12 @@
             <artifactId>okhttp</artifactId>
         </dependency>
 
+        <!-- UCloud sdk -->
+        <dependency>
+            <groupId>cn.ucloud.ufile</groupId>
+            <artifactId>ufile-client-java</artifactId>
+        </dependency>
+
         <!-- opencv -->
         <!-- 注意：scope为system会时依赖链断掉，即其他项目无法依赖此项目的jar包 -->
         <dependency>
@@ -72,17 +78,11 @@
             <version>4.2.0</version>
         </dependency>
 
-        <!-- UCloud sdk -->
-        <dependency>
-            <groupId>cn.ucloud.ufile</groupId>
-            <artifactId>ufile-client-java</artifactId>
-            <version>2.4.1</version>
-        </dependency>
-
         <!-- commons-io -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
+            <version>2.4</version>
         </dependency>
 
         <dependency>

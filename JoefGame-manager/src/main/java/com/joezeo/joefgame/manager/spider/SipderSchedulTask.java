@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -201,12 +202,11 @@ public class SipderSchedulTask {
     }
 
 
-    @Scheduled(cron = "0/30 * * * * ?")
+    @Scheduled(cron = "0/60 * * * * ?")
     public void restorePage() {
         // 判断游戏url
-        List<String> game = spiderComponent.gameFailUrl;
-        List<String> gameCopy = game.stream().collect(Collectors.toList());
-        game.removeAll(game);
+        Map<String, Integer> game = spiderComponent.gameFailMap;
+        List<String> gameCopy = game.keySet().stream().collect(Collectors.toList());
         if (gameCopy.size() != 0) {
             for (String url : gameCopy) {
                 System.out.println("再次爬取页面：" + url);
@@ -215,9 +215,8 @@ public class SipderSchedulTask {
         }
 
         // 判断捆绑包url
-        List<String> bundle = spiderComponent.gameFailUrl;
-        List<String> bundleCopy = bundle.stream().collect(Collectors.toList());
-        bundle.removeAll(bundle);
+        Map<String, Integer> bundle = spiderComponent.gameFailMap;
+        List<String> bundleCopy = bundle.keySet().stream().collect(Collectors.toList());
         if (bundleCopy.size() != 0) {
             for (String url : bundleCopy) {
                 System.out.println("再次爬取页面：" + url);
@@ -226,8 +225,8 @@ public class SipderSchedulTask {
         }
 
         // 判断软件url
-        List<String> software = spiderComponent.softwareFailUrl;
-        List<String> softwareCopy = software.stream().collect(Collectors.toList());
+        Map<String, Integer> software = spiderComponent.softwareFailMap;
+        List<String> softwareCopy = software.keySet().stream().collect(Collectors.toList());
         if (softwareCopy.size() != 0) {
             for (String url : softwareCopy) {
                 System.out.println("再次爬取页面：" + url);
@@ -236,9 +235,8 @@ public class SipderSchedulTask {
         }
 
         // 判断 dlc url
-        List<String> dlc = spiderComponent.dlcFailUrl;
-        List<String> dlcCopy = dlc.stream().collect(Collectors.toList());
-        dlc.removeAll(dlc);
+        Map<String, Integer> dlc = spiderComponent.dlcFailMap;
+        List<String> dlcCopy = dlc.keySet().stream().collect(Collectors.toList());
         if (dlcCopy.size() != 0) {
             for (String url : dlcCopy) {
                 System.out.println("再次爬取页面：" + url);
@@ -247,8 +245,8 @@ public class SipderSchedulTask {
         }
 
         // 判断试玩游戏url
-        List<String> demo = spiderComponent.demoFailUrl;
-        List<String> demoCopy = demo.stream().collect(Collectors.toList());
+        Map<String, Integer> demo = spiderComponent.demoFailMap;
+        List<String> demoCopy = demo.keySet().stream().collect(Collectors.toList());
         if (demoCopy.size() != 0) {
             for (String url : demoCopy) {
                 System.out.println("再次爬取页面：" + url);
@@ -257,9 +255,8 @@ public class SipderSchedulTask {
         }
 
         // 判断原声带url
-        List<String> sound = spiderComponent.soundFailUrl;
-        List<String> soundCopy = sound.stream().collect(Collectors.toList());
-        sound.removeAll(sound);
+        Map<String, Integer> sound = spiderComponent.soundFailMap;
+        List<String> soundCopy = sound.keySet().stream().collect(Collectors.toList());
         if (soundCopy.size() != 0) {
             for (String url : soundCopy) {
                 System.out.println("再次爬取页面：" + url);

@@ -234,7 +234,7 @@ public class SteamServiceImpl implements SteamService {
 
     private SteamAppDTO queryWithoutType(Integer appid) {
         SteamAppDTO appDTO;
-        List<Integer> typeIdxes = Arrays.asList(1, 2, 3, 4, 5);
+        List<Integer> typeIdxes = Arrays.asList(1, 2, 3, 4, 6);
 
         for (Integer typeIdx : typeIdxes) {
             appDTO = queryOthers(appid, typeIdx);
@@ -243,7 +243,7 @@ public class SteamServiceImpl implements SteamService {
             }
         }
 
-        typeIdxes = Arrays.asList(6,7);
+        typeIdxes = Arrays.asList(5,7);
         for (Integer typeIdx : typeIdxes) {
             appDTO = querySubOrBundle(appid, typeIdx);
             if(appDTO != null){
@@ -254,7 +254,6 @@ public class SteamServiceImpl implements SteamService {
         throw new CustomizeException(CustomizeErrorCode.APP_NOT_FOUND);
     }
 
-    @NotNull
     private SteamAppDTO querySubOrBundle(Integer appid, Integer type) {
         SteamAppDTO appDTO = new SteamAppDTO();
 
@@ -390,7 +389,7 @@ public class SteamServiceImpl implements SteamService {
 
     private HistoryPriceDTO queryPriceWithoutType(Integer appid) {
         HistoryPriceDTO historyPriceDTO;
-        List<Integer> typeIdxes = Arrays.asList(1, 2, 3, 4, 5);
+        List<Integer> typeIdxes = Arrays.asList(1, 2, 3, 4, 6);
 
         for (Integer typeIdx : typeIdxes) {
             historyPriceDTO = queryOthersPrice(appid, typeIdx);
@@ -399,7 +398,7 @@ public class SteamServiceImpl implements SteamService {
             }
         }
 
-        typeIdxes = Arrays.asList(6,7);
+        typeIdxes = Arrays.asList(5,7);
         for (Integer typeIdx : typeIdxes) {
             historyPriceDTO = querySubOrBundlePrice(appid, typeIdx);
             if(historyPriceDTO != null){
@@ -424,6 +423,9 @@ public class SteamServiceImpl implements SteamService {
             appInfo = JSONObject.parseObject(object.toJSONString(), SteamAppInfo.class);
         } else { // 如redis中不存在该app的信息，从数据库中查询，再放入到redis缓存中
             SteamAppInfo app = steamAppInfoMapper.selectByAppid(appid, typeStr);
+            if(app == null){
+                return null;
+            }
             int difftime = 60 * 60; // 如果获取时间差失败则默认保存1小时
             try {
                 // 获取现在时间与下一天凌晨4点的时间差，单位秒
@@ -510,8 +512,11 @@ public class SteamServiceImpl implements SteamService {
         } else {
             // redis缓存中没有则从数据库中查询
             // 由于礼包的dto比较复杂，这里获取的只是简单的信息，所以这里就不存入redis中了
-            // 由于querySub这个方法先于本方法执行，所以存储redis缓存就在querySub中执行了
+            // 由于querySubOrBundle这个方法先于本方法执行，所以存储redis缓存就在querySubOrBundle中执行了
             subInfo = steamSubBundleInfoMapper.selectByAppid(appid, typeStr);
+            if(subInfo == null){
+                return null;
+            }
         }
 
         // 获取该app的原价格

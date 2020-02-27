@@ -15,8 +15,8 @@
     <description>joefgame community project for Spring Boot</description>
     <packaging>pom</packaging>
     <modules>
-        <module>JoefGame-common</module>
         <module>JoefGame-dao</module>
+        <module>JoefGame-common</module>
         <module>JoefGame-potal</module>
         <module>JoefGame-manager</module>
         <module>JoefGame-web</module>
@@ -110,11 +110,11 @@
                 <version>5.22.0</version>
             </dependency>
 
-            <!-- commons-io -->
+            <!-- UCloud sdk -->
             <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>2.4</version>
+                <groupId>cn.ucloud.ufile</groupId>
+                <artifactId>ufile-client-java</artifactId>
+                <version>2.4.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
