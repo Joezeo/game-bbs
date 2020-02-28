@@ -19,13 +19,12 @@ var vue = new Vue({
     el: "#app",
     data: {appid, type, typeStr, app, loaded, prices, chartTitle},
     mounted: function () {
-        this.resolvAppType();
         this.getApp();
         this.getPrice();
     },
     methods: {
         resolvAppType: function () {
-            switch (Number.parseInt(type)) {
+            switch (Number.parseInt(this.type)) {
                 case 1:
                     this.typeStr = '游戏';
                     break;
@@ -65,6 +64,7 @@ var vue = new Vue({
                         vue.app.summary = vue.app.summary.replace("|", "<br>");
                     }
                     vue.loaded = true;
+                    vue.resolvAppType();
                 } else {
                     alert(jsonResult.message);
                 }

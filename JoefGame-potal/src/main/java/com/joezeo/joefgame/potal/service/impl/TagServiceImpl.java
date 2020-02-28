@@ -2,7 +2,9 @@ package com.joezeo.joefgame.potal.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.google.gson.JsonArray;
 import com.joezeo.joefgame.common.exception.ServiceException;
+import com.joezeo.joefgame.common.utils.TimeUtils;
 import com.joezeo.joefgame.dao.mapper.TagMapper;
 import com.joezeo.joefgame.dao.pojo.Tag;
 import com.joezeo.joefgame.dao.pojo.TagExample;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,21 +39,20 @@ public class TagServiceImpl implements TagService {
         // 先从redis中获取
         String key = "tag" + index.toString();
         if (redisUtil.hasKey(key)) {
-            List<Object> list = redisUtil.lGet(key, 0, -1);
-            tags = new ArrayList<>();
-            for (Object o : list) {
-                JSONArray jarray = (JSONArray) o;
-                Tag tag = JSON.parseObject(jarray.getJSONObject(1).toJSONString(), Tag.class);
-                tags.add(tag);
-            }
+            JSONArray json = (JSONArray) redisUtil.get(key);
+            tags = JSON.parseArray(json.toJSONString(), Tag.class);
         } else { // redis中没有数据再从mysql数据库中获取
             TagExample example = new TagExample();
             example.createCriteria().andCategoryEqualTo(index);
             tags = tagMapper.selectByExample(example);
             // 存入redis中
-            for (Tag tag : tags) { // 缓存一小时
-                redisUtil.lSet(key, tag, 60 * 60);
+            int diff = 60 * 60; // 如果获取时间差失败就存一个小时
+            try {
+                diff = TimeUtils.getDifftimeFromNextZero();
+            } catch (ParseException e) {
+                log.error("获取当前时间至第二天凌晨4点的时间差");
             }
+            redisUtil.set(key, tags, diff);
         }
         if (tags == null || tags.size() == 0) {
             // 没有数据，返回一个空的list

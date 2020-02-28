@@ -239,7 +239,18 @@ public class TopicServiceImpl implements TopicService {
                 throw new ServiceException("发布新帖子失败");
             }
         } else { // 进行更新帖子操作
+            // 获取贴子存储在UCloud的url地址
+            Topic memtopic = topicMapper.selectByPrimaryKey(topic.getId());
+            String url = memtopic.getDescription();
+            // 将帖子的内容从UCloud服务器更新
+            url = uCloudProvider.updateTopic(topic.getDescription(), "text/plan", url);
+
+            // 将之前redis的帖子缓存删除
+            String key = "topic-" + memtopic.getId();
+            redisUtil.del(key);
+
             topic.setGmtModify(System.currentTimeMillis());
+            topic.setDescription(url);
 
             int count = topicMapper.updateByPrimaryKeySelective(topic);
             if (count != 1) {
