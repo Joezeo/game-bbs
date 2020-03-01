@@ -477,11 +477,12 @@ public class SteamServiceImpl implements SteamService {
 
         List<String> times = new ArrayList<>();
         List<Integer> prices = new ArrayList<>();
-        for (int i = farTime; i <= preTime; i++) {
+        for (int i = farTime; i <= preTime; i = TimeUtils.dateAddOneDay(i)) {
             Integer price = priceMap.get(i);
             if (price == null) { // 该时间节点app没有降价，以原价展示
                 price = basePrice;
             }
+
             try {
                 times.add(TimeUtils.tansferInt(i)); // 把时间从20200215转换成2020-02-15
                 prices.add(price);

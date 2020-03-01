@@ -53,7 +53,6 @@ var vue = new Vue({
         },
         getApp: function () {
             var url = "/steam/getApp";
-            debugger;
             var params = {appid: appid, type: type};
             axios.post(url, params).then(function (result) {
                 var jsonResult = result.data;

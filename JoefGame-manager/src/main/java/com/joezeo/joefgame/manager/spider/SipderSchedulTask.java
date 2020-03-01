@@ -202,7 +202,7 @@ public class SipderSchedulTask {
     }
 
 
-    @Scheduled(cron = "0/60 * * * * ?")
+    @Scheduled(cron = "0 0/2 * * * ?")
     public void restorePage() {
         // 判断游戏url
         Map<String, Integer> game = spiderComponent.gameFailMap;
