@@ -376,3 +376,41 @@ a{
     font-family: "幼圆",sans-serif;
     font-weight: bold;
 }
+/*apps页面，价格样式*/
+.price-wrapper{
+    width: 21px;
+    float: right;
+    margin-right: 71px;
+    text-align: center;
+    display: block;
+}
+.special-price-wrapper{
+    width: 21px;
+    float: right;
+    margin-right: 22px;
+    text-align: center;
+    display: block;
+    position: relative;
+    bottom: 7px;
+}
+.special-price{
+    color: #fff;
+    background-color: #4c6a23;
+    line-height: 26px;
+    font-size: 18px;
+    float: right;
+    padding: 0 6px;
+    letter-spacing: 0px;
+    border-radius: 7px;
+}
+.origin-price{
+    width: 20px;
+    text-decoration: line-through;
+    color: #999999;
+    font-size: 14px;
+}
+.final-price{
+    width: 20px;
+    font-size: 14px;
+    margin-top: -5px;
+}

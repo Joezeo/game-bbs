@@ -49,6 +49,11 @@ var vue = new Vue({
             window.sessionStorage.removeItem("page");
             window.sessionStorage.removeItem("type");
             window.location.reload();
+        },
+        // 截除数字的小数位
+        fixedNum:function (num) {
+            var numStr = "" + num;
+            return numStr.split(".")[0];
         }
     }
 });

@@ -148,7 +148,7 @@ public class SipderSchedulTask {
                     subBundleInfo.setGmtModify(System.currentTimeMillis());
                     int idx = steamSubBundleInfoMapper.updateByAppidSelective(subBundleInfo);
                     if(idx != 1){
-                        log.error("修改特惠商品info的finalPrice失败");
+                        log.error("修改特惠商品["+ type +"]info的finalPrice失败");
                     }
                 } else {
                     List<String> types = SteamAppTypeEnum.listType();
@@ -159,7 +159,7 @@ public class SipderSchedulTask {
                             steamAppInfo.setGmtModify(System.currentTimeMillis());
                             int idx = steamAppInfoMapper.updateByAppidSelective(steamAppInfo, s);
                             if(idx != 1){
-                                log.error("修改特惠商品info的finalPrice失败");
+                                log.error("修改特惠商品[" + s + "]info的finalPrice失败");
                             }
                             break;
                         }
