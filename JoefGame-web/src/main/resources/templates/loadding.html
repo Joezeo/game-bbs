@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>正在检查浏览器状态,请稍候...</title>
@@ -141,13 +141,14 @@
 <script src="/jquery/jquery-3.4.1.js"></script>
 <script>
     $(function () {
+        var uri = window.location.href.split("=")[1];
         setTimeout(function () {
             $.post({
                 url: "/authAccess",
                 dataType: 'json',
                 success:function (jsonResult) {
                     if(jsonResult.success){
-                        window.location.href = "/";
+                        window.location.href = uri;
                     }
                 }
             });

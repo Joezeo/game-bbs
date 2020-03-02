@@ -31,7 +31,7 @@ public class SpiderAccessControlIntercepter implements HandlerInterceptor {
             if (hasAuth) {
                 return true;
             } else {
-                response.sendRedirect("/loadding");
+                response.sendRedirect("/loadding?uri=" + request.getRequestURI());
                 return false;
             }
         }

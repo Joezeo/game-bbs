@@ -29,7 +29,7 @@ var vue = new Vue({
             var url = "/steam/list";
             var params = {
                 page: page,
-                size: 20, // 默认每页展示10条帖子
+                size: 30, // 默认每页展示30款软件
                 appType: type
             };
             axios.post(url, params).then(function (response) {
