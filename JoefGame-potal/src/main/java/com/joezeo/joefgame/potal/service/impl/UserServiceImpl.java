@@ -105,6 +105,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean checkEmail(String targetEmail) {
+        UserExample example = new UserExample();
+        example.createCriteria().andEmailEqualTo(targetEmail);
+        List<User> users = userMapper.selectByExample(example);
+        if(users.size() != 0){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public User queryUserByToken(String token) {
         // 前方已经保证token！=null 或空，不必再做判断
         UserExample userExample = new UserExample();

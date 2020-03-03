@@ -31,7 +31,7 @@
                         <label for="authcode">请输入验证码</label>
                         <input v-model="authCode" type="text" class="form-control" id="authcode" placeholder="点击 Go!,获取确认邮件">
                         <span class="input-group-btn">
-                        <button class="btn btn-default getMail-btn" type="button">Go!</button></span>
+                        <button @click="getAuthcode(email)" class="btn btn-default getMail-btn" type="button">Go!</button></span>
                     </div><!-- /input-group -->
                     <br>
                     <div class="form-group">

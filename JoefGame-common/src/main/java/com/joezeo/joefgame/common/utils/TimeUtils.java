@@ -9,6 +9,15 @@ public class TimeUtils {
     }
 
     /**
+     * 获取当前日期的字符串 格式 yyyy-MM-dd HH:mm:ss
+     * @return
+     */
+    public static String getCurrentDateStr(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return format.format(new Date(System.currentTimeMillis()));
+    }
+
+    /**
      * 获取当天零点的时间戳
      */
     public static long getTimestampAtZero() throws ParseException {

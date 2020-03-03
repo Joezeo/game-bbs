@@ -29,6 +29,18 @@ var vue = new Vue({
                     alert(jsonResult.message);
                 }
             });
+        },
+        getAuthcode:function (email) {
+            var url = "/getAuthcode";
+            var params = {email: email};
+            axios.post(url, params).then(function (result) {
+                var jsonResult = result.data;
+                if(jsonResult.success){
+                    alert("验证码已发送至你的邮箱!")
+                } else {
+                    alert(jsonResult.message)
+                }
+            })
         }
 
     }

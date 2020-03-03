@@ -12,4 +12,6 @@ public interface UserService {
     void signup(User user);
 
     void login(User user);
+
+    boolean checkEmail(String targetEmail);
 }

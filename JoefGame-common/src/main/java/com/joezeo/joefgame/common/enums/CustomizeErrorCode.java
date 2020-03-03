@@ -32,7 +32,8 @@ public enum CustomizeErrorCode implements IExceptionErrorCode {
     DEPLOY_PROCESS_ERROR(2025, "部署流程文件错误，请稍后重试"),
     DELETE_PROCESS_ERROR(2026, "删除流程定义失败，请稍后重试"),
     GET_PROCESS_PIC_FALIED(2027, "获取流程定义图片失败，请稍后重试"),
-    APP_NOT_FOUND(2028, "您查询的App不存在，请换一个试试");
+    APP_NOT_FOUND(2028, "您查询的App不存在，请换一个试试"),
+    EMAIL_HAS_EXISTED(2029, "该邮箱已被注册使用，请更换后使用或直接登录");
 
     private Integer code;
     private String message;
