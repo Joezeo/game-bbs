@@ -1,6 +1,5 @@
 package com.joezeo.joefgame.potal.shiro;
 
-import com.joezeo.joefgame.common.utils.PasswordHelper;
 import com.joezeo.joefgame.dao.mapper.UserMapper;
 import com.joezeo.joefgame.dao.mapper.UserRoleMapper;
 import com.joezeo.joefgame.dao.pojo.Role;
@@ -15,7 +14,6 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,18 +22,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-public class UserShiroRealm extends AuthorizingRealm {
+public class GithubShiroRealm extends AuthorizingRealm {
 
     @Autowired
     private UserMapper userMapper;
     @Autowired
     private UserRoleMapper userRoleMapper;
-    @Autowired
-    private PasswordHelper passwordHelper;
 
     /**
-     * 进行授权
+     * 授权
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
@@ -53,38 +48,29 @@ public class UserShiroRealm extends AuthorizingRealm {
     }
 
     /**
-     * 进行认证
+     * 认证
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+        // 以Github三方登录方式进行登录验证
+        // 走一下表面过场就行，直接验证通过
         String account = (String) token.getPrincipal();
-        if("email".equals(account)){
+        if(!"github".equals(account)){
             return null;
         }
 
-        // 以邮箱/密码方式进行登录认证
+        String githubAccoutId = String.valueOf((char[]) token.getCredentials());
         UserExample example = new UserExample();
-        example.createCriteria().andEmailEqualTo(account);
-        List<User> users = userMapper.selectByExample(example);
-        if(users == null || users.size()!=1){
-            return null;
-        }
-        User user = users.get(0);
+        example.createCriteria().andGithubAccountIdEqualTo(githubAccoutId);
+        User user = userMapper.selectByExample(example).get(0);
 
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(user, userDTO);
-
         // 查询该用户的权限
         List<Role> roles = userRoleMapper.selectRolesById(user.getId());
         List<String> names = roles.stream().map(role -> role.getName()).collect(Collectors.toList());
         userDTO.setRoles(names);
-
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(
-                userDTO,
-                user.getPassword(),
-                ByteSource.Util.bytes(user.getSalt()),
-                getName());
-
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userDTO, githubAccoutId, getName());
         return info;
     }
 }

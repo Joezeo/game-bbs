@@ -6,6 +6,6 @@ import org.activiti.engine.delegate.ExecutionListener;
 public class AuthPassListener implements ExecutionListener {
     @Override
     public void notify(DelegateExecution execution) throws Exception {
-        System.out.println("验证成功");
+        // TODO: 验证码成功逻辑
     }
 }

@@ -2,6 +2,7 @@ var email = "";
 var password = "";
 var rememberMe = false;
 
+axios.defaults.withCredentials = true;
 var vue = new Vue({
     el:"#login",
     data:{email, password, rememberMe},

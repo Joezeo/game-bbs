@@ -13,7 +13,6 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
-import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,19 +40,15 @@ public class AuthorizeController {
 
     @PostMapping("login")
     @ResponseBody
-    public JsonResult<?> login(@RequestBody UserDTO userDTO, HttpServletResponse response){
+    public JsonResult<?> login(@RequestBody UserDTO userDTO,
+                               HttpSession session){
         User user = new User();
         BeanUtils.copyProperties(userDTO, user);
 
-        String token = UUID.randomUUID().toString();
-        user.setToken(token);
-        userService.login(user);
+        userService.login(user, userDTO.getRememberMe());
 
-        Cookie cookie = new Cookie("token", token);
-        if(userDTO.getRememberMe()){
-            cookie.setMaxAge(60 * 60 * 24 * 7); // 存储7天登录信息
-        }
-        response.addCookie(cookie);
+        userDTO = userService.queryUserByEmail(user.getEmail());
+        session.setAttribute("user", userDTO);
 
         return JsonResult.okOf(null);
     }
@@ -62,14 +57,8 @@ public class AuthorizeController {
     @ResponseBody
     public JsonResult<?> logout(HttpServletResponse response,
                          HttpSession session){
-        // 移除cookie
-        Cookie token = new Cookie("token", null);
-        response.addCookie(token);
-        token.setMaxAge(0);
-        token.setPath("/");
-
-        // 移除session
-        session.removeAttribute("user");
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        userService.logout();
 
         return JsonResult.okOf(null);
     }
@@ -92,12 +81,8 @@ public class AuthorizeController {
         User user =new User();
         BeanUtils.copyProperties(userDTO, user);
 
-        String token = UUID.randomUUID().toString();
-        user.setToken(token);
-
         userService.signup(user);
 
-        response.addCookie(new Cookie("token", token));
         return JsonResult.okOf(null);
     }
 

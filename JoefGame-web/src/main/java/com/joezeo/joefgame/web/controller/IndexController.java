@@ -2,6 +2,7 @@ package com.joezeo.joefgame.web.controller;
 
 import com.joezeo.joefgame.common.dto.JsonResult;
 import com.joezeo.joefgame.dao.pojo.User;
+import com.joezeo.joefgame.potal.dto.UserDTO;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +15,7 @@ public class IndexController {
     @PostMapping("/getUser")
     @ResponseBody
     public JsonResult<User> getUser(HttpSession session) {
-        User user = (User) session.getAttribute("user");
+        UserDTO user = (UserDTO) session.getAttribute("user");
 
         return JsonResult.okOf(user);
     }

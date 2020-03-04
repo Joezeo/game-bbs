@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joezeo.joefgame.dao.mapper.UserRoleMapper">
+    <select id="selectRolesByEmail" parameterType="String" resultType="Role">
+        select r.* from t_role r
+        join t_user_role ur
+        on  r.id = ur.roleid
+        join t_user u
+        on ur.userid = u.id
+        where u.email = #{email}
+    </select>
+
+    <select id="selectRolesById" parameterType="Long" resultType="Role">
+        select r.* from t_role r
+        join t_user_role ur
+        on  r.id = ur.roleid
+        join t_user u
+        on ur.userid = u.id
+        where u.id = #{userid}
+    </select>
+</mapper>

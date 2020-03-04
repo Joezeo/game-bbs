@@ -5,7 +5,7 @@ import com.joezeo.joefgame.common.dto.GithubUser;
 import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
 import com.joezeo.joefgame.common.exception.CustomizeException;
 import com.joezeo.joefgame.common.provider.GithubProvider;
-import com.joezeo.joefgame.dao.pojo.User;
+import com.joezeo.joefgame.potal.dto.UserDTO;
 import com.joezeo.joefgame.potal.service.SteamService;
 import com.joezeo.joefgame.potal.service.TopicService;
 import com.joezeo.joefgame.potal.service.UserService;
@@ -17,10 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.UUID;
 
 @Controller
 public class PotalPageController {
@@ -59,8 +56,7 @@ public class PotalPageController {
      */
     @GetMapping("/callback")
     public String callback(@RequestParam("code") String code,
-                           @RequestParam("state") String state,
-                           HttpServletResponse response) {
+                           @RequestParam("state") String state) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
         accessTokenDTO.setClient_secret(clientSecret);
@@ -72,20 +68,9 @@ public class PotalPageController {
         GithubUser githubUser = githubProvider.getGithubUser(accessToken);
 
         if (githubUser != null) {
-            User user = new User();
-            // 生成token令牌，用于判断用户是否已登录
-            String token = UUID.randomUUID().toString();
-            user.setToken(token);
-            user.setName(githubUser.getName());
-            user.setGithubAccountId(githubUser.getId());
-            user.setBio(githubUser.getBio());
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModify(user.getGmtCreate());
-
             // 先进行检查数据库中是否已经有该条github用户数据，如果有则更新信息，没有则存入数据
-            userService.createOrUpadate(user);
+            userService.createOrUpadate(githubUser);
 
-            response.addCookie(new Cookie("token", token));
             return "redirect:/";
         } else {
             return "redirect:/";
@@ -97,7 +82,7 @@ public class PotalPageController {
      */
     @GetMapping("/")
     public String htmIndex(HttpSession session) {
-        User user = (User) session.getAttribute("user");
+        UserDTO user = (UserDTO) session.getAttribute("user");
         if (user == null) {
             return "index";
         } else {
@@ -158,7 +143,7 @@ public class PotalPageController {
      */
     @GetMapping("/profile/{action}")
     public String profile(HttpSession session) {
-        User user = (User) session.getAttribute("user");
+        UserDTO user = (UserDTO) session.getAttribute("user");
         if (user == null) {
             throw new CustomizeException(CustomizeErrorCode.USER_NOT_LOGIN);
         }

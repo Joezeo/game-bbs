@@ -1,6 +1,7 @@
 package com.joezeo.joefgame.common.utils;
 
 import com.joezeo.joefgame.dao.pojo.User;
+import lombok.Data;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -8,11 +9,12 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
+@Data
 public class PasswordHelper {
     @Value("${shiro.hash.algorithm.name}")
-    public String algorithm;
+    private String algorithm;
     @Value("${shiro.hash.iteration}")
-    public Integer iteration;
+    private Integer iteration;
 
     public void encryptPassword(User user){
         user.setSalt(UUID.randomUUID().toString());

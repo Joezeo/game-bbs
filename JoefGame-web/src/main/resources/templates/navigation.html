@@ -65,7 +65,7 @@
                             <li><a href="/publish">发帖子</a></li>
                             <li><a href="/write">发文章</a></li>
                             <hr>
-                            <th:block th:if="${session.user.id == 1}">
+                            <th:block th:if="${#strings.containsIgnoreCase(session.user.roles,'admin')}">
                                 <li>管理员</li>
                                 <li><a href="/manager/panel">后台管理系统</a></li>
                             </th:block>
