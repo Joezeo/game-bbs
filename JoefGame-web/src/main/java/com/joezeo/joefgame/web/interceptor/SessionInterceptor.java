@@ -21,16 +21,28 @@ public class SessionInterceptor implements HandlerInterceptor {
 
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private UserService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         UserDTO userDTO = (UserDTO) request.getSession().getAttribute("user");
-        if(userDTO == null){
+        if (userDTO == null) {
             Subject subject = SecurityUtils.getSubject();
-            UserDTO user = (UserDTO) subject.getPrincipal();
-            request.getSession().setAttribute("user", user);
+
+            if (subject.isRemembered()) {
+                UserDTO user = (UserDTO) subject.getPrincipal();
+                String email = user.getEmail();
+                if (email != null && !"".equals(email)) {
+                    user = userService.queryUserByEmail(email);
+                } else {
+                    String githubAccounid = user.getGithubAccountId();
+                    user = userService.queryByAccountid(githubAccounid);
+                }
+                request.getSession().setAttribute("user", user);
+            }
         }
-        if(userDTO != null){
+        if (userDTO != null) {
             // 加载该用户未阅读消息的数量
             int unreadCount = notificationService.countUnread(userDTO.getId());
             request.getSession().setAttribute("unreadCount", unreadCount);
