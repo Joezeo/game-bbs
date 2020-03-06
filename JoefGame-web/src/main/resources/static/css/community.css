@@ -414,3 +414,41 @@ a{
     font-size: 14px;
     margin-top: -5px;
 }
+
+.personal{
+    font-size: 15px;
+}
+.list-group{
+    margin-top: 60px !important;
+}
+.avatar{
+    width: 64px;
+    height: 64px;
+}
+.panel-heading{
+    background: white !important;
+    font-weight: bold !important;
+}
+.btn-blue-white{
+    background: #004c81;
+    color: white;
+    border-radius: 20px;
+    width: 90px;
+    height: 30px;
+    float: right;
+}
+.login-with-logo{
+    width: 32px;
+    height: 32px;
+    border-radius: 32px;
+}
+.personal label{
+    float: left !important;
+    margin-left: 6px;
+    margin-top: 4px;
+}
+.personal .form-control{
+    width: 70% !important;
+    margin-left: 120px !important;
+    border-radius: 20px;
+}

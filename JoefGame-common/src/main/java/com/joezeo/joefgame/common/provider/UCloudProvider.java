@@ -17,11 +17,12 @@ import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Component
 @Slf4j
-public class UCloudProvider {
+public class UCloudProvider{
     @Autowired
     private ObjectAuthorization objectAuthorization;
 

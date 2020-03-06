@@ -78,8 +78,10 @@ public class ShiroConfig {
 
         filterChainDefinitionMap.put("/*", "anon");
         filterChainDefinitionMap.put("/home", "user");
+        filterChainDefinitionMap.put("/personal", "user");
         filterChainDefinitionMap.put("/profile/*", "user");
         filterChainDefinitionMap.put("/publish", "user");
+        filterChainDefinitionMap.put("/manager/*", "authc");
         filterChainDefinitionMap.put("/manager/*", "roles[admin]"); // 进入管理页面需要角色admin验证
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;

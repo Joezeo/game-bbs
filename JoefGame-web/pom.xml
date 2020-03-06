@@ -15,13 +15,13 @@
     <description>JoefGame-web,the child moudle for Spring Boot project JoefGame</description>
 
     <dependencies>
-        <!--Springboot 热部署 ctr+F9（MakeProject）进行触发重启服务-->
+        <!--        Springboot 热部署 ctr+F9（MakeProject）进行触发重启服务-->
         <!--        与System.loadLibaray()方法冲突-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-devtools</artifactId>-->
-        <!--            <scope>provided</scope>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>com.joezeo.joefgame</groupId>

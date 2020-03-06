@@ -4,7 +4,6 @@ import com.joezeo.joefgame.common.dto.JsonResult;
 import com.joezeo.joefgame.common.dto.PaginationDTO;
 import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
 import com.joezeo.joefgame.common.exception.CustomizeException;
-import com.joezeo.joefgame.dao.pojo.User;
 import com.joezeo.joefgame.potal.dto.NotificationDTO;
 import com.joezeo.joefgame.potal.dto.TopicDTO;
 import com.joezeo.joefgame.potal.dto.UserDTO;
@@ -23,9 +22,15 @@ public class ProfileController {
 
     @Autowired
     private TopicService topicService;
-
     @Autowired
     private NotificationService notificationService;
+
+    @PostMapping("/profile/getPersonal")
+    @ResponseBody
+    public JsonResult<UserDTO> getPersonal(HttpSession session){
+        UserDTO userDTO = (UserDTO) session.getAttribute("user");
+        return JsonResult.okOf(userDTO);
+    }
 
     @PostMapping("/profile/getTopics")
     @ResponseBody

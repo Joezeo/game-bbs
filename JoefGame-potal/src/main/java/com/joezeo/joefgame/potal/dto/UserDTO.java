@@ -16,7 +16,7 @@ public class UserDTO implements Serializable {
     private String email;
     private String password;
     private String avatarUrl;
-    private Integer authCode; // 用于邮箱验证的验证码
+    private String authCode; // 用于邮箱验证的验证码
     private Boolean rememberMe; // 是否记住登录状态（7天）
 
     private List<String> roles;

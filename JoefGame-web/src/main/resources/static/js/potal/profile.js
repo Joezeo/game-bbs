@@ -4,19 +4,25 @@ var sectionName = "";
 var pagination = {};
 var loaded = false;
 var unreadCount = 0;
+var user = {};
+var loadedUser = false;
 
 var vue = new Vue({
     el: "#profile",
     data: {
-        section: section,
+        section,
         sectionName,
         pagination,
         loaded,
-        unreadCount
+        unreadCount,
+        user, loadedUser
     },
     mounted: function () {
         this.removeStorage();
         switch (this.section) {
+            case "personal":
+                this.sectionName = "个人资料";
+                break;
             case "topics":
                 this.sectionName = "我的帖子";
                 break;
@@ -41,6 +47,9 @@ var vue = new Vue({
                 size: 10 // 默认显示为10
             };
             switch (section) {
+                case "personal":
+                    url = "/profile/getPersonal";
+                    break;
                 case "topics":
                     url = "/profile/getTopics";
                     break;
@@ -52,8 +61,15 @@ var vue = new Vue({
             axios.post(url, params).then(function (response) {
                 var jsonResult = response.data;
                 if (jsonResult.success) {
-                    vue.pagination = jsonResult.data;
-                    vue.loaded = true;
+                    if(vue.section == "personal"){
+                        vue.user = jsonResult.data;
+                        vue.loadedUser = true;
+                    } else {
+                        vue.pagination = jsonResult.data;
+                        vue.loaded = true;
+                    }
+                } else {
+                    alert(jsonResult.message);
                 }
             });
         },

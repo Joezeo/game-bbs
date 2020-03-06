@@ -6,11 +6,12 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @Component
 @Data
-public class PasswordHelper {
+public class PasswordHelper{
     @Value("${shiro.hash.algorithm.name}")
     private String algorithm;
     @Value("${shiro.hash.iteration}")

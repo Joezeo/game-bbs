@@ -76,7 +76,7 @@ public class AuthorizeController {
 
         String authcode = (String) runtimeService.getVariable(task.getExecutionId(), "authcode");
 
-        if (authcode.equals(userDTO.getAuthCode().toString())) { // 验证成功
+        if (authcode.equals(userDTO.getAuthCode())) { // 验证成功
             // 设置流程变量-密码、用户名，以便在Listener中使用
             runtimeService.setVariable(task.getExecutionId(), "password", userDTO.getPassword());
             runtimeService.setVariable(task.getExecutionId(), "name", userDTO.getName());

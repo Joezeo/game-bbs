@@ -1,16 +1,16 @@
 package com.joezeo.joefgame.potal.activiti;
 
+import com.joezeo.joefgame.common.utils.SpringGetter;
 import com.joezeo.joefgame.dao.pojo.User;
 import com.joezeo.joefgame.potal.service.UserService;
+import com.joezeo.joefgame.potal.service.impl.UserServiceImpl;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class AuthPassListener implements ExecutionListener {
 
-    @Autowired
+    private static final long serialVersionUID = -8762771418466969185L;
+
     private UserService userService;
 
     @Override
@@ -21,6 +21,7 @@ public class AuthPassListener implements ExecutionListener {
         String email = (String) execution.getVariable("target");
         String password = (String) execution.getVariable("password");
 
+        userService = SpringGetter.getBean(UserServiceImpl.class).get();
         User user =new User();
         user.setName(name);
         user.setPassword(password);
