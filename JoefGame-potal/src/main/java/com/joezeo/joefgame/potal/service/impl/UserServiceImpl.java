@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -64,7 +65,7 @@ public class UserServiceImpl implements UserService {
         if(memUser == null || memUser.size() == 0){ // 执行插入操作,即注册操作
             // 随机生成头像
             InputStream avatar = new AvatarGenerator().getARandomAvatar();
-            String avatarUrl = uCloudProvider.uploadAvatar(avatar, "image/jpeg", "avatar-" + user.getGithubAccountId() + ".jpg");
+            String avatarUrl = uCloudProvider.uploadAvatar(avatar, "image/jpeg", "avatar-" + UUID.randomUUID().toString() + ".jpg");
             user.setAvatarUrl(avatarUrl);
 
             int count = userMapper.insert(user);
@@ -97,13 +98,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void signup(User user) {
-        passwordHelper.encryptPassword(user);
+        passwordHelper.encryptPassword(user); // 密码加密
         user.setGmtCreate(System.currentTimeMillis());
         user.setGmtModify(user.getGmtCreate());
 
         // 随机生成头像
         InputStream avatar = new AvatarGenerator().getARandomAvatar();
-        String avatarUrl = uCloudProvider.uploadAvatar(avatar, "image/jpeg", "avatar-" + user.getGithubAccountId() + ".jpg");
+        String avatarUrl = uCloudProvider.uploadAvatar(avatar, "image/jpeg", "avatar-" + UUID.randomUUID().toString() + ".jpg");
         user.setAvatarUrl(avatarUrl);
 
         int count = userMapper.insertSelective(user);

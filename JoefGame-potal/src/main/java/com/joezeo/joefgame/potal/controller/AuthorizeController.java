@@ -5,7 +5,6 @@ import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
 import com.joezeo.joefgame.common.utils.AuthUtils;
 import com.joezeo.joefgame.common.utils.TimeUtils;
 import com.joezeo.joefgame.dao.pojo.User;
-import com.joezeo.joefgame.potal.activiti.AuthFailedListener;
 import com.joezeo.joefgame.potal.activiti.AuthPassListener;
 import com.joezeo.joefgame.potal.dto.UserDTO;
 import com.joezeo.joefgame.potal.service.UserService;
@@ -24,6 +23,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -41,7 +41,7 @@ public class AuthorizeController {
     @PostMapping("login")
     @ResponseBody
     public JsonResult<?> login(@RequestBody UserDTO userDTO,
-                               HttpSession session){
+                               HttpSession session) {
         User user = new User();
         BeanUtils.copyProperties(userDTO, user);
 
@@ -56,7 +56,7 @@ public class AuthorizeController {
     @PostMapping("/logout")
     @ResponseBody
     public JsonResult<?> logout(HttpServletResponse response,
-                         HttpSession session){
+                                HttpSession session) {
         UserDTO user = (UserDTO) session.getAttribute("user");
         userService.logout();
 
@@ -65,44 +65,49 @@ public class AuthorizeController {
 
     @PostMapping("/signup")
     @ResponseBody
-    public JsonResult signup(@RequestBody UserDTO userDTO, HttpServletResponse response){
+    public JsonResult signup(@RequestBody UserDTO userDTO, HttpServletResponse response) {
         // 验证验证码
         Task task = taskService.createTaskQuery().taskAssignee("system")
                 .processVariableValueEquals("target", userDTO.getEmail()).singleResult();
-        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
-        String authcode = (String) runtimeService.getVariable(processInstance.getId(), "authcode");
-        if(authcode.equals(userDTO.getAuthCode())){ // 验证成功
-            runtimeService.setVariable(processInstance.getId(), "flag", "true");
-        } else { // 验证失败
-            runtimeService.setVariable(processInstance.getId(), "flag", "false");
+        if (task == null) {
+            // 验证时间超过5分钟，验证码失效
+            return JsonResult.errorOf(CustomizeErrorCode.AUTHCODE_TIME_OUT);
         }
-        taskService.complete(task.getId());
 
-        User user =new User();
-        BeanUtils.copyProperties(userDTO, user);
+        String authcode = (String) runtimeService.getVariable(task.getExecutionId(), "authcode");
 
-        userService.signup(user);
-
-        return JsonResult.okOf(null);
-    }
-
-    @PostMapping("/authAccess")
-    @ResponseBody
-    public JsonResult authAccess(HttpServletResponse response){
-        Cookie access = new Cookie("__access", UUID.randomUUID().toString());
-        access.setMaxAge(60 * 60 * 24); // cookie储存一天
-        response.addCookie(access);
-        return JsonResult.okOf(null);
+        if (authcode.equals(userDTO.getAuthCode().toString())) { // 验证成功
+            // 设置流程变量-密码、用户名，以便在Listener中使用
+            runtimeService.setVariable(task.getExecutionId(), "password", userDTO.getPassword());
+            runtimeService.setVariable(task.getExecutionId(), "name", userDTO.getName());
+            taskService.complete(task.getId());
+            // 验证码验证任务完成，执行监听器 AuthPassListener 进行注册操作
+            return JsonResult.okOf(null);
+        } else {
+            return JsonResult.errorOf(CustomizeErrorCode.SIGNUP_WRONG_AUTHCODE);
+        }
     }
 
     @PostMapping("getAuthcode")
     @ResponseBody
-    public JsonResult<?> getAuthcode(@RequestBody UserDTO userDTO){
+    public JsonResult<?> getAuthcode(@RequestBody UserDTO userDTO) {
         String targetEmail = userDTO.getEmail();
-        //TODO: 检查email是否重复
+
+        // 检查Email是否重复
         boolean isExist = userService.checkEmail(targetEmail);
-        if(isExist){
+        if (isExist) {
             return JsonResult.errorOf(CustomizeErrorCode.EMAIL_HAS_EXISTED);
+        }
+
+        // 检查是否存在同一个邮箱的注册流程
+        List<ProcessInstance> processes = runtimeService.createProcessInstanceQuery()
+                .processDefinitionKey("signup_auth_mail_process").list();
+        for (ProcessInstance process : processes) {
+            String email = (String) runtimeService.getVariable(process.getId(), "target");
+            if (email.equals(targetEmail)) {
+                runtimeService.deleteProcessInstance(process.getId(), "验证码未过有效期，用户重复获取验证码，流程重复");
+                break;
+            }
         }
 
         // 获取验证码
@@ -114,11 +119,17 @@ public class AuthorizeController {
         varabies.put("authcode", authCode);
         varabies.put("date", TimeUtils.getCurrentDateStr());
         varabies.put("authPassListener", new AuthPassListener());
-        varabies.put("authFailedListener", new AuthFailedListener());
-
         // 启动流程
         runtimeService.startProcessInstanceByKey("signup_auth_mail_process", varabies);
+        return JsonResult.okOf(null);
+    }
 
+    @PostMapping("/authAccess")
+    @ResponseBody
+    public JsonResult authAccess(HttpServletResponse response) {
+        Cookie access = new Cookie("__access", UUID.randomUUID().toString());
+        access.setMaxAge(60 * 60 * 24); // cookie储存一天
+        response.addCookie(access);
         return JsonResult.okOf(null);
     }
 }

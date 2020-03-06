@@ -96,7 +96,7 @@ public class ShiroConfig {
     @Bean
     public CookieRememberMeManager cookieRememberMeManager() {
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
-        SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
+        SimpleCookie simpleCookie = new SimpleCookie("__token");
         simpleCookie.setMaxAge(60 * 60 * 24 * 7); // cookie默认保存7天
         cookieRememberMeManager.setCookie(simpleCookie);
         // 由于每次关闭重启应用都会重新生成一个cipherKey，这会导致rememberMe功能失效，故设置一个固定值

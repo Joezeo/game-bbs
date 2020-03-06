@@ -13,7 +13,7 @@ body{
     font-weight: bold;
 }
 
-.gallery img{
+.gallery .pic-view{
     margin-left: 25.5%;
     margin-top: -7px;
     width: 700px;
