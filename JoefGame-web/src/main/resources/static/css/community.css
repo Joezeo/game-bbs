@@ -134,7 +134,13 @@ a{
 }
 
 .profile .section{
-    margin-top: 20px;
+    position: fixed;
+    top: 50px;
+    left: 0;
+    width: 160px;
+    padding-top: 60px;
+    box-sizing: border-box;
+    text-align: right;
 }
 
 .community-menu {
@@ -451,4 +457,8 @@ a{
     width: 70% !important;
     margin-left: 120px !important;
     border-radius: 20px;
+}
+.profile .main-zone{
+    margin-left: 70px !important;
+    margin-right: 70px !important;
 }

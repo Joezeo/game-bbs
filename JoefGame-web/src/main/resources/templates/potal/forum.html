@@ -14,7 +14,7 @@
 
 <div class="container-fluid main" id="forum">
     <div class="row">
-        <div class="col-lg-9 .col-md-12 .col-sm-12 .col-xs-12">
+        <div class="col-lg-12 .col-md-12 .col-sm-12 .col-xs-12">
             <div class="row top-row">
                 <div class="col-lg-1 .col-md-12 .col-sm-12 .col-xs-12">
                     <h2><img src="/imgs/find.png" alt="" style="margin-top: -10px;"></h2>
@@ -89,27 +89,6 @@
             </div>
             <!--            分页条结束-->
 
-        </div>
-
-        <!--        右侧信息条-->
-        <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
-            <div class="panel panel-default" style="margin-top: 30px">
-                <div class="panel-body" v-if="loadedUser" v-cloak>
-                    <img :src="user.avatarUrl" alt="Avatar"
-                         style="width: 48px;height: 48px;border-radius: 6px;">
-                    <a href="#" style="color: black;font-family: '幼圆',sans-serif;font-size: 16px">
-                        <span v-text="user.name"></span>
-                    </a>
-                    <hr>
-                    <h3>
-                    <span class="label label-default" style="background: #efefef;height: 30px;">
-                    </span>
-                    </h3>
-                </div>
-                <div class="panel-body" v-if="!loadedUser">
-                    <span style="font-weight: bold">您还未登录，请登录</span>
-                </div>
-            </div>
         </div>
     </div>
 </div>
