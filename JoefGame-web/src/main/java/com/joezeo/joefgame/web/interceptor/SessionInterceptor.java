@@ -30,7 +30,7 @@ public class SessionInterceptor implements HandlerInterceptor {
         if (userDTO == null) {
             Subject subject = SecurityUtils.getSubject();
 
-            if (subject.isRemembered()) {
+            if (subject.isRemembered() || subject.isAuthenticated()) {
                 UserDTO user = (UserDTO) subject.getPrincipal();
                 String email = user.getEmail();
                 if (email != null && !"".equals(email)) {
