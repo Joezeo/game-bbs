@@ -116,6 +116,12 @@
                 <artifactId>ufile-client-java</artifactId>
                 <version>2.4.1</version>
             </dependency>
+            <!--OpenId-->
+            <dependency>
+                <groupId>org.openid4java</groupId>
+                <artifactId>openid4java</artifactId>
+                <version>1.0.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

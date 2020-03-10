@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -75,6 +76,13 @@ public class PotalPageController {
         } else {
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/steam/callback")
+    public String steamCallback(HttpServletRequest request){
+        String steamid = (String) request.getAttribute("io");
+        System.out.println(steamid);
+        return "redirect:/";
     }
 
     /**

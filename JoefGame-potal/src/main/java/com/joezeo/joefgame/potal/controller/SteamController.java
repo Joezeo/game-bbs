@@ -2,6 +2,7 @@ package com.joezeo.joefgame.potal.controller;
 
 import com.joezeo.joefgame.common.dto.JsonResult;
 import com.joezeo.joefgame.common.dto.PaginationDTO;
+import com.joezeo.joefgame.common.provider.SteamProvider;
 import com.joezeo.joefgame.potal.dto.AppsDTO;
 import com.joezeo.joefgame.potal.dto.HistoryPriceDTO;
 import com.joezeo.joefgame.potal.dto.SteamAppDTO;
@@ -16,6 +17,15 @@ public class SteamController {
 
     @Autowired
     private SteamService steamService;
+    @Autowired
+    private SteamProvider steamProvider;
+
+    @PostMapping("/auth")
+    public JsonResult<?> auth(){
+        steamProvider.auth();
+        return JsonResult.okOf(null);
+    }
+
     @PostMapping("/list")
     @ResponseBody
     public JsonResult<AppsDTO> listApps(@RequestBody AppsDTO appsDTO){

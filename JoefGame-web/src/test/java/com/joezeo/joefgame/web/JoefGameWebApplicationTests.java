@@ -1,5 +1,6 @@
 package com.joezeo.joefgame.web;
 
+import com.joezeo.joefgame.common.provider.SteamProvider;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -16,6 +17,8 @@ class JoefGameWebApplicationTests {
     private TaskService taskService;
     @Autowired
     private RuntimeService runtimeService;
+    @Autowired
+    private SteamProvider steamProvider;
 
     @Test
     public void deleteTask() {
@@ -26,4 +29,8 @@ class JoefGameWebApplicationTests {
         }
     }
 
+    @Test
+    public void steamAuth(){
+        steamProvider.auth();
+    }
 }

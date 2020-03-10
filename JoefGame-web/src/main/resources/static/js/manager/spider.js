@@ -5,6 +5,17 @@ var vue = new Vue({
 
     },
     methods:{
+        steamAuth:function(){
+            var url = '/steam/auth';
+            axios.post(url).then(function (result) {
+                var jsonResult = result.data;
+                if(jsonResult.success){
+                    alert("Steam Auth 测试已发送");
+                } else {
+                    alert(jsonResult.message);
+                }
+            });
+        },
         spideProxyIP: function () {
             var url = 'spideProxyIP';
             axios.post(url).then(function (response) {
