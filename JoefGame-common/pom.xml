@@ -89,6 +89,7 @@
         <dependency>
             <groupId>org.openid4java</groupId>
             <artifactId>openid4java</artifactId>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>

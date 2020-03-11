@@ -38,28 +38,27 @@ public class ShiroConfig {
     /**
      * CustomFormAuthenticationFilter 取消SpringBoot的自动注册
      */
-    @Bean
-    public FilterRegistrationBean delegatingFilterProxy(CustomFormAuthenticationFilter customFormAuthenticationFilter) {
-        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(customFormAuthenticationFilter);
-        filterRegistrationBean.setEnabled(false);
-        return filterRegistrationBean;
-    }
+//    @Bean
+//    public FilterRegistrationBean delegatingFilterProxy(CustomFormAuthenticationFilter customFormAuthenticationFilter) {
+//        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(customFormAuthenticationFilter);
+//        filterRegistrationBean.setEnabled(false);
+//        return filterRegistrationBean;
+//    }
 
     /**
-     *  自定义filter
-     *  这个fiter暂时没有效果，不起作用
-     *  猜想是因为这个filter直接拦截请求，而我自己已经写了控制器控制/login请求
+     * 自定义filter
+     * 这个fiter暂时没有效果，不起作用
+     * 猜想是因为这个filter直接拦截请求，而我自己已经写了控制器控制/login请求
      */
-    @Bean
-    public CustomFormAuthenticationFilter customFormAuthenticationFilter(){
-        CustomFormAuthenticationFilter customFormAuthenticationFilter = new CustomFormAuthenticationFilter();
-        customFormAuthenticationFilter.setLoginUrl("/login");
-        customFormAuthenticationFilter.setUsernameParam("email");
-        customFormAuthenticationFilter.setPasswordParam("password");
-        customFormAuthenticationFilter.setRememberMeParam("rememberMe");
-        return customFormAuthenticationFilter;
-    }
-
+//    @Bean
+//    public CustomFormAuthenticationFilter customFormAuthenticationFilter(){
+//        CustomFormAuthenticationFilter customFormAuthenticationFilter = new CustomFormAuthenticationFilter();
+//        customFormAuthenticationFilter.setLoginUrl("/login");
+//        customFormAuthenticationFilter.setUsernameParam("email");
+//        customFormAuthenticationFilter.setPasswordParam("password");
+//        customFormAuthenticationFilter.setRememberMeParam("rememberMe");
+//        return customFormAuthenticationFilter;
+//    }
     @Bean("shiroFilter")
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
@@ -67,20 +66,19 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
         // 注册自定义CustomFormAuthenticationFilter
-        Map<String, Filter> filters = shiroFilterFactoryBean.getFilters();
-        filters.put("authc", customFormAuthenticationFilter());
-        shiroFilterFactoryBean.setFilters(filters);
+//        Map<String, Filter> filters = shiroFilterFactoryBean.getFilters();
+//        filters.put("authc", customFormAuthenticationFilter());
+//        shiroFilterFactoryBean.setFilters(filters);
 
         Map<String, String> filterChainDefinitionMap = new HashMap<>();
         shiroFilterFactoryBean.setLoginUrl("/login");
         shiroFilterFactoryBean.setUnauthorizedUrl("/"); // 如果未经验证，返回根页面
         shiroFilterFactoryBean.setSuccessUrl("/");
 
-        filterChainDefinitionMap.put("/*", "anon");
+        filterChainDefinitionMap.put("/**", "anon");
         filterChainDefinitionMap.put("/home", "user");
-        filterChainDefinitionMap.put("/personal", "user");
+        filterChainDefinitionMap.put("/publish/**", "user");
         filterChainDefinitionMap.put("/profile/*", "user");
-        filterChainDefinitionMap.put("/publish", "user");
         filterChainDefinitionMap.put("/manager/*", "authc");
         filterChainDefinitionMap.put("/manager/*", "roles[admin]"); // 进入管理页面需要角色admin验证
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
@@ -101,7 +99,7 @@ public class ShiroConfig {
         SimpleCookie simpleCookie = new SimpleCookie("__token");
         simpleCookie.setMaxAge(60 * 60 * 24 * 7); // cookie默认保存7天
         cookieRememberMeManager.setCookie(simpleCookie);
-        // 由于每次关闭重启应用都会重新生成一个cipherKey，这会导致rememberMe功能失效，故设置一个固定值
+        // 由于每次关闭重启服务器都会重新生成一个cipherKey，这会导致rememberMe功能失效，故设置一个固定值
         cookieRememberMeManager.setCipherKey(Base64.decode(cipherKey));
         return cookieRememberMeManager;
     }
@@ -114,7 +112,7 @@ public class ShiroConfig {
     }
 
     @Bean
-    public GithubShiroRealm githubShiroRealm(){
+    public GithubShiroRealm githubShiroRealm() {
         return new GithubShiroRealm();
     }
 
@@ -127,7 +125,9 @@ public class ShiroConfig {
         list.add(userShiroRealm());
         list.add(githubShiroRealm());
         securityManager.setRealms(list);
+
         // 多Realm认证策略，AtLeastOneSuccessFulAtrategy 至少一个成功的策略-默认使用
+
         securityManager.setRememberMeManager(cookieRememberMeManager());
         return securityManager;
     }

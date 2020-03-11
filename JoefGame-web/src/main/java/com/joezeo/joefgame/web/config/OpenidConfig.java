@@ -13,6 +13,7 @@ public class OpenidConfig {
         ConsumerManager manager=new ConsumerManager();
         manager.setAssociations(new InMemoryConsumerAssociationStore());
         manager.setNonceVerifier(new InMemoryNonceVerifier(5000));
+        manager.setMaxAssocAttempts(0); // 设置为stateless模式，Steam要求
         return manager;
     }
 }
