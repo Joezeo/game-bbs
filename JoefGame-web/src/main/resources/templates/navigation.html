@@ -22,13 +22,13 @@
                 <ul class="nav navbar-nav navbar-left">
                     <li th:if="${session.user != null}">
                         <a href="/home" style="font-weight: bold;color: black;">
-                            <img src="/imgs/home.png" alt="" style="height: 21px;width: 21px;margin-top: -2px;"> 小窝</a></li>
-                    <li>
-                        <a href="/forum" style="font-weight: bold;color: black;">
-                            <img src="/imgs/forum.png" alt="" style="height: 21px;width: 21px;margin-top: -2px;"> 社区</a></li>
+                            <img src="/imgs/home.png" alt="" style="height: 21px;width: 21px;margin-top: -2px;"></a></li>
                     <li>
                         <a href="/steam/apps" style="font-weight: bold;color: black;">
                             <img src="/imgs/steam.png" alt=""> Steam 数据库</a></li>
+                    <li>
+                        <a href="/forum" style="font-weight: bold;color: black;">
+                            <img src="/imgs/forum.png" alt="" style="height: 21px;width: 21px;margin-top: -2px;"> 社区</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right" th:if="${#httpServletRequest.requestURI != '/login' and #httpServletRequest.requestURI != '/signup'}">
@@ -57,13 +57,15 @@
                            aria-expanded="false" style="margin-top: -7px;">
                             <img th:src="${session.user.avatarUrl}" alt="" style="border-radius: 20px;width: 32px;height: 32px;">
                         </a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu my-menu">
                             <li th:text="${session.user.name}"></li>
                             <li><a href="/profile/personal">个人中心 </a></li>
                             <hr>
                             <li>创作新主题</li>
                             <li><a href="/publish">发帖子</a></li>
-                            <li><a href="/write">发文章</a></li>
+                            <hr>
+                            <li>小工具</li>
+                            <li><a href="/gallery">图床</a></li>
                             <hr>
                             <th:block th:if="${#strings.containsIgnoreCase(session.user.roles,'admin')}">
                                 <li>管理员</li>

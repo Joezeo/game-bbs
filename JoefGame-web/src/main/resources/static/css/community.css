@@ -117,7 +117,7 @@ a {
 }
 
 .footer .inner-2 {
-    margin-left: 10%;
+    margin-left: 7%;
     text-align: left;
     font-family: "幼圆", sans-serif;
 }
@@ -522,4 +522,7 @@ a {
 .plus:hover .forum-publish {
     background: #d13d2a !important;
     color: #efefef !important;
+}
+.my-menu{
+    border-radius: 15px !important;
 }

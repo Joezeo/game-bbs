@@ -17,14 +17,6 @@ public class SteamController {
 
     @Autowired
     private SteamService steamService;
-    @Autowired
-    private SteamProvider steamProvider;
-
-    @PostMapping("/auth")
-    public JsonResult<?> auth(){
-        steamProvider.auth();
-        return JsonResult.okOf(null);
-    }
 
     @PostMapping("/list")
     @ResponseBody

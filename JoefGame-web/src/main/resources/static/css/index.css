@@ -1,18 +1,59 @@
-row-1{
+h1{
+    color: white !important;
+    font-size: 53px !important;
+    font-weight: 1000 !important;
+    font-family: aktiv-grotesk, sans-serif;
+}
+h2{
+    color: white; !important;
+    font-weight: 500 !important;
+}
+h3{
+    color: white !important;
+    font-weight: 480 !important;
+}
+.wrapper{
+    background: url("/imgs/backgroud.gif") no-repeat;
+    background-size: 100% 100%;
+    width: 100% !important;
+    height: 607px !important;
+    position: absolute;
+    right: 0;
+    left: 0;
+    margin-top: -19px;
+    border: 5px solid white;
+    border-radius: 10px;
+    /*border-bottom: 10px solid white;*/
+    /*border-top: 10px solid white;*/
+    z-index: -2;
+}
+.overlay{
+    position: absolute;
+    right: 0px;
+    left: 0px;
+    margin-top: -19px;
+    width: 100% !important;
+    height: 607px !important;
+    background-color: rgba(0,0,0,.25);
+}
+.content{
+    position: absolute;
+    right: 35%;
+    top: 290px;
+    text-align: center;
+}
+.fillstuff{
     height: 600px;
 }
-
-row-2{
-    height: 600px;
-    background: #d9d9d9;
-}
-
 .index-joinus-btn{
     background: #e7513b;
     color: white;
     width: 150px;
     height: 50px;
-    border-radius: 20px;
+    border-radius: 50px;
+    border: #e7513b solid 1px;
+    text-align: center;
+    font-size: 18px;
 }
 .index-joinus-btn:hover{
     background: #c94634;

@@ -18,68 +18,22 @@
 <div th:replace="navigation :: nav"></div>
 
 <div class="container-fluid" id="index">
-    <div class="row row-1">
-        <div class="col-lg-6 .col-md-12 .col-sm-12 .col-xs-12">
-            <div><h1>JOEF GAME</h1></div>
-            <div>一切源于热爱</div>
-            <div><input type="button" class="index-joinus-btn" value="加入我们！" @click="btnJumpTo(loadedUser)"></div>
-        </div>
-
-        <div class="col-lg-6 .col-md-12 .col-sm-12 .col-xs-12">
-<!--            <div style="height: 250px; width: 400px;background: blue;">-->
-<!--            </div>-->
-        </div>
+    <div class="wrapper">
     </div>
-
-    <div class="row row-2">
-        <div class="col-lg-6 .col-md-12 .col-sm-12 .col-xs-12">
-        </div>
-
-        <div class="col-lg-6 .col-md-12 .col-sm-12 .col-xs-12">
-            <div>
-                <div><h1>独立游戏爱好者社区</h1></div>
-                <div>寻找你的独立游戏伙伴</div>
-            </div>
-        </div>
+    <div class="overlay">
     </div>
-
-    <div class="row row-3">
-        <div class="col-lg-6 .col-md-12 .col-sm-12 .col-xs-12">
-            <div><h1>Steam想买游戏却不知道何时买？</h1></div>
-            <div>Steam数据库为你提供历史价格，让你不被价格所困</div>
-        </div>
-
-        <div class="col-lg-6 .col-md-12 .col-sm-12 .col-xs-12">
-            <div>
-            </div>
-        </div>
+    <div class="content">
+        <div><h1>JOEF GAME</h1></div>
+        <div><h3>独立游戏 · 像素画 · Steam数据库 · 社区 </h3></div>
+        <br>
+        <div><h2>一切源于热爱</h2></div>
+        <br>
+        <br>
+        <div><input type="button" class="index-joinus-btn" value="  加入我们 ！" @click="btnJumpTo(loadedUser)"></div>
     </div>
+</div>
 
-    <div class="row row-4">
-        <div class="col-lg-6 .col-md-12 .col-sm-12 .col-xs-12">
-            <div>
-            </div>
-        </div>
-
-        <div class="col-lg-6 .col-md-12 .col-sm-12 .col-xs-12">
-            <div><h1>在这里你可以分享游戏的一切</h1></div>
-            <div>灵感？像素？你都可以在这里找到</div>
-        </div>
-
-    </div>
-
-    <div class="row row-5">
-        <div class="col-lg-6 .col-md-12 .col-sm-12 .col-xs-12">
-            <div><h1>爱好者？开发者？</h1></div>
-            <div>你都能在这里找到归属</div>
-        </div>
-
-        <div class="col-lg-6 .col-md-12 .col-sm-12 .col-xs-12">
-            <div>
-            </div>
-        </div>
-    </div>
-
+<div class="fillstuff">
 </div>
 
 <div th:replace="footer :: foot"></div>

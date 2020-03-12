@@ -5,6 +5,7 @@ import com.joezeo.joefgame.common.dto.GithubUser;
 import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
 import com.joezeo.joefgame.common.exception.CustomizeException;
 import com.joezeo.joefgame.common.provider.GithubProvider;
+import com.joezeo.joefgame.common.provider.SteamProvider;
 import com.joezeo.joefgame.potal.dto.UserDTO;
 import com.joezeo.joefgame.potal.service.SteamService;
 import com.joezeo.joefgame.potal.service.TopicService;
@@ -25,6 +26,8 @@ public class PotalPageController {
 
     @Autowired
     private GithubProvider githubProvider;
+    @Autowired
+    private SteamProvider steamProvider;
     @Autowired
     private UserService userService;
     @Autowired
@@ -76,6 +79,11 @@ public class PotalPageController {
         } else {
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/auth")
+    public void auth(){
+        steamProvider.auth();
     }
 
     @GetMapping("/steam/callback")
