@@ -2,10 +2,10 @@ var name = "";
 var email = "";
 var password = "";
 var authCode="";
-
+var condition = "";
 var vue = new Vue({
     el:"#signup",
-    data:{name, email, password, authCode},
+    data:{name, email, password, authCode, condition},
     mounted:function () {
         this.removeStorage();
     },
@@ -41,7 +41,10 @@ var vue = new Vue({
                     alert(jsonResult.message)
                 }
             })
-        }
-
+        },
+        // search相关函数，函数从文件search.js中引入
+        searchUser:searchUser,
+        searchSteam:searchSteam,
+        searchTopic:searchTopic
     }
 });

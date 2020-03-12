@@ -1,10 +1,11 @@
 var user = {};
 var loadedUser = false;
+var condition = "";
 
 var vue =new Vue({
     el:"#index",
     data:{
-        user, loadedUser
+        user, loadedUser, condition
     },
     mounted:function () {
         this.removeStorage();
@@ -35,10 +36,14 @@ var vue =new Vue({
         },
         btnJumpTo:function (loadedUser) {
             if(loadedUser){
-                window.location.href="/forum";
+                window.location.href="/home";
             } else {
                 window.location.href="/login";
             }
-        }
+        },
+        // search相关函数，函数从文件search.js中引入
+        searchUser:searchUser,
+        searchSteam:searchSteam,
+        searchTopic:searchTopic
     }
 });

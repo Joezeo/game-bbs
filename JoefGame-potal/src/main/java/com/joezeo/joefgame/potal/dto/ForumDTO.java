@@ -7,10 +7,9 @@ import lombok.Data;
  * 往index传输json数据所用的dto
  */
 @Data
-public class IndexDTO<T> {
+public class ForumDTO<T> {
     private PaginationDTO<T> pagination;
     private Integer page;
     private Integer size;
-    private String condition;
     private String tab;
 }

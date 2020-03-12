@@ -97,7 +97,7 @@ a {
 }
 
 .footer {
-    margin-top: 50px;
+    margin-top: 100px;
     /*border-top: 1px solid rgba(0,0,0,.22);*/
     background-color: white;
     color: #999;
@@ -496,7 +496,7 @@ a {
 }
 
 .forum-publish {
-    z-index: 999;
+    z-index: 886;
     position: absolute;
     width: 48px;
     height: 48px;
@@ -526,4 +526,36 @@ a {
 .my-menu{
     border-radius: 15px !important;
     margin-top: 10px !important;
+}
+
+/*搜索框下的面板*/
+.search-panel{
+    display: none;
+    position: absolute !important;
+    top: 60px !important;
+    right: 0px !important;
+    z-index: 996 !important;
+    width: 100% !important;
+    height: 180px !important;
+    background: white !important;
+    border-radius: 15px !important;
+}
+.selection{
+    width: 100% !important;
+    height: 50px;
+    background-color: white;
+    margin-bottom: 5px;
+    border: white 1px solid;
+    border-radius: 20px;
+    text-align: left;
+    outline: none;
+}
+.selection:hover{
+    background-color: #efefef !important;
+}
+.search-panel a {
+    text-decoration: none;
+}
+.search-panel a :hover{
+    color: black;
 }

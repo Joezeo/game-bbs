@@ -6,6 +6,7 @@ var loaded = false;
 var unreadCount = 0;
 var user = {};
 var loadedUser = false;
+var condition = "";
 
 var vue = new Vue({
     el: "#profile",
@@ -15,7 +16,7 @@ var vue = new Vue({
         pagination,
         loaded,
         unreadCount,
-        user, loadedUser
+        user, loadedUser,condition
     },
     mounted: function () {
         this.removeStorage();
@@ -107,7 +108,11 @@ var vue = new Vue({
             var s = date.getSeconds();
 
             return Y + M + D + h + m + s;
-        }
+        },
+        // search相关函数，函数从文件search.js中引入
+        searchUser:searchUser,
+        searchSteam:searchSteam,
+        searchTopic:searchTopic
     }
 });
 

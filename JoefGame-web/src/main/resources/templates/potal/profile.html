@@ -9,189 +9,194 @@
 </head>
 <body>
 
-<!--导航栏-->
-<div th:replace="navigation :: nav"></div>
+<div id="profile">
 
-<div class="container-fluid main profile" id="profile">
-    <div class="row">
-        <div class="col-lg-12 .col-md-12 .col-sm-12 .col-xs-12">
-            <div class="row top-row" style="margin-bottom: 15px;">
+    <!--导航栏-->
+    <div th:replace="navigation :: nav"></div>
 
-                <div class="col-lg-9 .col-md-9 .col-sm-9 .col-xs-9">
-                    <h2><img v-if="section=='personal'" src="/imgs/personal.png" alt="" style="margin-top: -10px;">
-                        <img v-if="section=='topics'" v-cloak src="/imgs/mytopic.png" alt="" style="margin-top: -10px;">
-                        <img v-if="section=='notify'" v-cloak src="/imgs/notify.png" alt="" style="margin-top: -10px;">
-                        <span v-text="sectionName"></span></h2>
-                </div>
+    <div class="container-fluid main profile">
+        <div class="row">
+            <div class="col-lg-12 .col-md-12 .col-sm-12 .col-xs-12">
+                <div class="row top-row" style="margin-bottom: 15px;">
 
-                <div class="col-lg-3 .col-md-3 .col-sm-3 .col-xs-3">
-                    <button @click="readAllNotification" type="button" class="btn btn-success btn-allread pixel-btn"
-                            v-if="section=='notify'" v-cloak>全部已读
-                    </button>
-                </div>
-            </div>
-
-            <template v-if="loadedUser">
-                <!--                个人资料-->
-                <div v-if="section == 'personal'" class="personal main-zone">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4>基本信息 | Basic Information</h4>
-                        </div>
-                        <div class="panel-body">
-                            用户名: <span v-text="user.name"></span>
-                        </div>
-
-                        <div class="panel-body">
-                            头像: <img :src="user.avatarUrl" class="avatar">
-                            <input type="button" class="btn-blue-white" value="更换头像" style="margin-top: 20px;"/>
-                        </div>
-
-                        <div class="panel-body">
-                            个性签名: <span v-text="user.bio"></span>
-                            <input type="button" class="btn-blue-white" value="更改"/>
-                        </div>
+                    <div class="col-lg-9 .col-md-9 .col-sm-9 .col-xs-9">
+                        <h2><img v-if="section=='personal'" src="/imgs/personal.png" alt="" style="margin-top: -10px;">
+                            <img v-if="section=='topics'" v-cloak src="/imgs/mytopic.png" alt=""
+                                 style="margin-top: -10px;">
+                            <img v-if="section=='notify'" v-cloak src="/imgs/notify.png" alt=""
+                                 style="margin-top: -10px;">
+                            <span v-text="sectionName"></span></h2>
                     </div>
 
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4>登录绑定 | Log In With</h4>
+                    <div class="col-lg-3 .col-md-3 .col-sm-3 .col-xs-3">
+                        <button @click="readAllNotification" type="button" class="btn btn-success btn-allread pixel-btn"
+                                v-if="section=='notify'" v-cloak>全部已读
+                        </button>
+                    </div>
+                </div>
+
+                <template v-if="loadedUser">
+                    <!--                个人资料-->
+                    <div v-if="section == 'personal'" class="personal main-zone">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>基本信息 | Basic Information</h4>
+                            </div>
+                            <div class="panel-body">
+                                用户名: <span v-text="user.name"></span>
+                            </div>
+
+                            <div class="panel-body">
+                                头像: <img :src="user.avatarUrl" class="avatar">
+                                <input type="button" class="btn-blue-white" value="更换头像" style="margin-top: 20px;"/>
+                            </div>
+
+                            <div class="panel-body">
+                                个性签名: <span v-text="user.bio"></span>
+                                <input type="button" class="btn-blue-white" value="更改"/>
+                            </div>
                         </div>
-                        <div class="panel-body">
-                            <img src="/imgs/email-f.png" alt="" class="login-with-logo"/>
-                            邮箱: <span v-text="user.email"></span>
-                            <input type="button" class="btn-blue-white" value="更换邮箱"/>
-                        </div>
-                        <div class="panel-body">
-                            <img src="/imgs/github-f.png" alt="" class="login-with-logo"/>
-                            Github
-                            <span v-if="user.githubAccountId != null">已绑定</span>
-                            <span v-if="user.githubAccountId == null">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>登录绑定 | Log In With</h4>
+                            </div>
+                            <div class="panel-body">
+                                <img src="/imgs/email-f.png" alt="" class="login-with-logo"/>
+                                邮箱: <span v-text="user.email"></span>
+                                <input type="button" class="btn-blue-white" value="更换邮箱"/>
+                            </div>
+                            <div class="panel-body">
+                                <img src="/imgs/github-f.png" alt="" class="login-with-logo"/>
+                                Github
+                                <span v-if="user.githubAccountId != null">已绑定</span>
+                                <span v-if="user.githubAccountId == null">
                             <input type="button" class="btn-blue-white" value="点击绑定"/>
                         </span>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>账号安全 | Account Security</h4>
+                                <h5 style="color: #999999;">修改您的密码</h5>
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label for="oldPassword">旧密码</label>
+                                    <input type="password" class="form-control" id="oldPassword"
+                                           placeholder="请输入旧密码...">
+                                </div>
+                                <div class="form-group">
+                                    <label for="newPassword">新密码</label>
+                                    <input type="password" class="form-control" id="newPassword"
+                                           placeholder="请输入新密码...">
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirmPassword">确认密码</label>
+                                    <input type="password" class="form-control" id="confirmPassword"
+                                           placeholder="请确认新密码...">
+                                </div>
+                                <input type="button" class="btn-blue-white" value="修改密码"/>
+                            </div>
                         </div>
                     </div>
+                </template>
 
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4>账号安全 | Account Security</h4>
-                            <h5 style="color: #999999;">修改您的密码</h5>
-                        </div>
+                <!--            非Personal页面 提供边框样式-->
+                <div class="main-zone panel panel-default" v-if="section != 'personal'">
+                    <div class="panel-body">
+                        <template v-if="loaded">
+                            <!--            我的帖子-->
+                            <div v-if="section == 'topics'">
+                                <div class="media" v-for="topic in pagination.datas">
+                                    <div class="media-left">
+                                        <a href="#">
+                                            <img class="media-object head-img" :src="topic.user.avatarUrl" alt="用户头像"
+                                                 style="border-radius: 8px;">
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading"><a :href="'/topic/'+topic.id"
+                                                                     style="color: black;padding-top: 10px;font-size: 16px;"
+                                                                     v-text="topic.title"></a></h4>
+                                        <span class="text-desc"><span v-text="topic.commentCount"></span> 个评论 • <span
+                                                v-text="topic.viewCount"></span> 次浏览 • <span
+                                                v-text="timestampToTime(topic.gmtCreate)"></span></span></span>
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+                        </template>
 
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <label for="oldPassword">旧密码</label>
-                                <input type="password" class="form-control" id="oldPassword"
-                                       placeholder="请输入旧密码...">
+                        <template v-if="loaded">
+                            <!--            最新回复-->
+                            <div v-if="section == 'notify'">
+                                <div v-for="notify in pagination.datas">
+                                    <p>
+                                        <a href="#" v-text="notify.notifiername"></a>
+                                        <span v-text="notify.type"></span>
+                                        <a @click="readNotify(notify.id)" v-text="notify.relatedname"></a>
+                                        <span class="label label-warning" v-if="notify.status == 0">未读</span>
+                                    </p>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="newPassword">新密码</label>
-                                <input type="password" class="form-control" id="newPassword"
-                                       placeholder="请输入新密码...">
-                            </div>
-                            <div class="form-group">
-                                <label for="confirmPassword">确认密码</label>
-                                <input type="password" class="form-control" id="confirmPassword"
-                                       placeholder="请确认新密码...">
-                            </div>
-                            <input type="button" class="btn-blue-white" value="修改密码"/>
-                        </div>
+                        </template>
+
+                        <template v-if="loaded">
+                            <!--            分页条开始-->
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                    <li v-if="pagination.hasFirst">
+                                        <a @click="getDatas(section,1)" aria-label="First">
+                                            <span aria-hidden="true">&lt;&lt;</span>
+                                        </a>
+                                    </li>
+                                    <li v-if="pagination.hasPrevious">
+                                        <a @click="getDatas(section,pagination.page-1)" aria-label="Previous">
+                                            <span aria-hidden="true">&lt;</span>
+                                        </a>
+                                    </li>
+                                    <li v-for="page in pagination.pages" :class="page==pagination.page?'active':''">
+                                        <a @click="getDatas(section,page)" v-text="page">1</a></li>
+                                    <li v-if="pagination.hasNext">
+                                        <a @click="getDatas(section,pagination.page+1)" aria-label="Next">
+                                            <span aria-hidden="true">&gt;</span>
+                                        </a>
+                                    </li>
+                                    <li v-if="pagination.hasLast">
+                                        <a @click="getDatas(section,pagination.totalPage)" aria-label="Last">
+                                            <span aria-hidden="true">&gt;&gt;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <!--            分页条结束-->
+                        </template>
                     </div>
                 </div>
-            </template>
 
-            <!--            非Personal页面 提供边框样式-->
-            <div class="main-zone panel panel-default" v-if="section != 'personal'">
-                <div class="panel-body">
-                    <template v-if="loaded">
-                        <!--            我的帖子-->
-                        <div v-if="section == 'topics'">
-                            <div class="media" v-for="topic in pagination.datas">
-                                <div class="media-left">
-                                    <a href="#">
-                                        <img class="media-object head-img" :src="topic.user.avatarUrl" alt="用户头像"
-                                             style="border-radius: 8px;">
-                                    </a>
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading"><a :href="'/topic/'+topic.id"
-                                                                 style="color: black;padding-top: 10px;font-size: 16px;"
-                                                                 v-text="topic.title"></a></h4>
-                                    <span class="text-desc"><span v-text="topic.commentCount"></span> 个评论 • <span
-                                            v-text="topic.viewCount"></span> 次浏览 • <span
-                                            v-text="timestampToTime(topic.gmtCreate)"></span></span></span>
-                                </div>
-                                <hr>
-                            </div>
-                        </div>
-                    </template>
-
-                    <template v-if="loaded">
-                        <!--            最新回复-->
-                        <div v-if="section == 'notify'">
-                            <div v-for="notify in pagination.datas">
-                                <p>
-                                    <a href="#" v-text="notify.notifiername"></a>
-                                    <span v-text="notify.type"></span>
-                                    <a @click="readNotify(notify.id)" v-text="notify.relatedname"></a>
-                                    <span class="label label-warning" v-if="notify.status == 0">未读</span>
-                                </p>
-                            </div>
-                        </div>
-                    </template>
-
-                    <template v-if="loaded">
-                        <!--            分页条开始-->
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination">
-                                <li v-if="pagination.hasFirst">
-                                    <a @click="getDatas(section,1)" aria-label="First">
-                                        <span aria-hidden="true">&lt;&lt;</span>
-                                    </a>
-                                </li>
-                                <li v-if="pagination.hasPrevious">
-                                    <a @click="getDatas(section,pagination.page-1)" aria-label="Previous">
-                                        <span aria-hidden="true">&lt;</span>
-                                    </a>
-                                </li>
-                                <li v-for="page in pagination.pages" :class="page==pagination.page?'active':''">
-                                    <a @click="getDatas(section,page)" v-text="page">1</a></li>
-                                <li v-if="pagination.hasNext">
-                                    <a @click="getDatas(section,pagination.page+1)" aria-label="Next">
-                                        <span aria-hidden="true">&gt;</span>
-                                    </a>
-                                </li>
-                                <li v-if="pagination.hasLast">
-                                    <a @click="getDatas(section,pagination.totalPage)" aria-label="Last">
-                                        <span aria-hidden="true">&gt;&gt;</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                        <!--            分页条结束-->
-                    </template>
-                </div>
             </div>
-
-        </div>
-        <div class="list-group section">
-            <a href="/profile/personal" type="button" class="list-group-item">个人资料</a>
-            <a href="/profile/topics" type="button" class="list-group-item">我的帖子</a>
-            <a href="/profile/notify" type="button" class="list-group-item">
-                <span class="badge" v-text="unreadCount" style="float: left !important;"></span>
-                <span>最新回复</span>
-            </a>
+            <div class="list-group section">
+                <a href="/profile/personal" type="button" class="list-group-item">个人资料</a>
+                <a href="/profile/topics" type="button" class="list-group-item">我的帖子</a>
+                <a href="/profile/notify" type="button" class="list-group-item">
+                    <span class="badge" v-text="unreadCount" style="float: left !important;"></span>
+                    <span>最新回复</span>
+                </a>
+            </div>
         </div>
     </div>
-</div>
 
-<div th:replace="footer :: foot"></div>
+    <div th:replace="footer :: foot"></div>
+</div>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="/jquery/jquery-3.4.1.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
-<script src="/js/potal/profile.js"></script>
 <script src="/js/potal/search.js"></script>
+<script src="/js/potal/profile.js"></script>
 <script src="/js/potal/logout.js"></script>
 </body>
 </html>

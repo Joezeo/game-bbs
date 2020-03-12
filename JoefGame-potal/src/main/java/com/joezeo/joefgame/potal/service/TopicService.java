@@ -6,7 +6,7 @@ import com.joezeo.joefgame.dao.pojo.Topic;
 
 public interface TopicService {
 
-    PaginationDTO<TopicDTO> listPage(Integer page, Integer size, String condition, String tab);
+    PaginationDTO<TopicDTO> listPage(Integer page, Integer size, String tab);
 
     PaginationDTO<TopicDTO> listPage(Long userid, Integer page, Integer size);
 

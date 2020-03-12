@@ -98,7 +98,7 @@ public class PotalPageController {
     @GetMapping("/steam/callback")
     public String steamCallback(HttpServletRequest request){
         String steamid = steamProvider.getSteamid(request);
-        System.out.println(steamid);
+        // TODO: 操作steamID，判断当前用户是否注册，如未注册进入注册页面，然后与steamID绑定，如果已经注册则直接登录成功
         return "redirect:/";
     }
 

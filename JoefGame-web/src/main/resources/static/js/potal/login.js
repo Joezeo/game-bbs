@@ -1,11 +1,12 @@
 var email = "";
 var password = "";
 var rememberMe = false;
+var condition = "";
 
 axios.defaults.withCredentials = true;
 var vue = new Vue({
     el:"#login",
-    data:{email, password, rememberMe},
+    data:{email, password, rememberMe, condition},
     mounted:function () {
         this.removeStorage();
     },
@@ -29,7 +30,11 @@ var vue = new Vue({
                     alert(jsonResult.message);
                 }
             });
-        }
+        },
+        // search相关函数，函数从文件search.js中引入
+        searchUser:searchUser,
+        searchSteam:searchSteam,
+        searchTopic:searchTopic
 
     }
 });

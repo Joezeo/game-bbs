@@ -10,38 +10,40 @@
 </head>
 <body>
 
-<!--导航栏-->
-<div th:replace="navigation :: nav"></div>
+<div id="home">
+    <!--导航栏-->
+    <div th:replace="navigation :: nav"></div>
 
-<div class="container-fluid" id="home">
-    <div class="row" v-if="loadedUser" v-cloak>
-        <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
-            <div class="left">
-                <div class="user-info">
-                    <img :src="user.avatarUrl" alt=""><br>
-                    <span v-text="user.name"></span>
+    <div class="container-fluid home">
+        <div class="row" v-if="loadedUser" v-cloak>
+            <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
+                <div class="left">
+                    <div class="user-info">
+                        <img :src="user.avatarUrl" alt=""><br>
+                        <span v-text="user.name"></span>
+                    </div>
+                    <hr>
+                    <span>关注</span>
+                    <hr>
                 </div>
-                <hr>
-                <span>关注</span>
-                <hr>
             </div>
-        </div>
 
-        <div class="col-lg-6 .col-md-12 .col-sm-12 .col-xs-12">
-            <div class="middle">
+            <div class="col-lg-6 .col-md-12 .col-sm-12 .col-xs-12">
+                <div class="middle">
 
+                </div>
             </div>
-        </div>
-        <!--        右侧信息条-->
-        <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
-            <div class="right">
+            <!--        右侧信息条-->
+            <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
+                <div class="right">
 
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div th:replace="footer :: foot"></div>
+    <div th:replace="footer :: foot"></div>
+</div>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="/jquery/jquery-3.4.1.js"></script>

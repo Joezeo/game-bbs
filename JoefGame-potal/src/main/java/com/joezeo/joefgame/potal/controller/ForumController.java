@@ -2,7 +2,7 @@ package com.joezeo.joefgame.potal.controller;
 
 import com.joezeo.joefgame.common.dto.JsonResult;
 import com.joezeo.joefgame.common.dto.PaginationDTO;
-import com.joezeo.joefgame.potal.dto.IndexDTO;
+import com.joezeo.joefgame.potal.dto.ForumDTO;
 import com.joezeo.joefgame.potal.dto.TopicDTO;
 import com.joezeo.joefgame.potal.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +18,11 @@ public class ForumController {
 
     @PostMapping("/list")
     @ResponseBody
-    public JsonResult<IndexDTO> index(@RequestBody IndexDTO<TopicDTO> indexDTO) {
-        PaginationDTO<TopicDTO> paginationDTO = topicService.listPage(indexDTO.getPage(), indexDTO.getSize(), indexDTO.getCondition(), indexDTO.getTab());
+    public JsonResult<ForumDTO> index(@RequestBody ForumDTO<TopicDTO> forumDTO) {
+        PaginationDTO<TopicDTO> paginationDTO = topicService.listPage(forumDTO.getPage(), forumDTO.getSize(), forumDTO.getTab());
 
-        indexDTO.setPagination(paginationDTO);
+        forumDTO.setPagination(paginationDTO);
 
-        return JsonResult.okOf(indexDTO);
+        return JsonResult.okOf(forumDTO);
     }
 }

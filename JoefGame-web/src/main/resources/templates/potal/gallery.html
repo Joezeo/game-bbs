@@ -9,47 +9,53 @@
     <link rel="stylesheet" href="/css/gallery.css">
 </head>
 <body>
-<!--导航栏-->
-<div th:replace="navigation :: nav"></div>
+<div id="gallery">
 
-<div class="container-fluid main gallery">
-    <div class="row gallery">
-        <div class="col-lg-12 .col-md-12 .col-sm-12 .col-xs-12">
-            <h2><img src="/imgs/gallery-top.png" style="margin-top: -10px;"> 图床</h2>
-            <div class="panel panel-default">
-                <img src="/imgs/gallery.png" alt="Joezeoの图床" style="margin-left: 480px;"/>
+    <!--导航栏-->
+    <div th:replace="navigation :: nav"></div>
 
-                <div class="panel-body">
-                    <img id="pic-view" class="pic-view"/>
-                </div>
+    <div class="container-fluid main gallery">
+        <div class="row gallery">
+            <div class="col-lg-12 .col-md-12 .col-sm-12 .col-xs-12">
+                <h2><img src="/imgs/gallery-top.png" style="margin-top: -10px;"> 图床</h2>
+                <div class="panel panel-default">
+                    <img src="/imgs/gallery.png" alt="Joezeoの图床" style="margin-left: 480px;"/>
 
-                <div class="panel-footer">
-                    <form enctype="multipart/form-data" method="post" id="pic-form">
-                        <div class="col-lg-12">
-                            <div class="input-group">
-                                <input id="pic-src" type="text" class="form-control my-input" placeholder="请选择图片上传..." readonly>
-                                <span class="input-group-btn">
+                    <div class="panel-body">
+                        <img id="pic-view" class="pic-view"/>
+                    </div>
+
+                    <div class="panel-footer">
+                        <form enctype="multipart/form-data" method="post" id="pic-form">
+                            <div class="col-lg-12">
+                                <div class="input-group">
+                                    <input id="pic-src" type="text" class="form-control my-input"
+                                           placeholder="请选择图片上传..." readonly>
+                                    <span class="input-group-btn">
                                 <button id="img-select" class="btn btn-default pixel-btn" type="button">
-                                    <span  class="glyphicon glyphicon-folder-open"
+                                    <span class="glyphicon glyphicon-folder-open"
                                           aria-hidden="true"></span>
                                     &nbsp;&nbsp;选择图片
                                 </button>
                             </span>
-                                <input type="file" style="display: none" id="file-input" name="pic-name">
-                            </div><!-- /input-group -->
-                        </div><!-- /.col-lg-12 -->
-                    </form>
+                                    <input type="file" style="display: none" id="file-input" name="pic-name">
+                                </div><!-- /input-group -->
+                            </div><!-- /.col-lg-12 -->
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <div th:replace="footer :: foot"></div>
 </div>
-<div th:replace="footer :: foot"></div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="/jquery/jquery-3.4.1.js"></script>
 <script src="/jquery/jquery-form.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
-<script src="/js/potal/gallery.js"></script>
 <script src="/js/potal/search.js"></script>
+<script src="/js/potal/gallery.js"></script>
 <script src="/js/potal/logout.js"></script>
 </body>
 </html>

@@ -8,13 +8,10 @@ import org.openid4java.consumer.ConsumerManager;
 import org.openid4java.consumer.VerificationResult;
 import org.openid4java.discovery.DiscoveryException;
 import org.openid4java.discovery.DiscoveryInformation;
-import org.openid4java.discovery.Identifier;
-import org.openid4java.message.*;
-import org.openid4java.message.ax.AxMessage;
-import org.openid4java.message.ax.FetchRequest;
-import org.openid4java.message.ax.FetchResponse;
-import org.openid4java.message.sreg.SRegMessage;
-import org.openid4java.message.sreg.SRegResponse;
+import org.openid4java.message.AuthRequest;
+import org.openid4java.message.AuthSuccess;
+import org.openid4java.message.MessageException;
+import org.openid4java.message.ParameterList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -63,7 +60,6 @@ public class SteamProvider {
         VerificationResult verification = null;
         try {
             verification = consumerManager.verify(url.toString(), params, discovered);
-            Identifier verified = verification.getVerifiedId();
         } catch (MessageException e) {
             e.printStackTrace();
         } catch (DiscoveryException e) {

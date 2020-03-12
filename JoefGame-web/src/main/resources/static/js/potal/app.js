@@ -14,10 +14,11 @@ var app = {};
 var loaded = false;
 var chartTitle = '历史价格';
 var prices = {};
+var condition = "";
 
 var vue = new Vue({
     el: "#app",
-    data: {appid, type, typeStr, app, loaded, prices, chartTitle},
+    data: {appid, type, typeStr, app, loaded, prices, chartTitle, condition},
     mounted: function () {
         this.getApp();
         this.getPrice();
@@ -83,6 +84,10 @@ var vue = new Vue({
                 }
             })
         },
+        // search相关函数，函数从文件search.js中引入
+        searchUser:searchUser,
+        searchSteam:searchSteam,
+        searchTopic:searchTopic
     }
 });
 

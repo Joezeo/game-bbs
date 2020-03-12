@@ -3,10 +3,11 @@ var apps = {};
 var type = 1;
 var page = 1;
 var loaded = false;
+var condition = "";
 
 var vue = new Vue({
     el: "#apps",
-    data: {pagination, apps, type, loaded, page},
+    data: {pagination, apps, type, loaded, page, condition},
     mounted: function () {
         this.getMem();
         this.list(this.page, this.type);
@@ -54,6 +55,10 @@ var vue = new Vue({
         fixedNum:function (num) {
             var numStr = "" + num;
             return numStr.split(".")[0];
-        }
+        },
+        // search相关函数，函数从文件search.js中引入
+        searchUser:searchUser,
+        searchSteam:searchSteam,
+        searchTopic:searchTopic
     }
 });

@@ -1,8 +1,10 @@
 var user = {};
 var loadedUser = false;
+var condition = "";
+
 var vue = new Vue({
     el:"#home",
-    data:{user,loadedUser},
+    data:{user,loadedUser, condition},
     mounted:function () {
         this.removeStorage();
         this.getUser();
@@ -29,6 +31,11 @@ var vue = new Vue({
                     vue.loadedUser = false;
                 }
             })
-        }
+        },
+
+        // search相关函数，函数从文件search.js中引入
+        searchUser:searchUser,
+        searchSteam:searchSteam,
+        searchTopic:searchTopic
     }
 })

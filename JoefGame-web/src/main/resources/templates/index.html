@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>JOEF · GAME 独立游戏爱好者社区|steam历史价格查询</title>
+    <title>JOEF · GAME 独立游戏爱好者社区|steam数据库</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="baidu-site-verification" content="HLAOO0YScR" />
+    <meta name="baidu-site-verification" content="HLAOO0YScR"/>
     <meta name="keywords" content="独立游戏社区,steam数据库,steam历史价格,独立游戏,像素游戏,独立游戏开发,像素风,像素画,steam"/>
     <meta name="description" content="JoefGame,独立游戏社区,独立游戏、像素游戏爱好者聚集地,Steam重度患者聚集地,提供Steam历史价格服务"/>
     <meta name="author" content="Joezeo"/>
@@ -14,44 +14,45 @@
 </head>
 <body style="background: white;">
 
-<!--导航栏-->
-<div th:replace="navigation :: nav"></div>
+<div id="index">
+    <!--导航栏-->
+    <div th:replace="navigation :: nav"></div>
 
-<div class="container-fluid" id="index">
-    <div class="wrapper">
+    <div class="container-fluid">
+        <div class="wrapper">
+        </div>
+        <div class="overlay">
+        </div>
+        <div class="content">
+            <div><h1>JOEF GAME</h1></div>
+            <div><h3>独立游戏 · 像素画 · Steam数据库 · 社区 </h3></div>
+            <br>
+            <div><h2>一切源于热爱</h2></div>
+            <br>
+            <br>
+            <div><input type="button" class="index-joinus-btn" value="  加入我们 ！" @click="btnJumpTo(loadedUser)"></div>
+        </div>
     </div>
-    <div class="overlay">
+
+    <div class="fillstuff">
     </div>
-    <div class="content">
-        <div><h1>JOEF GAME</h1></div>
-        <div><h3>独立游戏 · 像素画 · Steam数据库 · 社区 </h3></div>
-        <br>
-        <div><h2>一切源于热爱</h2></div>
-        <br>
-        <br>
-        <div><input type="button" class="index-joinus-btn" value="  加入我们 ！" @click="btnJumpTo(loadedUser)"></div>
-    </div>
+
+    <div th:replace="footer :: foot"></div>
 </div>
-
-<div class="fillstuff">
-</div>
-
-<div th:replace="footer :: foot"></div>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="/jquery/jquery-3.4.1.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
-<script src="/js/index.js"></script>
 <script src="/js/potal/search.js"></script>
 <script src="/js/potal/logout.js"></script>
+<script src="/js/index.js"></script>
 <script>
-    (function(){
+    (function () {
         var bp = document.createElement('script');
         var curProtocol = window.location.protocol.split(':')[0];
         if (curProtocol === 'https') {
             bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-        }
-        else {
+        } else {
             bp.src = 'http://push.zhanzhang.baidu.com/push.js';
         }
         var s = document.getElementsByTagName("script")[0];

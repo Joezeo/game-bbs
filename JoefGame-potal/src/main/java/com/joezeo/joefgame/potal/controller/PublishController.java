@@ -3,10 +3,10 @@ package com.joezeo.joefgame.potal.controller;
 import com.joezeo.joefgame.common.dto.JsonResult;
 import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
 import com.joezeo.joefgame.dao.pojo.Topic;
-import com.joezeo.joefgame.dao.pojo.User;
 import com.joezeo.joefgame.potal.cache.TagCache;
 import com.joezeo.joefgame.potal.dto.TagDTO;
 import com.joezeo.joefgame.potal.dto.TopicDTO;
+import com.joezeo.joefgame.potal.dto.UserDTO;
 import com.joezeo.joefgame.potal.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,7 +47,7 @@ public class PublishController {
     @PostMapping("/publish")
     @ResponseBody
     public JsonResult publish(@RequestBody Topic topic, HttpSession session) {
-        User user = (User) session.getAttribute("user");
+        UserDTO user = (UserDTO) session.getAttribute("user");
         if (user == null) {
             return JsonResult.errorOf(CustomizeErrorCode.USER_NOT_LOGIN);
         }

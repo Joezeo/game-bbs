@@ -10,103 +10,109 @@
 </head>
 <body>
 
-<!--导航栏-->
-<div th:replace="navigation :: nav"></div>
+<div id="publish">
 
-<div class="container-fluid main" id="publish">
-    <div class="row">
-        <div class="col-lg-9 .col-md-12 .col-sm-12 .col-xs-12">
-            <h2><img src="/imgs/pencil.png" alt="" style="margin-top: -10px;"> 发起</h2>
-            <hr>
+    <!--导航栏-->
+    <div th:replace="navigation :: nav"></div>
 
-            <form id="publish-form">
-                <input type="hidden" th:value="${id}" name="id" id="id">
-                <div class="form-group">
-                    <label for="title"> 帖子标题（简明扼要）：</label>
-                    <input v-model="topicDTO.title" type="email" class="form-control" id="title" name="title"
-                           placeholder="帖子标题...">
-                    <div id="title-warning" class="alert alert-warning" role="alert" style="display: none">
-                        帖子标题不可为空，请输入
+    <div class="container-fluid main">
+        <div class="row">
+            <div class="col-lg-9 .col-md-12 .col-sm-12 .col-xs-12">
+                <h2><img src="/imgs/pencil.png" alt="" style="margin-top: -10px;"> 发起</h2>
+                <hr>
+
+                <form id="publish-form">
+                    <input type="hidden" th:value="${id}" name="id" id="id">
+                    <div class="form-group">
+                        <label for="title"> 帖子标题（简明扼要）：</label>
+                        <input v-model="topicDTO.title" type="email" class="form-control" id="title" name="title"
+                               placeholder="帖子标题...">
+                        <div id="title-warning" class="alert alert-warning" role="alert" style="display: none">
+                            帖子标题不可为空，请输入
+                        </div>
                     </div>
-                </div>
 
-                <label for="description"> 帖子内容（详细描述）：</label>
-                <div class="form-group" id="topic-editor">
+                    <label for="description"> 帖子内容（详细描述）：</label>
+                    <div class="form-group" id="topic-editor">
                     <textarea v-text="topicDTO.description" class="form-control" name="description" id="description"
                               cols="30" rows="10" style="display: none"></textarea>
-                </div>
-                <div id="des-warning" class="alert alert-warning" role="alert" style="display: none">
-                    帖子内容不可为空，请输入
-                </div>
-                <br>
-
-                <!--                帖子主题选择-->
-                <label for="topicType"> 主题选择：</label>
-                <select v-model="topicDTO.topicType" class="form-control" id="topicType" name="topicType">
-                    <option value="1" selected>广场</option>
-                </select>
-                <br>
-
-                <!--                标签选择-->
-                <div class="form-group">
-                    <label for="tag"> 添加标签：</label>
-                    <input v-model="topicDTO.tag" @click="loadTagPanel" type="email" class="form-control" id="tag"
-                           name="tag" autocomplete="off"
-                           placeholder="输入标签，以,分隔">
-                    <div id="tag-warning" class="alert alert-warning" role="alert" style="display: none">
-                        主题标签不可为空，请选择合适的标签
                     </div>
-                    <div @blur="closeTagPanel" class="panel panel-default tag-panel" style="display: none;">
-                        <div>
-                            <div class="panel-head" style="margin: 10px 10px;">
-                                <ul class="nav nav-tabs" role="tablist">
-                                    <li role="presentation" v-for="tagDTO,tagDTOStat in tagDTOS"
-                                        :class="tagDTOStat==0?'active':''"><a aria-controls="home"
-                                                                              role="tab"
-                                                                              data-toggle="tab"
-                                                                              :href="'#'+tagDTO.category"
-                                                                              v-text="tagDTO.category"></a>
-                                    </li>
-                                </ul>
-                            </div>
+                    <div id="des-warning" class="alert alert-warning" role="alert" style="display: none">
+                        帖子内容不可为空，请输入
+                    </div>
+                    <br>
 
-                            <div class="panel-body tab-content" style="margin: 10px 10px;">
-                                <template v-for="tagdto,tagdtoStat in tagDTOS">
-                                    <div role="tabpanel" :class="tagdtoStat==0?'tab-pane active':'tab-pane'"
-                                         :id="tagdto.category">
-                                        <template v-for="tag in tagdto.tags">
-                                            <span @click.stop="addTag(tag.name)" :value="tag.name" class="label label-warning label-span">
+                    <!--                帖子主题选择-->
+                    <label for="topicType"> 主题选择：</label>
+                    <select v-model="topicDTO.topicType" class="form-control" id="topicType" name="topicType">
+                        <option value="1" selected>广场</option>
+                    </select>
+                    <br>
+
+                    <!--                标签选择-->
+                    <div class="form-group">
+                        <label for="tag"> 添加标签：</label>
+                        <input v-model="topicDTO.tag" @click="loadTagPanel" type="email" class="form-control" id="tag"
+                               name="tag" autocomplete="off"
+                               placeholder="输入标签，以,分隔">
+                        <div id="tag-warning" class="alert alert-warning" role="alert" style="display: none">
+                            主题标签不可为空，请选择合适的标签
+                        </div>
+                        <div @blur="closeTagPanel" class="panel panel-default tag-panel" style="display: none;">
+                            <div>
+                                <div class="panel-head" style="margin: 10px 10px;">
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <li role="presentation" v-for="tagDTO,tagDTOStat in tagDTOS"
+                                            :class="tagDTOStat==0?'active':''"><a aria-controls="home"
+                                                                                  role="tab"
+                                                                                  data-toggle="tab"
+                                                                                  :href="'#'+tagDTO.category"
+                                                                                  v-text="tagDTO.category"></a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="panel-body tab-content" style="margin: 10px 10px;">
+                                    <template v-for="tagdto,tagdtoStat in tagDTOS">
+                                        <div role="tabpanel" :class="tagdtoStat==0?'tab-pane active':'tab-pane'"
+                                             :id="tagdto.category">
+                                            <template v-for="tag in tagdto.tags">
+                                            <span @click.stop="addTag(tag.name)" :value="tag.name"
+                                                  class="label label-warning label-span">
                                                 <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
                                                 <span v-html="'&nbsp;&nbsp;'+tag.name"></span>
                                             </span>
-                                        </template>
-                                    </div>
-                                </template>
+                                            </template>
+                                        </div>
+                                    </template>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <button @click="doPublish" id="publish-btn" type="button" class="btn btn-success btn-publish pixel-btn">发布
-                </button>
-            </form>
-        </div>
+                    <button @click="doPublish" id="publish-btn" type="button"
+                            class="btn btn-success btn-publish pixel-btn">发布
+                    </button>
+                </form>
+            </div>
 
-        <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
-            <h3 class="topic-title" style="margin-top: 35px;">帖子发起指南</h3>
-            <div class="topic-desc">
+            <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
+                <h3 class="topic-title" style="margin-top: 35px;">帖子发起指南</h3>
+                <div class="topic-desc">
+                </div>
             </div>
         </div>
     </div>
+
+    <div th:replace="footer :: foot"></div>
 </div>
-<div th:replace="footer :: foot"></div>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="/jquery/jquery-3.4.1.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <script src="/editor/js/editormd.min.js"></script>
 <script src="/editor/plugins/image-dialog/image-dialog.js"></script>
-<script src="/js/potal/publish.js"></script>
 <script src="/js/potal/search.js"></script>
+<script src="/js/potal/publish.js"></script>
 <script src="/js/potal/logout.js"></script>
 </body>
 </html>

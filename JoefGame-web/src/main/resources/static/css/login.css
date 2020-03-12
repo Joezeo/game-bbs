@@ -70,7 +70,7 @@ label{
 .pixel-btn:hover{
     background: #d13d2a !important;
 }
-.github-login{
+.third-part-login{
     border: 1px solid #999999;
     border-radius: 15px;
     height: 45px;
@@ -79,8 +79,21 @@ label{
     margin-bottom: 10px;
     text-align: center;
 }
+.third-part-login a {
+    text-decoration: none;
+}
+.third-part-login a :hover{
+    color: #d13d2a !important;
+}
 .github-login-sub{
     margin-top: 4px;
+}
+.steam-login-sub{
+    margin-top: 4px;
+}
+.steam-login-sub a img{
+    margin-top: -3px !important;
+    border-radius: 10px !important;
 }
 
 /*注册*/

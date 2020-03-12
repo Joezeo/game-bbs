@@ -48,8 +48,11 @@ public class TopicServiceImpl implements TopicService {
     @Autowired
     private UCloudProvider uCloudProvider;
 
+    /*
+    * Forum页面的分页查询
+    * */
     @Override
-    public PaginationDTO<TopicDTO> listPage(Integer page, Integer size, String condition, String tab) {
+    public PaginationDTO<TopicDTO> listPage(Integer page, Integer size, String tab) {
         // 获取帖子主题
         Integer type = 0; // 初始值为0，为0时查询条件不包含主题
         if (tab != null && !"".equals(tab)) {
@@ -59,13 +62,9 @@ public class TopicServiceImpl implements TopicService {
             throw new ServiceException("参数异常");
         }
 
-        // 判断搜索条件是否为空
-        if (condition != null && !"".equals(condition)) {
-            String[] conds = condition.split(" ");
-            condition = Arrays.stream(conds).collect(Collectors.joining("|"));
-        }
-
-        int count = topicExtMapper.countSearch(condition, type);
+        TopicExample example = new TopicExample();
+        example.createCriteria().andTopicTypeEqualTo(type);
+        int count = (int) topicMapper.countByExample(example);
 
         PaginationDTO<TopicDTO> paginationDTO = new PaginationDTO<>();
         paginationDTO.setPagination(page, size, count);
@@ -74,7 +73,12 @@ public class TopicServiceImpl implements TopicService {
         page = paginationDTO.getPage();
         int index = (page - 1) * size;
 
-        List<Topic> topics = topicExtMapper.selectSearch(index, size, condition, type);
+        // 分页查询帖子
+        TopicExample pageExample = new TopicExample();
+        pageExample.createCriteria().andTopicTypeEqualTo(type);
+        pageExample.setOrderByClause("gmt_create desc");
+        RowBounds rowBounds = new RowBounds(index, size);
+        List<Topic> topics = topicMapper.selectByExampleWithRowbounds(pageExample, rowBounds);
         if (topics == null || topics.size() == 0) { // 帖子数量为0
             paginationDTO.setDatas(new ArrayList<>());
             return paginationDTO;

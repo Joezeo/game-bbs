@@ -4,6 +4,18 @@ $(function () {
     $("#file-input").change(uploadFile);
 });
 
+var condition = "";
+var vue = new Vue({
+    el:"#gallery",
+    data:{condition},
+    methods:{
+        // search相关函数，函数从文件search.js中引入
+        searchUser:searchUser,
+        searchSteam:searchSteam,
+        searchTopic:searchTopic
+    }
+});
+
 // 移除apps页面存储的page、type信息
 function removeStorage(){
     window.sessionStorage.removeItem("page");

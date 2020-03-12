@@ -8,10 +8,12 @@ var topicDTO = {
     topicType: 3 // 帖子类型默认为广场
 };
 
+var condition = "";
+
 var vue = new Vue({
     el: "#publish",
     data: {
-        tagDTOS, topicDTO
+        tagDTOS, topicDTO, condition
     },
     mounted: function () { // vue对象加载完毕
         this.removeStorage();
@@ -63,7 +65,11 @@ var vue = new Vue({
         doPublish: doPublish,
         loadTagPanel: loadTagPanel,
         closeTagPanel: closeTagPanel,
-        addTag: addTag
+        addTag: addTag,
+        // search相关函数，函数从文件search.js中引入
+        searchUser:searchUser,
+        searchSteam:searchSteam,
+        searchTopic:searchTopic
     }
 });
 
@@ -85,7 +91,7 @@ function doPublish() {
             if (!vue.topicDTO.id && vue.topicDTO.id != null && vue.topicDTO.id != "") {
                 location.href = "/topic/" + vue.topicDTO.id;
             } else {
-                location.href = "/";
+                location.href = "/forum";
             }
         } else {
             if (jsonResult.code == 2004) { // 用户未进行登录操作

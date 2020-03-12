@@ -17,13 +17,15 @@ var loadedSubComments = false;
 var likeStatus = false;
 var liked = "";
 
+var condition = "";
+
 axios.default.withCredentials = true;
 var vue = new Vue({
     el: "#topic",
     data: {
         topicId, topic, comments, subComments, user, likeUsersId,
         loadedTopic, loadedComments, loadedSubComments, loadedUser,
-        commentContent, likeStatus, liked
+        commentContent, likeStatus, liked, condition
     },
     mounted: function () {
         this.removeStorage();
@@ -182,7 +184,11 @@ var vue = new Vue({
             var s = date.getSeconds();
 
             return Y + M + D + h + m + s;
-        }
+        },
+        // search相关函数，函数从文件search.js中引入
+        searchUser:searchUser,
+        searchSteam:searchSteam,
+        searchTopic:searchTopic
     }
 });
 

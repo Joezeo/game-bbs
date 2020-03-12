@@ -1,14 +1,14 @@
-var indexDTO = {
+var forumDTO = {
     user: {},
     pagination: {},
-    condition: '',
+    condition: "",
     tab: 'square',
     loaded: false, // 页面是否异步加载完毕
     loadedUser: false
 };
 var vue = new Vue({
         el: "#forum",
-        data: indexDTO,
+        data: forumDTO,
         mounted: function () { // 表示这个vue对象加载成功了
             this.removeStorage();
             this.closable();
@@ -61,7 +61,6 @@ var vue = new Vue({
                     if (jsonResult.success) {
                         var indexdto = response.data.data;
                         vue.pagination = indexdto.pagination;
-                        vue.condition = indexdto.condition;
                         vue.tab = indexdto.tab;
                         vue.loaded = true;
                     } else {
@@ -80,7 +79,11 @@ var vue = new Vue({
                 var s = date.getSeconds();
 
                 return Y + M + D + h + m + s;
-            }
+            },
+            // search相关函数，函数从文件search.js中引入
+            searchUser:searchUser,
+            searchSteam:searchSteam,
+            searchTopic:searchTopic
         }
     })
 ;

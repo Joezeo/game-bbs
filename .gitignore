@@ -33,3 +33,5 @@ build/
 ### extend ###
 *.properties
 log/
+*.png
+*.gif
