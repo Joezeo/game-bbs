@@ -81,14 +81,14 @@ public class PotalPageController {
         }
     }
 
-    @GetMapping("/auth")
+    @GetMapping("/steam/auth")
     public void auth(){
         steamProvider.auth();
     }
 
     @GetMapping("/steam/callback")
     public String steamCallback(HttpServletRequest request){
-        String steamid = (String) request.getAttribute("io");
+        String steamid = (String) request.getAttribute("id");
         System.out.println(steamid);
         return "redirect:/";
     }

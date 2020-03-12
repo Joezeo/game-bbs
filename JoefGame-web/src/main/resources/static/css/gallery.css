@@ -37,3 +37,11 @@ body{
 .imgsrc-input{
     width: 300px
 }
+.pixel-btn{
+    color: white !important;
+    background: #e7513b !important;
+    border-radius: 10px;
+}
+.my-input{
+    border-radius: 10px !important;
+}
