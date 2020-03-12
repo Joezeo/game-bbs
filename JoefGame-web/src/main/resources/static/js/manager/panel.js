@@ -10,7 +10,7 @@ var vue = new Vue({
     methods:{
         getUser:function () {
             var url = "/getUser";
-            axios.get(url).then(function (response) {
+            axios.post(url).then(function (response) {
                 var jsonResult = response.data;
                 if (jsonResult.success) {
                     var getedUser = jsonResult.data;

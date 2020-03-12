@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 @Controller
 public class PotalPageController {
@@ -82,13 +84,20 @@ public class PotalPageController {
     }
 
     @GetMapping("/steam/auth")
-    public void auth(){
-        steamProvider.auth();
+    public void auth(HttpServletResponse response){
+        String destination = steamProvider.auth();
+        if(destination != null){
+            try {
+                response.sendRedirect(destination);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @GetMapping("/steam/callback")
     public String steamCallback(HttpServletRequest request){
-        String steamid = (String) request.getAttribute("id");
+        String steamid = steamProvider.getSteamid(request);
         System.out.println(steamid);
         return "redirect:/";
     }
