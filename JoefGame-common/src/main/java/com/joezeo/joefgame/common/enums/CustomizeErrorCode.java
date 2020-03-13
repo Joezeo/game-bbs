@@ -36,7 +36,8 @@ public enum CustomizeErrorCode implements IExceptionErrorCode {
     EMAIL_HAS_EXISTED(2029, "该邮箱已被注册使用，请更换后使用或直接登录"),
     USER_GITHUB_LOGIN_FALIED(2030, "使用Github三方登录失败，请稍后重试"),
     SIGNUP_WRONG_AUTHCODE(2031, "验证码错误，请检查后重试，或重新获取验证码"),
-    AUTHCODE_TIME_OUT(2032, "验证码未获取或验证码已超时，请重新获取");
+    AUTHCODE_TIME_OUT(2032, "验证码未获取或验证码已超时，请重新获取"),
+    SEARCH_FAILED(2033, "发生未知原因搜索失败啦，请换个搜索条件试试");
 
     private Integer code;
     private String message;

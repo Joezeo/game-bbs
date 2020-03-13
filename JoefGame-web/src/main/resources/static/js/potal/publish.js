@@ -66,7 +66,7 @@ var vue = new Vue({
         loadTagPanel: loadTagPanel,
         closeTagPanel: closeTagPanel,
         addTag: addTag,
-        // search相关函数，函数从文件search.js中引入
+        // search相关函数，函数从文件commonSearch.js中引入
         searchUser:searchUser,
         searchSteam:searchSteam,
         searchTopic:searchTopic

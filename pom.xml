@@ -122,6 +122,12 @@
                 <artifactId>openid4java</artifactId>
                 <version>1.0.0</version>
             </dependency>
+            <!--SolrJ-->
+            <dependency>
+                <groupId>org.apache.solr</groupId>
+                <artifactId>solr-solrj</artifactId>
+                <version>8.4.1</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

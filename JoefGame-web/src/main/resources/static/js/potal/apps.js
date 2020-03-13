@@ -56,7 +56,7 @@ var vue = new Vue({
             var numStr = "" + num;
             return numStr.split(".")[0];
         },
-        // search相关函数，函数从文件search.js中引入
+        // search相关函数，函数从文件conmmonSearch.js中引入
         searchUser:searchUser,
         searchSteam:searchSteam,
         searchTopic:searchTopic

@@ -73,8 +73,9 @@ public class SteamProvider {
         if (verification != null) {
             AuthSuccess authSuccess = (AuthSuccess) verification.getAuthResponse();
             String clamiedID = authSuccess.getClaimed(); // steam以clamiedID的形式包裹steamID，格式：http://steamcommunity.com/openid/id/<steamid>
-            if(clamiedID != null && !"".equals(clamiedID)){
-                steamid = clamiedID.substring(clamiedID.lastIndexOf("/" + 1));
+            if (clamiedID != null && !"".equals(clamiedID)) {
+                log.info("用户使用Steam三方登录，clamiedID=" + clamiedID);
+                steamid = clamiedID.substring(clamiedID.lastIndexOf("/") + 1);
             }
         }
         return steamid;

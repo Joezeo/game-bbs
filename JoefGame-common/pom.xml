@@ -70,14 +70,6 @@
             <artifactId>ufile-client-java</artifactId>
         </dependency>
 
-        <!-- opencv -->
-        <!-- 注意：scope为system会时依赖链断掉，即其他项目无法依赖此项目的jar包 -->
-        <dependency>
-            <groupId>org.opencv</groupId>
-            <artifactId>opencv</artifactId>
-            <version>4.2.0</version>
-        </dependency>
-
         <!-- commons-io -->
         <dependency>
             <groupId>commons-io</groupId>
@@ -90,6 +82,21 @@
             <groupId>org.openid4java</groupId>
             <artifactId>openid4java</artifactId>
             <version>1.0.0</version>
+        </dependency>
+
+        <!--SolrJ-->
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj</artifactId>
+            <version>8.4.1</version>
+        </dependency>
+
+        <!-- opencv -->
+        <!-- 注意：scope为system会时依赖链断掉，即其他项目无法依赖此项目的jar包 -->
+        <dependency>
+            <groupId>org.opencv</groupId>
+            <artifactId>opencv</artifactId>
+            <version>4.2.0</version>
         </dependency>
 
         <dependency>

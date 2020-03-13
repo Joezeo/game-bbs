@@ -18,9 +18,9 @@ public class ErrorControllerAdvicer{
 
     @ExceptionHandler(Exception.class)
     ModelAndView handleControllerException(Throwable ex, HttpServletRequest request, HttpServletResponse response) {
-        String contentType = request.getContentType();
+        String contentType = request.getContentType().toLowerCase();
 
-        if("application/json;charset=UTF-8".equals(contentType)){ // 如果以前后端分离的方式访问服务器
+        if("application/json;charset=utf-8".equals(contentType)){ // 如果以前后端分离的方式访问服务器
             JsonResult result;
             if(ex instanceof CustomizeException){
                 result = JsonResult.errorOf((CustomizeException)ex);

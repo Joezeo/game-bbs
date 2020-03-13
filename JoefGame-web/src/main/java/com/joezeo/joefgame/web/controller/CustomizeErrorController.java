@@ -33,10 +33,10 @@ public class CustomizeErrorController implements ErrorController {
     @RequestMapping(produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView errorHtml(HttpServletRequest request, HttpServletResponse response, Throwable ex) {
         // 需判断前端的请求类型是不是application/json
-        String contentType = request.getContentType();
+        String contentType = request.getContentType().toLowerCase();
         HttpStatus status = getStatus(request);
 
-        if("application/json;charset=UTF-8".equals(contentType)) { // 如果以前后端分离的方式访问服务器
+        if("application/json;charset=utf-8".equals(contentType)) { // 如果以前后端分离的方式访问服务器
             JsonResult result;
             if (ex instanceof CustomizeException) {
                 result = JsonResult.errorOf((CustomizeException) ex);

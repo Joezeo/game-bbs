@@ -219,4 +219,12 @@ public class PotalPageController {
         }
         return "potal/topic";
     }
+
+    /**
+     * 获取搜索结果页面
+     */
+    @GetMapping("/search/{type}")
+    public String htmSearch (){
+        return "potal/search";
+    }
 }
