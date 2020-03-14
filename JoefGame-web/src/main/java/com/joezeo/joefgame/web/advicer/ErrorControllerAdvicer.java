@@ -14,16 +14,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @ControllerAdvice
-public class ErrorControllerAdvicer{
+public class ErrorControllerAdvicer {
 
     @ExceptionHandler(Exception.class)
     ModelAndView handleControllerException(Throwable ex, HttpServletRequest request, HttpServletResponse response) {
-        String contentType = request.getContentType().toLowerCase();
+        String contentType = request.getContentType();
 
-        if("application/json;charset=utf-8".equals(contentType)){ // 如果以前后端分离的方式访问服务器
+        if (contentType != null && "application/json;charset=utf-8".equals(contentType.toLowerCase())) { // 如果以application/json的方式访问服务器
             JsonResult result;
-            if(ex instanceof CustomizeException){
-                result = JsonResult.errorOf((CustomizeException)ex);
+            if (ex instanceof CustomizeException) {
+                result = JsonResult.errorOf((CustomizeException) ex);
             } else { // 处理包括 ServiceException 在内的异常情况
                 ex.printStackTrace(); // 此处异常是系统异常，需打印异常信息排查错误
                 result = JsonResult.errorOf(CustomizeErrorCode.SERVER_ERROR);
@@ -40,7 +40,7 @@ public class ErrorControllerAdvicer{
         } else { // 以get请求的方式访问服务器
             ModelAndView modelAndView = new ModelAndView("error");
 
-            if(ex instanceof CustomizeException){
+            if (ex instanceof CustomizeException) {
                 modelAndView.addObject("message", ex.getMessage());
             } else { // 处理包括 ServiceException 在内的异常情况，不包括根目录下的异常
                 ex.printStackTrace(); // 此处异常是系统异常，需打印异常信息排查错误

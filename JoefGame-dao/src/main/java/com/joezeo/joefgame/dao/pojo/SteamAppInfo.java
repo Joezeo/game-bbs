@@ -21,4 +21,5 @@ public class SteamAppInfo implements Serializable {
     private String summary;
     private Long gmtCreate;
     private Long gmtModify;
+    private Integer appType;
 }

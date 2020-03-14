@@ -10,9 +10,6 @@ import java.util.List;
 public class SteamAppDTO implements Serializable {
     private static final long serialVersionUID = 8537786774650172706L;
 
-    // 搜索时的搜索条件
-    private String condition;
-
     // 以 @Field 注解标注的字段为在Solr中存储的字段
     @Field private String id;
     @Field private Integer appid;
@@ -27,6 +24,7 @@ public class SteamAppDTO implements Serializable {
     @Field private Integer originalPrice;
     @Field private Integer finalPrice;
     private String summary;
+    @Field private Integer appType;
 
     /*
     如果是sub礼包信息则需存储它所包含的app信息

@@ -10,7 +10,7 @@
     <insert id="insert" parameterType="SteamSubBundleInfo">
         insert into t_steam_sub_bundle_info
         values (default, #{appid}, #{name}, #{devloper} ,#{publisher},#{releaseDate}, #{originalPrice}, #{finalPrice},
-        #{contains}, #{gmtCreate},#{gmtModify},#{imgUrl},#{type})
+        #{contains}, #{gmtCreate},#{gmtModify},#{imgUrl},#{type},#{appType})
     </insert>
 
     <select id="selectCount" resultType="int">

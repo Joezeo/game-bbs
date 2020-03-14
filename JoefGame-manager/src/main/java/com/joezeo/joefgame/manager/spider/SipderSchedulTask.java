@@ -150,16 +150,18 @@ public class SipderSchedulTask {
                     if(idx != 1){
                         log.error("修改特惠商品["+ type +"]info的finalPrice失败");
                     }
-                } else {
+                } else { // app
                     List<String> types = SteamAppTypeEnum.listType();
-                    for (String s : types) {
-                        SteamAppInfo steamAppInfo = steamAppInfoMapper.selectByAppid(item.getAppid(), s);
+                    types.remove("sub");
+                    types.remove("bundle");
+                    for (String typ : types) {
+                        SteamAppInfo steamAppInfo = steamAppInfoMapper.selectByAppid(item.getAppid(), typ);
                         if(steamAppInfo != null){
                             steamAppInfo.setFinalPrice(item.getPrice());
                             steamAppInfo.setGmtModify(System.currentTimeMillis());
-                            int idx = steamAppInfoMapper.updateByAppidSelective(steamAppInfo, s);
+                            int idx = steamAppInfoMapper.updateByAppidSelective(steamAppInfo, typ);
                             if(idx != 1){
-                                log.error("修改特惠商品[" + s + "]info的finalPrice失败");
+                                log.error("修改特惠商品[" + typ + "]info的finalPrice失败");
                             }
                             break;
                         }

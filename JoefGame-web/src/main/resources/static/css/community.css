@@ -533,10 +533,10 @@ a {
     display: none;
     position: absolute !important;
     top: 60px !important;
-    right: 0px !important;
+    right: 0 !important;
     z-index: 996 !important;
     width: 100% !important;
-    height: 180px !important;
+    height: 190px !important;
     background: white !important;
     border-radius: 15px !important;
 }

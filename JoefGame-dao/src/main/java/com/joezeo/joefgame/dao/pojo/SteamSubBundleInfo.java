@@ -22,4 +22,5 @@ public class SteamSubBundleInfo implements Serializable {
     private Long gmtModify;
     private String imgUrl;
     private String type;
+    private Integer appType;
 }

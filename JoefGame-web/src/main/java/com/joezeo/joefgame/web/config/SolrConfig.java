@@ -13,6 +13,7 @@ public class SolrConfig {
     @Bean("solrClient")
     public HttpSolrClient httpSolrClient(){
         HttpSolrClient.Builder builder = new HttpSolrClient.Builder(solrUrl);
+
         return builder.build();
     }
 }

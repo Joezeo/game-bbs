@@ -594,6 +594,11 @@ public class PageResolver {
             steamSubBundleInfo.setGmtModify(steamSubBundleInfo.getGmtCreate());
             steamSubBundleInfo.setImgUrl(imgUrl);
             steamSubBundleInfo.setType(type);
+            if("sub".equals(type)){
+                steamSubBundleInfo.setAppType(7);
+            } else {
+                steamSubBundleInfo.setAppType(5);
+            }
             int index = steamSubBundleInfoMapper.insert(steamSubBundleInfo);
             if (index != 1) {
                 log.error("插入steam礼包信息失败,appid" + appid);

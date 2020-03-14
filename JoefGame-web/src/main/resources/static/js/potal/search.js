@@ -20,59 +20,43 @@ if(!param){ // 搜索参数为空，返回主页
 }
 
 var condition=""; // 如果在搜索结果页面使用搜索功能的参数
-
-/*
-此些参数用于接收搜索结果
-start
- */
-var steamAppList = {};
-var topicList = {};
-var userList = {};
-
-var steamAppLoaded = false;
-var topicLoaded = false;
-var userLoaded = false;
-/* end */
+var pagination = {};
+var results = {};
+var loaded = false;
+var apptypes = ["游戏","软件","DLC","试玩游戏","捆绑包","原声带","礼包"];
 
 var vue = new Vue({
     el:"#search",
     data:{
-        condition,type,param,
-        steamAppDTO: steamAppList,topicDTO: topicList,userDTO: userList,steamAppLoaded,topicLoaded,userLoaded
+        condition,type,param,pagination,results,loaded,apptypes
     },
     mounted:function(){
-        this.search(this.type, this.param);
+        this.search(1,this.type, this.param);
     },
     methods:{
         // search相关函数，函数从文件commonSearch.js中引入
         searchUser:searchUser,
         searchSteam:searchSteam,
         searchTopic:searchTopic,
-        search:function (type, param) {
+        search:function (page, type, param) {
             var url = "/search/"+type;
-            var params = {condition: param};
+            var params = {condition: param, page: page};
             axios.post(url, params).then(function (result) {
                 var jsonResult = result.data;
                 if(jsonResult.success){
-                    switch (type) {
-                        case "steam":
-                            vue.steamAppDTO = jsonResult.data;
-                            vue.steamAppLoaded = true;
-                            break;
-                        case "topic":
-                            vue.topicDTO = jsonResult.data;
-                            vue.topicLoaded = true;
-                            break;
-                        case "user":
-                            vue.userDTO = jsonResult.data;
-                            vue.userLoaded = true;
-                            break;
-                    }
+                    vue.pagination = jsonResult.data;
+                    vue.results = vue.pagination.datas;
+                    vue.loaded = true;
                 } else {
                     alert(jsonResult.message);
                     window.location.href = "/"; //搜索失败，返回主页
                 }
             })
+        },
+        // 截除数字的小数位
+        fixedNum:function (num) {
+            var numStr = "" + num;
+            return numStr.split(".")[0];
         }
     }
 });

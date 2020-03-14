@@ -11,6 +11,7 @@ public class PaginationDTO<T> implements Serializable {
 
     private static final long serialVersionUID = 3659016553387318138L;
 
+
     private List<T> datas; // 根据分页信息获取到的相应页数的数据
     private Boolean hasNext; // 判断是否展示上一页按钮
     private Boolean hasPrevious; // 判断是否展示下一页按钮
@@ -21,6 +22,8 @@ public class PaginationDTO<T> implements Serializable {
     private Integer totalCount; // 总数据条数
     private Integer totalPage; // 总页数
     private List<Integer> pages = new ArrayList<>(); // 分页条上一共要展示的页数集合
+
+    private String condition; // 搜索时需要的搜索条件
 
     public void setPagination(Integer page, Integer size, Integer totalCount) {
         this.totalPage = totalCount % size == 0 ? totalCount / size : totalCount / size + 1;
