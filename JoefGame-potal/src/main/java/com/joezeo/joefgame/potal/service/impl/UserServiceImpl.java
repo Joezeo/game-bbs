@@ -163,6 +163,9 @@ public class UserServiceImpl implements UserService {
         List<String> names = roles.stream().map(role -> role.getName()).collect(Collectors.toList());
         userDTO.setRoles(names);
 
+        // 将密码设为null
+        userDTO.setPassword(null);
+
         return userDTO;
     }
 
@@ -188,6 +191,9 @@ public class UserServiceImpl implements UserService {
         List<Role> roles = userRoleMapper.selectRolesById(userDTO.getId());
         List<String> names = roles.stream().map(role -> role.getName()).collect(Collectors.toList());
         userDTO.setRoles(names);
+
+        // 将密码设置为null
+        userDTO.setPassword(null);
         return userDTO;
     }
 
@@ -198,6 +204,10 @@ public class UserServiceImpl implements UserService {
             log.error("通过主键获取user失败,userid=" + userid);
             throw new CustomizeException(CustomizeErrorCode.SERVER_ERROR);
         }
+
+        // 将密码、salt设置为null
+        user.setPassword(null);
+        user.setSalt(null);
         return user;
     }
 }

@@ -87,19 +87,23 @@
                         <table class="col-lg-12 .col-md-12 .col-sm-12 .col-xs-12 search-table">
                             <div v-if="loaded">
                                 <tr v-for="topic in results" class="content-tr">
-                                    <div class="media-left">
-                                        <a href="#">
-                                            <img class="media-object head-img" :src="topic.user.avatarUrl"
-                                                 alt="用户头像" style="border-radius: 8px;">
-                                        </a>
-                                    </div>
-                                    <div class="media-body">
-                                        <h4 class="media-heading"><a :href="'/topic/'+topic.topicid"
-                                                                     style="color: black;padding-top: 10px;font-size: 16px;"
-                                                                     v-text="topic.title"></a></h4>
-                                        <span class="text-desc"><span v-text="topic.user.name"></span> • <span
-                                                v-text="timestampToTime(topic.gmtCreate)"></span></span></span>
-                                    </div>
+                                    <td>
+                                        <div class="media-left">
+                                            <a href="#">
+                                                <img class="media-object head-img" :src="topic.user.avatarUrl"
+                                                     alt="用户头像" style="border-radius: 8px;">
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="media-body">
+                                            <h4 class="media-heading"><a :href="'/topic/'+topic.topicid"
+                                                                         style="color: black;padding-top: 10px;font-size: 16px;"
+                                                                         v-text="topic.title"></a></h4>
+                                            <span class="text-desc"><span v-text="topic.user.name"></span> • <span
+                                                    v-text="timestampToTime(topic.gmtCreate)"></span></span></span>
+                                        </div>
+                                    </td>
                                 </tr>
                             </div>
                         </table>
