@@ -47,7 +47,7 @@
                         <div v-if="loaded">
                             <tr v-for="app in results" class="content-tr">
                                 <td>
-                                    <img :src="app.imgUrl" alt="App Pic">
+                                    <img :src="app.imgUrl" alt="App Pic" class="app-pic">
                                 </td>
                                 <td v-text="app.appid" style="text-align: center;"></td>
                                 <td v-text="apptypes[app.appType-1]" style="width: 69px;text-align: center"></td>
@@ -84,13 +84,40 @@
 
                 <template v-if="type=='topic'" v-cloak>
                     <div v-if="loaded">
-
+                        <table class="col-lg-12 .col-md-12 .col-sm-12 .col-xs-12 search-table">
+                            <div v-if="loaded">
+                                <tr v-for="topic in results" class="content-tr">
+                                    <div class="media-left">
+                                        <a href="#">
+                                            <img class="media-object head-img" :src="topic.user.avatarUrl"
+                                                 alt="用户头像" style="border-radius: 8px;">
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading"><a :href="'/topic/'+topic.topicid"
+                                                                     style="color: black;padding-top: 10px;font-size: 16px;"
+                                                                     v-text="topic.title"></a></h4>
+                                        <span class="text-desc"><span v-text="topic.user.name"></span> • <span
+                                                v-text="timestampToTime(topic.gmtCreate)"></span></span></span>
+                                    </div>
+                                </tr>
+                            </div>
+                        </table>
                     </div>
                 </template>
 
                 <template v-if="type=='user'" v-cloak>
                     <div v-if="loaded">
-
+                        <table class="col-lg-12 .col-md-12 .col-sm-12 .col-xs-12 search-table">
+                            <div v-if="loaded">
+                                <tr v-for="user in results" class="content-tr">
+                                    <td><img :src="user.avatarUrl" class="user-pic"></td>
+                                    <td><a href="" v-text="user.name" class="user-name"></a>
+                                        <br><span v-text="user.bio"></span>
+                                    </td>
+                                </tr>
+                            </div>
+                        </table>
                     </div>
                 </template>
 

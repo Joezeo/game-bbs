@@ -9,6 +9,8 @@ public interface UserService{
 
     UserDTO queryByAccountid(String accountId);
 
+    User queryByUserid(Long userid);
+
     void createOrUpadate(GithubUser githubUser);
 
     void signup(User user);

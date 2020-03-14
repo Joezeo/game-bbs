@@ -25,7 +25,7 @@ public class TopicDTO implements Serializable {
     private Integer commentCount;
     private Integer viewCount;
     private Integer likeCount;
-    private Long gmtCreate;
+    @Field private Long gmtCreate;
     private Long gmtModify;
     @Field private Long userid;
     private Integer topicType;

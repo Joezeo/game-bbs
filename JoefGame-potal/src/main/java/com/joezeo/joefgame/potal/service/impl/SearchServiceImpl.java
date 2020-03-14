@@ -4,29 +4,31 @@ import com.joezeo.joefgame.common.dto.PaginationDTO;
 import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
 import com.joezeo.joefgame.common.enums.SolrCoreNameEnum;
 import com.joezeo.joefgame.common.exception.CustomizeException;
+import com.joezeo.joefgame.dao.pojo.User;
 import com.joezeo.joefgame.potal.dto.SteamAppDTO;
 import com.joezeo.joefgame.potal.dto.TopicDTO;
 import com.joezeo.joefgame.potal.dto.UserDTO;
 import com.joezeo.joefgame.potal.service.SearchService;
+import com.joezeo.joefgame.potal.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.params.ModifiableSolrParams;
-import org.apache.solr.common.params.SolrParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
 public class SearchServiceImpl implements SearchService {
     @Autowired
     private HttpSolrClient solrClient;
+    @Autowired
+    private UserService userService;
 
     @Override
     public PaginationDTO<SteamAppDTO> searchSteamBySolr(String condition, Integer page) {
@@ -38,7 +40,6 @@ public class SearchServiceImpl implements SearchService {
             shardsBuilder.append(solrClient.getBaseURL() + "/" + coreName + ",");
         });
         String shards = shardsBuilder.substring(0, shardsBuilder.lastIndexOf(","));
-        System.out.println(shards);
 
         // 判断搜索条件是否是数字，如果是则通过appid搜索
         boolean isNum = StringUtils.isNumeric(condition);
@@ -92,6 +93,12 @@ public class SearchServiceImpl implements SearchService {
             paginationDTO.setPagination(page, 30, totalCount);
 
             List<TopicDTO> topics = query.getBeans(TopicDTO.class);
+
+            for (TopicDTO topic : topics) {
+                User user = userService.queryByUserid(topic.getUserid());
+                topic.setUser(user);
+            }
+
             paginationDTO.setDatas(topics);
 
             return paginationDTO;
@@ -120,6 +127,7 @@ public class SearchServiceImpl implements SearchService {
             paginationDTO.setPagination(page, 30, totalCount);
 
             List<UserDTO> topics = query.getBeans(UserDTO.class);
+
             paginationDTO.setDatas(topics);
 
             return paginationDTO;

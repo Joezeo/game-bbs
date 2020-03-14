@@ -190,4 +190,14 @@ public class UserServiceImpl implements UserService {
         userDTO.setRoles(names);
         return userDTO;
     }
+
+    @Override
+    public User queryByUserid(Long userid) {
+        User user = userMapper.selectByPrimaryKey(userid);
+        if(user == null){
+            log.error("通过主键获取user失败,userid=" + userid);
+            throw new CustomizeException(CustomizeErrorCode.SERVER_ERROR);
+        }
+        return user;
+    }
 }

@@ -319,6 +319,7 @@ public class SteamServiceImpl implements SteamService {
             // 由于缓存中的信息并不需要修改，所以使用String的方式存储
             redisUtil.set(key, appDTO, difftime);
         }
+
         appDTO.setType(type);
         return appDTO;
     }
