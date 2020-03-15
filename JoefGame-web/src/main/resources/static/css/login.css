@@ -117,3 +117,8 @@ label{
 .signup-bottom-btn a{
     color: #e7513b;
 }
+.ticks{
+    width: 70% !important;
+    height: 105px !important;
+    margin-left: 15%;
+}

@@ -2,6 +2,7 @@ package com.joezeo.joefgame.web.controller;
 
 import com.joezeo.joefgame.common.dto.AccessTokenDTO;
 import com.joezeo.joefgame.common.dto.GithubUser;
+import com.joezeo.joefgame.common.dto.SteamUser;
 import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
 import com.joezeo.joefgame.common.exception.CustomizeException;
 import com.joezeo.joefgame.common.provider.GithubProvider;
@@ -62,7 +63,8 @@ public class PotalPageController {
      */
     @GetMapping("/callback")
     public String callback(@RequestParam("code") String code,
-                           @RequestParam("state") String state) {
+                           @RequestParam("state") String state,
+                           HttpSession session) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
         accessTokenDTO.setClient_secret(clientSecret);
@@ -74,11 +76,18 @@ public class PotalPageController {
         GithubUser githubUser = githubProvider.getGithubUser(accessToken);
 
         if (githubUser != null) {
-            // 先进行检查数据库中是否已经有该条github用户数据，如果有则更新信息，没有则存入数据
-            userService.createOrUpadate(githubUser);
+            // 先进行检查数据库中是否已经有该条github用户数据
+            // 如果有则登录，没有则将GithubUser信息存入session，转入注册页面
+            boolean isExist = userService.isExistGithubUser(githubUser.getId());
+            if(isExist){
+                userService.loginBaseGithub(githubUser.getId());
+                return "redirect:/";
+            } else {
+                session.setAttribute("tempGithubUser", githubUser);
+                return "redirect:/signup";
+            }
 
-            return "redirect:/";
-        } else {
+        } else { // githubUser == null 说明三方登录失败了，转回主页面
             return "redirect:/";
         }
     }
@@ -96,10 +105,28 @@ public class PotalPageController {
     }
 
     @GetMapping("/steam/callback")
-    public String steamCallback(HttpServletRequest request){
+    public String steamCallback(HttpServletRequest request, HttpSession session){
         String steamid = steamProvider.getSteamid(request);
-        // TODO: 操作steamID，判断当前用户是否注册，如未注册进入注册页面，然后与steamID绑定，如果已经注册则直接登录成功
-        return "redirect:/";
+        // 操作steamID，判断当前用户是否注册，如未注册进入注册页面，然后与steamID绑定，如果已经注册则直接登录成功
+        if(steamid != null && !"".equals(steamid)){
+            boolean isExist = userService.isExistSteamUser(steamid);
+            if(isExist){
+                // 进行登录操作
+                userService.loginBaseSteam(steamid);
+                return "redirect:/";
+            } else {
+                // 通过steamID查询该用户的steam昵称
+                SteamUser steamUser = new SteamUser();
+                String steamName = steamProvider.getSteamName(steamid);
+                steamUser.setName(steamName);
+                // 将steamUser存入session
+                session.setAttribute("tempSteamUser", steamUser);
+                // 转到注册页面
+                return "redirect:/signup";
+            }
+        } else { // steamID 为空，说明steam 三方登录失败，转回主页面
+            return "redirect:/";
+        }
     }
 
     /**

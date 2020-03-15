@@ -5,8 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.joezeo.joefgame.potal.shiro.CustomFormAuthenticationFilter;
-import com.joezeo.joefgame.potal.shiro.GithubShiroRealm;
+import com.joezeo.joefgame.potal.shiro.ThreePartyLoginShiroRealm;
 import com.joezeo.joefgame.potal.shiro.UserShiroRealm;
 import com.joezeo.joefgame.common.utils.PasswordHelper;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -19,11 +18,8 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.servlet.Filter;
 
 @Configuration
 public class ShiroConfig {
@@ -112,8 +108,8 @@ public class ShiroConfig {
     }
 
     @Bean
-    public GithubShiroRealm githubShiroRealm() {
-        return new GithubShiroRealm();
+    public ThreePartyLoginShiroRealm threePartyLoginShiroRealm() {
+        return new ThreePartyLoginShiroRealm();
     }
 
     @Bean
@@ -123,7 +119,7 @@ public class ShiroConfig {
         // 设置多个realm
         List<Realm> list = new ArrayList<>();
         list.add(userShiroRealm());
-        list.add(githubShiroRealm());
+        list.add(threePartyLoginShiroRealm());
         securityManager.setRealms(list);
 
         // 多Realm认证策略，AtLeastOneSuccessFulAtrategy 至少一个成功的策略-默认使用

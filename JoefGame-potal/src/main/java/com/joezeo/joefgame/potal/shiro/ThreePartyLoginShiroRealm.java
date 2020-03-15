@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class GithubShiroRealm extends AuthorizingRealm {
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+public class ThreePartyLoginShiroRealm extends AuthorizingRealm {
 
     @Autowired
     private UserMapper userMapper;
@@ -55,7 +56,7 @@ public class GithubShiroRealm extends AuthorizingRealm {
         // 以Github三方登录方式进行登录验证
         // 走一下表面过场就行，直接验证通过
         String account = (String) token.getPrincipal();
-        if(!"github".equals(account)){
+        if(!"3-part-login".equals(account)){
             return null;
         }
 

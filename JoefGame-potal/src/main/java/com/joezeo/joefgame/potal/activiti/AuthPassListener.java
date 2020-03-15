@@ -11,21 +11,29 @@ public class AuthPassListener implements ExecutionListener {
 
     private static final long serialVersionUID = -8762771418466969185L;
 
-    private UserService userService;
-
+    /**
+     *  用户注册邮箱验证成功
+     */
     @Override
     public void notify(DelegateExecution execution) throws Exception {
-        // TODO: 验证码成功逻辑
         // 进行注册账户操作
         String name = (String) execution.getVariable("name");
         String email = (String) execution.getVariable("target");
         String password = (String) execution.getVariable("password");
+        String githubID = (String) execution.getVariable("githubID");
+        String steamID = (String) execution.getVariable("steamID");
 
-        userService = SpringGetter.getBean(UserServiceImpl.class).get();
-        User user =new User();
+        UserService userService = SpringGetter.getBean(UserServiceImpl.class).get();
+        User user = new User();
         user.setName(name);
         user.setPassword(password);
         user.setEmail(email);
+        if (githubID != null) {
+            user.setGithubAccountId(githubID);
+        }
+        if (steamID != null) {
+            user.setSteamId(steamID);
+        }
         userService.signup(user);
     }
 }

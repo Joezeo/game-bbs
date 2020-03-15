@@ -1,6 +1,12 @@
 package com.joezeo.joefgame.common.provider;
 
+import com.alibaba.fastjson.JSONObject;
+import com.joezeo.joefgame.common.dto.SteamUser;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.openid4java.association.AssociationException;
 import org.openid4java.consumer.ConsumerException;
@@ -13,10 +19,12 @@ import org.openid4java.message.AuthSuccess;
 import org.openid4java.message.MessageException;
 import org.openid4java.message.ParameterList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
 
 @Component
@@ -27,6 +35,15 @@ public class SteamProvider {
      */
     @Autowired
     private ConsumerManager consumerManager;
+
+    /*
+    OkHttpClient
+     */
+    @Autowired
+    private OkHttpClient okHttpClient;
+
+    @Value("${steam.api.private.key}")
+    private String steamApiPrivateKey;
 
     public String auth() {
         try {
@@ -79,5 +96,23 @@ public class SteamProvider {
             }
         }
         return steamid;
+    }
+
+    public String getSteamName(String steamid) {
+        String url = " http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=" + steamApiPrivateKey + "&steamids=" + steamid;
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+
+        try {
+            Response response = okHttpClient.newCall(request).execute();
+            String jsonResult = response.body().toString();
+            SteamUser steamUser = JSONObject.parseObject(jsonResult, SteamUser.class);
+            return steamUser.getName();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

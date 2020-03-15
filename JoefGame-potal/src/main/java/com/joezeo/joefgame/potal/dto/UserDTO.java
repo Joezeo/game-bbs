@@ -21,6 +21,7 @@ public class UserDTO implements Serializable {
     @Field private String avatarUrl;
     private String authCode; // 用于邮箱验证的验证码
     private Boolean rememberMe; // 是否记住登录状态（7天）
+    private String steamId;
 
     private List<String> roles;
 }

@@ -1,6 +1,8 @@
 package com.joezeo.joefgame.potal.controller;
 
+import com.joezeo.joefgame.common.dto.GithubUser;
 import com.joezeo.joefgame.common.dto.JsonResult;
+import com.joezeo.joefgame.common.dto.SteamUser;
 import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
 import com.joezeo.joefgame.common.utils.AuthUtils;
 import com.joezeo.joefgame.common.utils.TimeUtils;
@@ -80,6 +82,12 @@ public class AuthorizeController {
             // 设置流程变量-密码、用户名，以便在Listener中使用
             runtimeService.setVariable(task.getExecutionId(), "password", userDTO.getPassword());
             runtimeService.setVariable(task.getExecutionId(), "name", userDTO.getName());
+            if (userDTO.getGithubAccountId() != null) { // 说明是通过Github三方绑定注册
+                runtimeService.setVariable(task.getExecutionId(), "githubID", userDTO.getGithubAccountId());
+            }
+            if (userDTO.getSteamId() != null) { // 说明是通过steam三方绑定注册
+                runtimeService.setVariable(task.getExecutionId(), "steamID", userDTO.getSteamId());
+            }
             taskService.complete(task.getId());
             // 验证码验证任务完成，执行监听器 AuthPassListener 进行注册操作
             return JsonResult.okOf(null);
@@ -131,5 +139,21 @@ public class AuthorizeController {
         access.setMaxAge(60 * 60 * 24); // cookie储存一天
         response.addCookie(access);
         return JsonResult.okOf(null);
+    }
+
+    @PostMapping("/getTmpGithubUser")
+    @ResponseBody
+    JsonResult<GithubUser> getTmpGithubUser(HttpSession session) {
+        GithubUser githubUser = (GithubUser) session.getAttribute("tempGithubUser");
+
+        return JsonResult.okOf(githubUser);
+    }
+
+    @PostMapping("/getTmpSteamUser")
+    @ResponseBody
+    JsonResult<GithubUser> getTmpSteamUser(HttpSession session) {
+        SteamUser steamUser = (SteamUser) session.getAttribute("tempSteamUser");
+
+        return JsonResult.okOf(steamUser);
     }
 }
