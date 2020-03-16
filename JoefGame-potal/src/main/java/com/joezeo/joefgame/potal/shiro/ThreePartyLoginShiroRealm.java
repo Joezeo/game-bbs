@@ -60,10 +60,22 @@ public class ThreePartyLoginShiroRealm extends AuthorizingRealm {
             return null;
         }
 
-        String githubAccoutId = String.valueOf((char[]) token.getCredentials());
-        UserExample example = new UserExample();
-        example.createCriteria().andGithubAccountIdEqualTo(githubAccoutId);
-        User user = userMapper.selectByExample(example).get(0);
+        String threePartyID = String.valueOf((char[]) token.getCredentials());
+
+        UserExample githubExample = new UserExample();
+        githubExample.createCriteria().andGithubAccountIdEqualTo(threePartyID);
+        List<User> userByGithub = userMapper.selectByExample(githubExample);
+
+        UserExample steamExample = new UserExample();
+        steamExample.createCriteria().andSteamIdEqualTo(threePartyID);
+        List<User> userBySteam = userMapper.selectByExample(steamExample);
+
+        User user;
+        if(userByGithub != null && userByGithub.size() != 0){
+            user = userByGithub.get(0);
+        } else {
+            user = userBySteam.get(0);
+        }
 
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(user, userDTO);
@@ -71,7 +83,7 @@ public class ThreePartyLoginShiroRealm extends AuthorizingRealm {
         List<Role> roles = userRoleMapper.selectRolesById(user.getId());
         List<String> names = roles.stream().map(role -> role.getName()).collect(Collectors.toList());
         userDTO.setRoles(names);
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userDTO, githubAccoutId, getName());
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userDTO, threePartyID, getName());
         return info;
     }
 }

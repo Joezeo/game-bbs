@@ -80,7 +80,7 @@ var vue = new Vue({
                 if(jsonResult.success){
                     vue.tmpSteamUser = jsonResult.data;
                     if(vue.tmpSteamUser != null){
-                        vue.name = vue.tmpGithubUser.name;
+                        vue.name = vue.tmpSteamUser.personaname;
                     }
                 }
             })

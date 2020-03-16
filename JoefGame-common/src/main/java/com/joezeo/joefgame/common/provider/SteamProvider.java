@@ -1,9 +1,9 @@
 package com.joezeo.joefgame.common.provider;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.joezeo.joefgame.common.dto.SteamResponse;
 import com.joezeo.joefgame.common.dto.SteamUser;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -99,7 +99,7 @@ public class SteamProvider {
     }
 
     public String getSteamName(String steamid) {
-        String url = " http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=" + steamApiPrivateKey + "&steamids=" + steamid;
+        String url = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=" + steamApiPrivateKey + "&steamids=" + steamid;
         Request request = new Request.Builder()
                 .url(url)
                 .get()
@@ -107,9 +107,12 @@ public class SteamProvider {
 
         try {
             Response response = okHttpClient.newCall(request).execute();
-            String jsonResult = response.body().toString();
-            SteamUser steamUser = JSONObject.parseObject(jsonResult, SteamUser.class);
-            return steamUser.getName();
+            String jsonResult = response.body().string();
+            SteamResponse steamResponse = JSON.parseObject(jsonResult, SteamResponse.class);
+            List<SteamUser> players = steamResponse.getResponse().getPlayers();
+            if(players != null && players.size()!=0){
+                return players.get(0).getPersonaname();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

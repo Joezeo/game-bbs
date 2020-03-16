@@ -118,7 +118,8 @@ public class PotalPageController {
                 // 通过steamID查询该用户的steam昵称
                 SteamUser steamUser = new SteamUser();
                 String steamName = steamProvider.getSteamName(steamid);
-                steamUser.setName(steamName);
+                steamUser.setPersonaname(steamName);
+                steamUser.setSteamid(steamid);
                 // 将steamUser存入session
                 session.setAttribute("tempSteamUser", steamUser);
                 // 转到注册页面
