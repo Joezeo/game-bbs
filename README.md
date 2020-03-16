@@ -12,7 +12,7 @@
 ![](https://img.shields.io/badge/%E6%9C%8D%E5%8A%A1%E6%8F%90%E4%BE%9B-Nginx/1.17.9-blue?style=flat&logo=appveyor)
 ---
 **基本框架**：SpringBoot + MyBatis  
-**前端**：Vue + Html5
+**前端**：Vue + Html5  
 **三方API调用**：Github API，Steam API，UCloud API  
 **数据库版本管理**：Flyway  
 **全文检索**：Solr    
