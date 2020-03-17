@@ -3,8 +3,8 @@ package com.joezeo.joefgame.potal.controller;
 import com.joezeo.joefgame.common.dto.JsonResult;
 import com.joezeo.joefgame.common.enums.CommentTypeEnum;
 import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
-import com.joezeo.joefgame.dao.pojo.User;
 import com.joezeo.joefgame.potal.dto.CommentDTO;
+import com.joezeo.joefgame.potal.dto.UserDTO;
 import com.joezeo.joefgame.potal.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +28,7 @@ public class CommentController {
     @ResponseBody
     public JsonResult<?> comment(@RequestBody CommentDTO commentDTO,
                               HttpSession session) {
-        User user = (User) session.getAttribute("user");
+        UserDTO user = (UserDTO) session.getAttribute("user");
         if (user == null) {
             return JsonResult.errorOf(CustomizeErrorCode.USER_NOT_LOGIN);
         }
@@ -44,7 +44,7 @@ public class CommentController {
     @PostMapping("/comment/subComment")
     @ResponseBody
     public JsonResult<?> subComment(@RequestBody CommentDTO commentDTO, HttpSession session){
-        User user = (User) session.getAttribute("user");
+        UserDTO user = (UserDTO) session.getAttribute("user");
         if (user == null) {
             return JsonResult.errorOf(CustomizeErrorCode.USER_NOT_LOGIN);
         }

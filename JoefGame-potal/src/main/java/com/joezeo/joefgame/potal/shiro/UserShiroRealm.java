@@ -1,6 +1,5 @@
 package com.joezeo.joefgame.potal.shiro;
 
-import com.joezeo.joefgame.common.utils.PasswordHelper;
 import com.joezeo.joefgame.dao.mapper.UserMapper;
 import com.joezeo.joefgame.dao.mapper.UserRoleMapper;
 import com.joezeo.joefgame.dao.pojo.Role;
@@ -31,8 +30,6 @@ public class UserShiroRealm extends AuthorizingRealm {
     private UserMapper userMapper;
     @Autowired
     private UserRoleMapper userRoleMapper;
-    @Autowired
-    private PasswordHelper passwordHelper;
 
     /**
      * 进行授权

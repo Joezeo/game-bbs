@@ -8,6 +8,7 @@ import com.joezeo.joefgame.common.exception.ServiceException;
 import com.joezeo.joefgame.potal.dto.CommentDTO;
 import com.joezeo.joefgame.dao.mapper.*;
 import com.joezeo.joefgame.dao.pojo.*;
+import com.joezeo.joefgame.potal.dto.UserDTO;
 import com.joezeo.joefgame.potal.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -40,7 +41,7 @@ public class CommentServiceImpl implements CommentService {
     private CommentLikeUserMapper commentLikeUserMapper;
 
     @Override
-    public void addComment(CommentDTO commentDTO, User notifier) {
+    public void addComment(CommentDTO commentDTO, UserDTO notifier) {
         if (commentDTO == null) {
             log.error("函数addComment：参数commentDTO异常，=null");
             throw new ServiceException("参数commentDTO异常，=null");
