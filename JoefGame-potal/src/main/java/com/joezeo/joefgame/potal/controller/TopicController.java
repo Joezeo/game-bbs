@@ -24,7 +24,6 @@ public class TopicController {
     CommentService commentService;
 
     @PostMapping("/topic/getTopic")
-    @ResponseBody
     public JsonResult<TopicDTO> getTopic(@RequestBody TopicDTO topicDTO){
         // 查询指定id的帖子
         topicDTO = topicService.queryById(topicDTO.getId());
@@ -36,7 +35,6 @@ public class TopicController {
     }
 
     @PostMapping("/topic/getComments")
-    @ResponseBody
     public JsonResult<List<CommentDTO>> getComments(@RequestBody TopicDTO topicDTO){
         // 查询当前id帖子的全部评论
         List<CommentDTO> commentDTOS = commentService.listByParentId(topicDTO.getId(), CommentTypeEnum.QUESTION);
@@ -45,14 +43,12 @@ public class TopicController {
     }
 
     @PostMapping("/topic/like")
-    @ResponseBody
     public JsonResult<TopicDTO> likeTopic(@RequestBody TopicDTO topicDTO){
         topicDTO = topicService.likeTopic(topicDTO.getId(), topicDTO.getUserid());
         return JsonResult.okOf(topicDTO);
     }
 
     @PostMapping("/topic/unlike")
-    @ResponseBody
     public JsonResult<TopicDTO> unlikeTopic(@RequestBody TopicDTO topicDTO){
         topicDTO = topicService.unlikeTopic(topicDTO.getId(), topicDTO.getUserid());
         return JsonResult.okOf(topicDTO);

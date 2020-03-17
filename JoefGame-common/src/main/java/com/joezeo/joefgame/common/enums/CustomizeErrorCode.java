@@ -38,8 +38,9 @@ public enum CustomizeErrorCode implements IExceptionErrorCode {
     SIGNUP_WRONG_AUTHCODE(2031, "验证码错误，请检查后重试，或重新获取验证码"),
     AUTHCODE_TIME_OUT(2032, "验证码未获取或验证码已超时，请重新获取"),
     SEARCH_FAILED(2033, "发生未知原因搜索失败，请换个搜索条件试试"),
-    USER_STEAM_LOGIN_FALIED(2034, "使用Steam三方登录失败，请稍后重试")
-    ;
+    USER_STEAM_LOGIN_FALIED(2034, "使用Steam三方登录失败，请稍后重试"),
+    FAVORITE_APP_FAILED(2035, "收藏应用失败，请稍后重试"),
+    UNFAVORITE_APP_FAILED(2036, "取消收藏应用失败，请稍后重试");
 
     private Integer code;
     private String message;

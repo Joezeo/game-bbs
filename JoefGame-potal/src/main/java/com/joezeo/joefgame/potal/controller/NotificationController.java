@@ -20,7 +20,6 @@ public class NotificationController {
     private NotificationService notificationService;
 
     @PostMapping("/notification/{id}")
-    @ResponseBody
     public JsonResult<Long> notification(@PathVariable("id") Long id, HttpSession session){
         User user = (User) session.getAttribute("user");
         if(user == null){
@@ -34,7 +33,6 @@ public class NotificationController {
     }
 
     @PostMapping("/notification/allRead")
-    @ResponseBody
     public JsonResult allRead(HttpSession session){
         User user = (User) session.getAttribute("user");
         if(user == null){

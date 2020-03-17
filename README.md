@@ -14,7 +14,8 @@
 **基本框架**：SpringBoot + MyBatis  
 **前端**：Vue + Html5  
 **三方API调用**：Github API，Steam API，UCloud API  
-**数据库版本管理**：Flyway  
+**数据库版本管理**：Flyway    
+**缓存提供**：Redis  
 **全文检索**：Solr    
 **认证、授权**：Shiro  
 **流程管理**：Activiti6  

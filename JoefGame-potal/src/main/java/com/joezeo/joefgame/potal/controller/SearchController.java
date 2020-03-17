@@ -23,7 +23,6 @@ public class SearchController {
     private SearchService searchService;
 
     @PostMapping("/steam")
-    @ResponseBody
     public JsonResult<PaginationDTO<SteamAppDTO>> steam(@RequestBody PaginationDTO paginationDTO){
         try {
             String condition = URLDecoder.decode(paginationDTO.getCondition(), "UTF-8");
@@ -36,7 +35,6 @@ public class SearchController {
     }
 
     @PostMapping("/topic")
-    @ResponseBody
     public JsonResult<PaginationDTO<TopicDTO>> topic(@RequestBody PaginationDTO paginationDTO){
         try {
             String condition = URLDecoder.decode(paginationDTO.getCondition(), "UTF-8");
@@ -49,7 +47,6 @@ public class SearchController {
     }
 
     @PostMapping("/user")
-    @ResponseBody
     public JsonResult<PaginationDTO<UserDTO>> user(@RequestBody PaginationDTO paginationDTO){
         try {
             String condition = URLDecoder.decode(paginationDTO.getCondition(), "UTF-8");

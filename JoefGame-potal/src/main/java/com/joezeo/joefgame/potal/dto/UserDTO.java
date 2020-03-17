@@ -1,5 +1,6 @@
 package com.joezeo.joefgame.potal.dto;
 
+import com.joezeo.joefgame.dao.pojo.UserFavoriteApp;
 import lombok.Data;
 import org.apache.solr.client.solrj.beans.Field;
 
@@ -23,5 +24,7 @@ public class UserDTO implements Serializable {
     private Boolean rememberMe; // 是否记住登录状态（7天）
     private String steamId;
 
-    private List<String> roles;
+
+    /*用户拥有的权限*/private List<String> roles;
+    /*用户收藏的游戏*/private List<UserFavoriteApp> favorites;
 }

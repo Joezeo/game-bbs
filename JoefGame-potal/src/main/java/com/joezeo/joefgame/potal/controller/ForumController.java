@@ -17,7 +17,6 @@ public class ForumController {
     private TopicService topicService;
 
     @PostMapping("/list")
-    @ResponseBody
     public JsonResult<ForumDTO> index(@RequestBody ForumDTO<TopicDTO> forumDTO) {
         PaginationDTO<TopicDTO> paginationDTO = topicService.listPage(forumDTO.getPage(), forumDTO.getSize(), forumDTO.getTab());
 

@@ -23,7 +23,6 @@ public class FileController {
     UCloudProvider uCloudProvider;
 
     @PostMapping("imgUpload")
-    @ResponseBody
     public ImgDTO imgUpload(HttpServletRequest request) {
         MultipartHttpServletRequest mulReq = (MultipartHttpServletRequest) request;
         MultipartFile file = mulReq.getFile("editormd-image-file");

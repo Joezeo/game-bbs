@@ -28,7 +28,6 @@ public class PublishController {
 
     // 获取标签信息
     @PostMapping("/publish/getTags")
-    @ResponseBody
     public JsonResult<List<TagDTO>> getTags(){
         List<TagDTO> tagDTOS = tagCache.get();
         return JsonResult.okOf(tagDTOS);
@@ -36,7 +35,6 @@ public class PublishController {
 
     // 获取需要编辑的帖子信息
     @PostMapping("/publish/getTopic")
-    @ResponseBody
     public JsonResult<TopicDTO> getTopic(@RequestBody TopicDTO topicDTO){
         topicDTO = topicService.queryById(topicDTO.getId());
         return JsonResult.okOf(topicDTO);
@@ -45,7 +43,6 @@ public class PublishController {
 
     // 发布帖子
     @PostMapping("/publish")
-    @ResponseBody
     public JsonResult publish(@RequestBody Topic topic, HttpSession session) {
         UserDTO user = (UserDTO) session.getAttribute("user");
         if (user == null) {

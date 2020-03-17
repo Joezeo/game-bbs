@@ -26,14 +26,12 @@ public class ProfileController {
     private NotificationService notificationService;
 
     @PostMapping("/profile/getPersonal")
-    @ResponseBody
     public JsonResult<UserDTO> getPersonal(HttpSession session){
         UserDTO userDTO = (UserDTO) session.getAttribute("user");
         return JsonResult.okOf(userDTO);
     }
 
     @PostMapping("/profile/getTopics")
-    @ResponseBody
     public JsonResult<PaginationDTO<TopicDTO>> getTopics(HttpSession session,
                                                          @RequestBody PaginationDTO<?> pagination) {
         UserDTO user = (UserDTO) session.getAttribute("user");
@@ -47,7 +45,6 @@ public class ProfileController {
     }
 
     @PostMapping("/profile/getNotify")
-    @ResponseBody
     public JsonResult<NotificationDTO> getNotify(HttpSession session,
                                                  @RequestBody PaginationDTO<?> pagination) {
         UserDTO user = (UserDTO) session.getAttribute("user");

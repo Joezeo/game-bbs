@@ -41,7 +41,6 @@ public class AuthorizeController {
     private TaskService taskService;
 
     @PostMapping("login")
-    @ResponseBody
     public JsonResult<?> login(@RequestBody UserDTO userDTO,
                                HttpSession session) {
         User user = new User();
@@ -56,7 +55,6 @@ public class AuthorizeController {
     }
 
     @PostMapping("/logout")
-    @ResponseBody
     public JsonResult<?> logout(HttpServletResponse response,
                                 HttpSession session) {
         UserDTO user = (UserDTO) session.getAttribute("user");
@@ -66,7 +64,6 @@ public class AuthorizeController {
     }
 
     @PostMapping("/signup")
-    @ResponseBody
     public JsonResult signup(@RequestBody UserDTO userDTO, HttpServletResponse response) {
         // 验证验证码
         Task task = taskService.createTaskQuery().taskAssignee("system")
@@ -97,7 +94,6 @@ public class AuthorizeController {
     }
 
     @PostMapping("getAuthcode")
-    @ResponseBody
     public JsonResult<?> getAuthcode(@RequestBody UserDTO userDTO) {
         String targetEmail = userDTO.getEmail();
 
@@ -133,7 +129,6 @@ public class AuthorizeController {
     }
 
     @PostMapping("/authAccess")
-    @ResponseBody
     public JsonResult authAccess(HttpServletResponse response) {
         Cookie access = new Cookie("__access", UUID.randomUUID().toString());
         access.setMaxAge(60 * 60 * 24); // cookie储存一天
@@ -142,7 +137,6 @@ public class AuthorizeController {
     }
 
     @PostMapping("/getTmpGithubUser")
-    @ResponseBody
     JsonResult<GithubUser> getTmpGithubUser(HttpSession session) {
         GithubUser githubUser = (GithubUser) session.getAttribute("tempGithubUser");
 
@@ -150,7 +144,6 @@ public class AuthorizeController {
     }
 
     @PostMapping("/getTmpSteamUser")
-    @ResponseBody
     JsonResult<GithubUser> getTmpSteamUser(HttpSession session) {
         SteamUser steamUser = (SteamUser) session.getAttribute("tempSteamUser");
 

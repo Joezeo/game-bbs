@@ -33,7 +33,6 @@ public class ProcessController {
     private RepositoryService repositoryService;
 
     @PostMapping("/list")
-    @ResponseBody
     public JsonResult<PaginationDTO> getProcesses(@RequestParam(name = "page",defaultValue = "1") Integer page,
                                                   @RequestParam(name = "size", defaultValue = "5") Integer size){
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -60,7 +59,6 @@ public class ProcessController {
     }
 
     @PostMapping("/uploadProcess")
-    @ResponseBody
     public JsonResult<?> uploadProcess(HttpServletRequest request){
         MultipartHttpServletRequest mulReq = (MultipartHttpServletRequest)request;
         MultipartFile mulFile = mulReq.getFile("processBpmn");
@@ -82,7 +80,6 @@ public class ProcessController {
     }
 
     @PostMapping("/delete")
-    @ResponseBody
     public JsonResult<?> delete(@RequestBody ProcessDTO processDTO){
         try{
             ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().processDefinitionId(processDTO.getId()).singleResult();
@@ -95,7 +92,6 @@ public class ProcessController {
     }
 
     @GetMapping("/viewProcessPic")
-    @ResponseBody
     public void viewProcessPic(String id, HttpServletResponse response){
         try {
             ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().processDefinitionId(id).singleResult();

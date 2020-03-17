@@ -24,7 +24,6 @@ public class GalleryController {
     private UCloudProvider uCloudProvider;
 
     @PostMapping("/gallery/upload")
-    @ResponseBody
     public JsonResult upload(HttpServletRequest request) {
         MultipartHttpServletRequest mulReq = (MultipartHttpServletRequest) request;
         MultipartFile file = mulReq.getFile("pic-name");

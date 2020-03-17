@@ -3,6 +3,8 @@ package com.joezeo.joefgame.potal.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.joezeo.joefgame.common.utils.RedisUtil;
+import com.joezeo.joefgame.dao.mapper.UserFavoriteAppMapper;
+import com.joezeo.joefgame.dao.pojo.*;
 import com.joezeo.joefgame.potal.dto.HistoryPriceDTO;
 import com.joezeo.joefgame.common.dto.PaginationDTO;
 import com.joezeo.joefgame.potal.dto.SteamAppDTO;
@@ -12,9 +14,6 @@ import com.joezeo.joefgame.common.exception.CustomizeException;
 import com.joezeo.joefgame.dao.mapper.SteamAppInfoMapper;
 import com.joezeo.joefgame.dao.mapper.SteamHistoryPriceMapper;
 import com.joezeo.joefgame.dao.mapper.SteamSubBundleInfoMapper;
-import com.joezeo.joefgame.dao.pojo.SteamAppInfo;
-import com.joezeo.joefgame.dao.pojo.SteamHistoryPrice;
-import com.joezeo.joefgame.dao.pojo.SteamSubBundleInfo;
 import com.joezeo.joefgame.potal.service.SteamService;
 import com.joezeo.joefgame.common.utils.TimeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +38,8 @@ public class SteamServiceImpl implements SteamService {
     private SteamHistoryPriceMapper steamHistoryPriceMapper;
     @Autowired
     private SteamSubBundleInfoMapper steamSubBundleInfoMapper;
+    @Autowired
+    private UserFavoriteAppMapper userFavoriteAppMapper;
     @Autowired
     private RedisUtil redisUtil;
 
@@ -599,6 +600,44 @@ public class SteamServiceImpl implements SteamService {
             flag = true;
         }
         return flag;
+    }
+
+    @Override
+    public List<UserFavoriteApp> getFavorites(Long userid) {
+        UserFavoriteAppExample example = new UserFavoriteAppExample();
+        example.createCriteria().andUseridEqualTo(userid);
+        List<UserFavoriteApp> favoriteApps = userFavoriteAppMapper.selectByExample(example);
+        return favoriteApps;
+    }
+
+    @Override
+    public List<UserFavoriteApp> favoriteApp(Long userid, Integer appid, Integer type) {
+        UserFavoriteApp record = new UserFavoriteApp();
+        record.setAppid(appid);
+        record.setUserid(userid);
+        record.setType(type);
+        record.setGmtCreate(System.currentTimeMillis());
+        record.setGmtModify(record.getGmtCreate());
+        int idx = userFavoriteAppMapper.insertSelective(record);
+        if(idx != 1){
+            throw new CustomizeException(CustomizeErrorCode.FAVORITE_APP_FAILED);
+        }
+
+        List<UserFavoriteApp> favorites = getFavorites(userid);
+        return favorites;
+    }
+
+    @Override
+    public List<UserFavoriteApp> unFavoriteApp(Long userid, Integer appid, Integer type) {
+        UserFavoriteAppExample example = new UserFavoriteAppExample();
+        example.createCriteria().andUseridEqualTo(userid).andAppidEqualTo(appid).andTypeEqualTo(type);
+        int idx = userFavoriteAppMapper.deleteByExample(example);
+        if(idx != 1){
+            throw new CustomizeException(CustomizeErrorCode.UNFAVORITE_APP_FAILED);
+        }
+
+        List<UserFavoriteApp> favorites = getFavorites(userid);
+        return favorites;
     }
 
 }

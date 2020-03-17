@@ -18,21 +18,45 @@ if(isNaN(type) || type < 1 || type > 7){
     window.location.href = "/";
 }
 
+var user = {};
+var loadedUser = false;
 var typeStr = '';
 var app = {};
 var loaded = false;
 var chartTitle = '历史价格';
 var prices = {};
 var condition = "";
+var favorite = false; // 用户是否收藏该Steam 应用
+var favoriteList = {};
 
 var vue = new Vue({
     el: "#app",
-    data: {appid, type, typeStr, app, loaded, prices, chartTitle, condition},
+    data: {user, loadedUser, appid, type, typeStr, app, loaded, prices, chartTitle,
+        condition, favorite,favoriteList},
     mounted: function () {
         this.getApp();
         this.getPrice();
+        this.getUser();
+        this.getFavorites(this.loadedUser);
     },
     methods: {
+        getUser: function () {
+            var url = "/getUser";
+            axios.post(url).then(function (response) {
+                var jsonResult = response.data;
+                if (jsonResult.success) {
+                    var getedUser = jsonResult.data;
+                    if (getedUser) {
+                        vue.user = getedUser;
+                        vue.loadedUser = true;
+                    } else {
+                        vue.loadedUser = false;
+                    }
+                } else {
+                    vue.loadedUser = false;
+                }
+            })
+        },
         resolvAppType: function () {
             switch (Number.parseInt(this.type)) {
                 case 1:
@@ -96,7 +120,57 @@ var vue = new Vue({
         // search相关函数，函数从文件commonSearch.js中引入
         searchUser:searchUser,
         searchSteam:searchSteam,
-        searchTopic:searchTopic
+        searchTopic:searchTopic,
+        getFavorites:function(loadedUser){
+            if(loadedUser){ // 用户登录了
+                var url = "/steam/getFavorites";
+                axios.post(url).then(function (result) {
+                    var jsonResult = result.data;
+                    if(jsonResult.success){
+                        vue.favoriteList = jsonResult.data.favorites;
+                        vue.favorite = true;
+                    } else {
+                        alert(jsonResult.success);
+                    }
+                })
+            } else { // 用户没有登录
+                this.favorite = false;
+            }
+        },
+        favoriteApp:function (appid,type,loadedUser) {
+            if(!loadedUser){
+                window.location.href = "/login";
+                return false;
+            }
+            var url = "/steam/favoriteApp";
+            var params = {appid:appid, type:type};
+            axios.post(url, params).then(function (result) {
+                var jsonResult = result.data;
+                if(jsonResult.success){
+                    vue.favoriteList = jsonResult.data.favorites;
+                    vue.favorite = true;
+                } else {
+                    alert(jsonResult.message);
+                }
+            });
+        },
+        unFavoriteApp:function (appid,type,loadedUser) {
+            if(!loadedUser){
+                window.location.href = "/login";
+                return false;
+            }
+            var url = "/steam/unFavoriteApp";
+            var params = {appid:appid, type:type};
+            axios.post(url, params).then(function (result) {
+                var jsonResult = result.data;
+                if(jsonResult.success){
+                    vue.favoriteList = jsonResult.data.favorites;
+                    vue.favorite = true;
+                } else {
+                    alert(jsonResult.message);
+                }
+            });
+        }
     }
 });
 

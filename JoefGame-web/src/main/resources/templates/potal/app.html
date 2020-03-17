@@ -22,6 +22,12 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h3 v-text="app.name"></h3>
+                        <a @click="favoriteApp(appid,type,loadedUser)" v-if="!favorite" title="点击收藏应用">
+                            <img src="/imgs/star-black.png">
+                        </a>
+                        <a @click="unFavoriteApp(appid,type,loadedUser)" v-else title="取消收藏应用">
+                            <img src="/imgs/star-yellow.png">
+                        </a>
                     </div>
 
                     <div class="panel-body table-zone">
