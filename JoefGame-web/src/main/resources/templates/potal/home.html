@@ -19,12 +19,62 @@
             <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
                 <div class="left">
                     <div class="user-info">
-                        <img :src="user.avatarUrl" alt=""><br>
+                        <img :src="user.avatarUrl" :alt="user.name"><br>
                         <span v-text="user.name"></span>
                     </div>
                     <hr>
-                    <span>关注</span>
-                    <hr>
+                    <span><h4>关注的</h4></span>
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" class="active"><a @click="listUser()">用户</a></li>
+                        <li role="presentation"><a @click="listApp()">Steam 应用</a></li>
+                    </ul>
+
+                    <!--            关注的用户/steam应用-->
+                    <div v-if="loadedSubscribe" v-cloak>
+                        <div v-if="subscribeType=='user'">
+
+                        </div>
+                        <div v-if="subscribeType=='steam'">
+                            <table>
+                                <tr v-for="app in pagination.datas">
+                                    <!--TODO:改成链接的形式-->
+                                    <td v-text="app.name"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!--            分页条开始-->
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li v-if="pagination.hasFirst">
+                                    <a @click="listSubscribe(1,subscribeType)" aria-label="First">
+                                        <span aria-hidden="true">&lt;&lt;</span>
+                                    </a>
+                                </li>
+                                <li v-if="pagination.hasPrevious">
+                                    <a @click="listSubscribe(pagination.page-1,subscribeType)"
+                                       aria-label="Previous">
+                                        <span aria-hidden="true">&lt;</span>
+                                    </a>
+                                </li>
+
+                                <li v-for="page in pagination.pages" :class="[page==pagination.page?'active':'']"><a
+                                        @click="listSubscribe(page,subscribeType)" v-text="page"></a></li>
+
+                                <li v-if="pagination.hasNext">
+                                    <a @click="listSubscribe(pagination.page+1,subscribeType)" aria-label="Next">
+                                        <span aria-hidden="true">&gt;</span>
+                                    </a>
+                                </li>
+                                <li v-if="pagination.hasLast">
+                                    <a @click="listSubscribe(pagination.totalPage,subscribeType)" aria-label="Last">
+                                        <span aria-hidden="true">&gt;&gt;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!--            分页条结束-->
+                    </div>
+
                 </div>
             </div>
 

@@ -23,7 +23,7 @@ public class PaginationDTO<T> implements Serializable {
     private Integer totalPage; // 总页数
     private List<Integer> pages = new ArrayList<>(); // 分页条上一共要展示的页数集合
 
-    private String condition; // 搜索时需要的搜索条件
+    private String condition; // 搜索时需要的搜索条件,Home页面接收subscribeType
 
     public void setPagination(Integer page, Integer size, Integer totalCount) {
         this.totalPage = totalCount % size == 0 ? totalCount / size : totalCount / size + 1;

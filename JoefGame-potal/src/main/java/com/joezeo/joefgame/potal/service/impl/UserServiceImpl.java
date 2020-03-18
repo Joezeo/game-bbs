@@ -1,31 +1,33 @@
 package com.joezeo.joefgame.potal.service.impl;
 
-import com.joezeo.joefgame.common.dto.GithubUser;
-import com.joezeo.joefgame.common.dto.SteamUser;
+import com.joezeo.joefgame.common.dto.PaginationDTO;
 import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
+import com.joezeo.joefgame.common.enums.SteamAppTypeEnum;
 import com.joezeo.joefgame.common.exception.CustomizeException;
 import com.joezeo.joefgame.common.exception.ServiceException;
 import com.joezeo.joefgame.common.provider.UCloudProvider;
 import com.joezeo.joefgame.common.utils.AvatarGenerator;
 import com.joezeo.joefgame.common.utils.PasswordHelper;
+import com.joezeo.joefgame.dao.mapper.SteamAppInfoMapper;
+import com.joezeo.joefgame.dao.mapper.UserFavoriteAppMapper;
 import com.joezeo.joefgame.dao.mapper.UserMapper;
 import com.joezeo.joefgame.dao.mapper.UserRoleMapper;
-import com.joezeo.joefgame.dao.pojo.Role;
-import com.joezeo.joefgame.dao.pojo.User;
-import com.joezeo.joefgame.dao.pojo.UserExample;
+import com.joezeo.joefgame.dao.pojo.*;
+import com.joezeo.joefgame.potal.dto.SteamAppDTO;
 import com.joezeo.joefgame.potal.dto.UserDTO;
 import com.joezeo.joefgame.potal.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.session.RowBounds;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.apache.wml.WMLEmElement;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -38,6 +40,10 @@ public class UserServiceImpl implements UserService {
     private UCloudProvider uCloudProvider;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserFavoriteAppMapper userFavoriteAppMapper;
+    @Autowired
+    private SteamAppInfoMapper steamAppInfoMapper;
     @Autowired
     private PasswordHelper passwordHelper;
     @Autowired
@@ -60,6 +66,7 @@ public class UserServiceImpl implements UserService {
 
         return (memUser == null || memUser.size() == 0) ? false : true;
     }
+
 
     @Override
     public void signup(User user) {
@@ -138,7 +145,6 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
-
     @Override
     public UserDTO queryUserByEmail(String email) {
         UserDTO userDTO = new UserDTO();
@@ -203,5 +209,41 @@ public class UserServiceImpl implements UserService {
         user.setPassword(null);
         user.setSalt(null);
         return user;
+    }
+
+    @Override
+    public PaginationDTO<UserDTO> listFollowUser(Long userid, Integer page) {
+        PaginationDTO<UserDTO> paginationDTO = new PaginationDTO();
+        // TODO: t_follow_user 表还未建立
+        return paginationDTO;
+    }
+
+    @Override
+    public PaginationDTO<SteamAppDTO> listFavoriteApp(Long userid, Integer page) {
+        PaginationDTO<SteamAppDTO> paginationDTO = new PaginationDTO<>();
+
+        // 查询总数据条数
+        UserFavoriteAppExample example = new UserFavoriteAppExample();
+        example.createCriteria().andUseridEqualTo(userid);
+        int count = (int) userFavoriteAppMapper.countByExample(example);
+
+        paginationDTO.setPagination(page, 5, count); // 每页展示5个关注的用户
+        page = paginationDTO.getPage(); // 防止page参数不合法
+
+        int index = (page-1) * 5;
+
+        List<UserFavoriteApp> favoriteApps = userFavoriteAppMapper.selectByExampleWithRowbounds(example, new RowBounds(index, 5));
+
+        List<SteamAppDTO> list = new ArrayList<>();
+        favoriteApps.stream().forEach(favorite -> {
+            SteamAppInfo steamAppInfo = steamAppInfoMapper.selectByAppid(favorite.getAppid(), SteamAppTypeEnum.typeOf(favorite.getType()));
+            SteamAppDTO steamAppDTO = new SteamAppDTO();
+            BeanUtils.copyProperties(steamAppInfo, steamAppDTO);
+            list.add(steamAppDTO);
+        });
+
+        paginationDTO.setDatas(list);
+
+        return paginationDTO;
     }
 }

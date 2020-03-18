@@ -377,14 +377,14 @@ a {
 .pixel-btn {
     font-family: "幼圆", sans-serif;
     font-weight: bold;
-    background: #55ff75;
-    color: black;
+    background: #e7513b !important;
+    color: white;
     border-radius: 10px;
 }
 
 .pixel-btn:hover {
-    background: #14ff3f;
-    color: black;
+    background: #d13d2a !important;
+    color: white;
 }
 
 /*已点赞*/

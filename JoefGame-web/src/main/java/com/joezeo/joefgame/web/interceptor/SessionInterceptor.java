@@ -39,6 +39,7 @@ public class SessionInterceptor implements HandlerInterceptor {
                     String githubAccounid = user.getGithubAccountId();
                     user = userService.queryByAccountid(githubAccounid);
                 }
+                user.setPassword(null);
                 request.getSession().setAttribute("user", user);
             }
         }

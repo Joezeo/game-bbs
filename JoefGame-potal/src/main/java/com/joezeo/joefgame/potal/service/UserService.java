@@ -1,8 +1,10 @@
 package com.joezeo.joefgame.potal.service;
 
 import com.joezeo.joefgame.common.dto.GithubUser;
+import com.joezeo.joefgame.common.dto.PaginationDTO;
 import com.joezeo.joefgame.common.dto.SteamUser;
 import com.joezeo.joefgame.dao.pojo.User;
+import com.joezeo.joefgame.potal.dto.SteamAppDTO;
 import com.joezeo.joefgame.potal.dto.UserDTO;
 
 public interface UserService{
@@ -27,4 +29,8 @@ public interface UserService{
     boolean isExistGithubUser(String githubID);
 
     boolean isExistSteamUser(String steamid);
+
+    PaginationDTO<UserDTO> listFollowUser(Long userid, Integer page);
+
+    PaginationDTO<SteamAppDTO> listFavoriteApp(Long userid, Integer page);
 }
