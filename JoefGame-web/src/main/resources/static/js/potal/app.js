@@ -28,6 +28,7 @@ var prices = {};
 var condition = "";
 var favorite = false; // 用户是否收藏该Steam 应用
 var favoriteList = {};
+var typeStrs = ["游戏","软件","DLC","试玩游戏","捆绑包","原声带","礼包"];
 
 var vue = new Vue({
     el: "#app",
@@ -37,7 +38,6 @@ var vue = new Vue({
         this.getApp();
         this.getPrice();
         this.getUser();
-        this.getFavorites(this.loadedUser);
     },
     methods: {
         getUser: function () {
@@ -49,6 +49,7 @@ var vue = new Vue({
                     if (getedUser) {
                         vue.user = getedUser;
                         vue.loadedUser = true;
+                        vue.getFavorites(vue.loadedUser);
                     } else {
                         vue.loadedUser = false;
                     }
@@ -58,32 +59,7 @@ var vue = new Vue({
             })
         },
         resolvAppType: function () {
-            switch (Number.parseInt(this.type)) {
-                case 1:
-                    this.typeStr = '游戏';
-                    break;
-                case 2:
-                    this.typeStr = '软件';
-                    break;
-                case 3:
-                    this.typeStr = 'DLC';
-                    break;
-                case 4:
-                    this.typeStr = '试玩游戏';
-                    break;
-                case 5:
-                    this.typeStr = '捆绑包';
-                    break;
-                case 6:
-                    this.typeStr = '原声带';
-                    break;
-                case 7:
-                    this.typeStr = '礼包';
-                    break;
-                default:
-                    this.typeStr = '';
-                    break;
-            }
+            this.typeStr = typeStrs[this.type-1];
         },
         getApp: function () {
             var url = "/steam/getApp";
@@ -128,7 +104,7 @@ var vue = new Vue({
                     var jsonResult = result.data;
                     if(jsonResult.success){
                         vue.favoriteList = jsonResult.data.favorites;
-                        vue.favorite = true;
+                        checkFavorites(vue.favoriteList, vue.appid);
                     } else {
                         alert(jsonResult.success);
                     }
@@ -165,7 +141,7 @@ var vue = new Vue({
                 var jsonResult = result.data;
                 if(jsonResult.success){
                     vue.favoriteList = jsonResult.data.favorites;
-                    vue.favorite = true;
+                    vue.favorite = false;
                 } else {
                     alert(jsonResult.message);
                 }
@@ -201,5 +177,13 @@ function loadPriceChart(prices) {
     myChart.setOption(option);
 }
 
+function checkFavorites(favorites, appid) {
+    for(var i=0; i<favorites.length; i++){
+        if(favorites[i].appid == appid){
+            vue.favorite = true;
+            return;
+        }
+    }
+}
 
 
