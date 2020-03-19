@@ -393,6 +393,59 @@ public class RedisUtil {
     }
 
     /**
+     * list实现队列  left pop
+     * 从队列头返回一个数据
+     * @param key
+     * @return
+     */
+    public Object lPop(String key){
+        try{
+            return redisTemplate.opsForList().leftPop(key);
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * list实现队列 right push
+     * 从队列尾存入一个数据
+     * @param key
+     * @param value
+     * @return
+     */
+    public boolean lPush(String key, Object value){
+        try{
+            redisTemplate.opsForList().rightPush(key, value);
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * list实现队列 right push
+     * 从队列尾存入一个数据
+     * @param key
+     * @param value
+     * @Param time 时间秒
+     * @return
+     */
+    public boolean lPush(String key, Object value, long time){
+        try{
+            redisTemplate.opsForList().rightPush(key, value);
+            if(hasKey(key)){
+                expire(key, time);
+            }
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
      * 获取list缓存的长度
      * @param key 键
      * @return
@@ -422,7 +475,7 @@ public class RedisUtil {
     }
 
     /**
-     * 将list放入缓存
+     * 将list放入缓存 right push
      * @param key 键
      * @param value 值
      * @return
@@ -438,7 +491,7 @@ public class RedisUtil {
     }
 
     /**
-     * 将list放入缓存
+     * 将list放入缓存 right push
      * @param key 键
      * @param value 值
      * @param time 时间(秒)
@@ -457,7 +510,7 @@ public class RedisUtil {
     }
 
     /**
-     * 将list放入缓存
+     * 将list放入缓存 right push all
      * @param key 键
      * @param value 值
      * @return

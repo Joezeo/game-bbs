@@ -35,7 +35,7 @@ web -
     │
     └─── potal ─────
     |               |
-    |               └─── dao ─── common
+    |               └─── common ─── dao
     |               |
     └─── manager ───
 ```
