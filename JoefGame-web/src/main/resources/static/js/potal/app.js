@@ -13,7 +13,7 @@ var type = "0";
 if (url.lastIndexOf("type=") != -1) {
     type = url.substr(url.lastIndexOf("=") + 1);
 }
-if(isNaN(type) || type < 1 || type > 7){
+if(isNaN(type) || type < 0 || type > 7){
     alert("很抱歉参数异常，将导航至主页");
     window.location.href = "/";
 }

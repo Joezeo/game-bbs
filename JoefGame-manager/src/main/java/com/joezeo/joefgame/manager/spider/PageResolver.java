@@ -1,5 +1,7 @@
 package com.joezeo.joefgame.manager.spider;
 
+import com.joezeo.joefgame.common.enums.SteamAppTypeEnum;
+import com.joezeo.joefgame.common.mq.MessageSupplier;
 import com.joezeo.joefgame.dao.mapper.*;
 import com.joezeo.joefgame.dao.pojo.*;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,11 @@ public class PageResolver {
     private SteamHistoryPriceMapper steamHistoryPriceMapper;
     @Autowired
     private ProxyIPMapper proxyIPMapper;
+    @Autowired
+    private UserFavoriteAppMapper userFavoriteAppMapper;
+
+    @Autowired
+    private MessageSupplier messageSupplier;
 
     /**
      * 解析获取Steam各个搜索页的总页数
@@ -178,6 +185,22 @@ public class PageResolver {
         int index = steamHistoryPriceMapper.insert(historyPrice);
         if (index != 1) {
             log.error("存储特惠价格失败，appid=" + appid);
+        }
+
+        /*
+        将该应用的特惠信息存入消息队列中
+         */
+        // 获取收藏该App的用户idlist
+        UserFavoriteAppExample example = new UserFavoriteAppExample();
+        example.createCriteria().andAppidEqualTo(appid);
+        List<UserFavoriteApp> list = userFavoriteAppMapper.selectByExample(example);
+
+        // 获取该App的steamAppInfo
+        SteamAppInfo steamAppInfo = steamAppInfoMapper.selectByAppid(appid, type);
+
+        // 使用 messageSupplier 存储消息至消息队列
+        for (UserFavoriteApp userApp : list) {
+            messageSupplier.putMessage("" + appid, "" + userApp.getId(), steamAppInfo);
         }
     }
 

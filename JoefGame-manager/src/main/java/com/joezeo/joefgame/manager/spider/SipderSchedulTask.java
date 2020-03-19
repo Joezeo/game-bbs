@@ -2,6 +2,7 @@ package com.joezeo.joefgame.manager.spider;
 
 import com.joezeo.joefgame.common.enums.SpiderJobTypeEnum;
 import com.joezeo.joefgame.common.enums.SteamAppTypeEnum;
+import com.joezeo.joefgame.common.mq.MessageSupplier;
 import com.joezeo.joefgame.common.utils.TimeUtils;
 import com.joezeo.joefgame.dao.mapper.SteamAppInfoMapper;
 import com.joezeo.joefgame.dao.mapper.SteamHistoryPriceMapper;
@@ -126,7 +127,7 @@ public class SipderSchedulTask {
     }
 
     /**
-     * 陵城02:45
+     * 凌晨02:45
      * <p>
      * 根据当天的特惠列表修改 App Info的finalPrice字段
      */
