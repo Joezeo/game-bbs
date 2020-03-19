@@ -20,7 +20,7 @@ public class JoefSpecialPriceMessage<T> implements IJoefMessage<T>{
         this.userid = consumerID;
         this.appid = supplierID;
         this.content = content;
-        this.queueid = "mq-" + consumerID;
+        this.queueid = "mq-steam-" + consumerID;
     }
 
     @Override
