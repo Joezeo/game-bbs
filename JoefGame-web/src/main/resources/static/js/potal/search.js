@@ -48,7 +48,7 @@ var vue = new Vue({
                     vue.results = vue.pagination.datas;
                     vue.loaded = true;
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                     window.location.href = "/"; //搜索失败，返回主页
                 }
             })

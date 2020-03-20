@@ -49,7 +49,6 @@ var vue = new Vue({
         // 点击二级回复的回复按钮，提交二级评论
         doSubcomment: doSubcomment,
         // 如未登录点击链接自动登录
-        autoLogin: autoLogin,
         getUser: function () {
             var url = "/getUser";
             axios.post(url).then(function (response) {
@@ -73,7 +72,7 @@ var vue = new Vue({
                     // $("#topic-textarea").val(vue.topic.description);
                     loadLikeStatus(vue.user, vue.likeUsersId);
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             })
         },
@@ -89,7 +88,7 @@ var vue = new Vue({
                         loadCommentLikeStatus(vue.user, vue.comments[idx]);
                     }
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             })
         },
@@ -100,7 +99,7 @@ var vue = new Vue({
         likeTopic: function (topicId, userId, likeStatus) {
             // 如果还未登录
             if (!vue.loadedUser) {
-                alert("此操作需要登录，请登录后继续操作");
+                layer.msg("此操作需要登录，请登录后继续操作");
                 return false;
             }
             if (likeStatus) { // 已点赞取消点赞
@@ -115,7 +114,7 @@ var vue = new Vue({
                         vue.likeStatus = false;
                         loadLikeStatus(vue.user, vue.likeUsersId);
                     } else {
-                        alert(jsonResult.message);
+                        layer.msg(jsonResult.message);
                     }
                 })
             } else {
@@ -130,7 +129,7 @@ var vue = new Vue({
                         vue.likeStatus = true;
                         loadLikeStatus(vue.user, vue.likeUsersId);
                     } else {
-                        alert(jsonResult.message);
+                        layer.msg(jsonResult.message);
                     }
                 })
             }
@@ -139,7 +138,7 @@ var vue = new Vue({
         likeComment: function (commentID, userID, idx) {
             // 如果还未登录
             if (!vue.loadedUser) {
-                alert("此操作需要登录，请登录后继续操作");
+                layer.msg("此操作需要登录，请登录后继续操作");
                 return false;
             }
             if (vue.comments[idx].likeStatus) { // 取消点赞
@@ -154,7 +153,7 @@ var vue = new Vue({
                         vue.comments[idx].likeStatus = false;
                         loadCommentLikeStatus(vue.user, vue.comments[idx]);
                     } else {
-                        alert(jsonResult.message);
+                        layer.msg(jsonResult.message);
                     }
                 })
             } else {
@@ -168,7 +167,7 @@ var vue = new Vue({
                         vue.comments[idx].likeStatus = true;
                         loadCommentLikeStatus(vue.user, vue.comments[idx]);
                     } else {
-                        alert(jsonResult.message);
+                        layer.msg(jsonResult.message);
                     }
                 });
             }
@@ -192,20 +191,10 @@ var vue = new Vue({
     }
 });
 
-function autoLogin() {
-    window.localStorage.setItem("closable", true);
-    window.open("https://github.com/login/oauth/authorize?client_id=332735b1b85bfbb88779&scope=user&state=1");
-    // 当完成github第三方验证后，关闭主页，取出localStorage中的closable，刷新当前页面
-    window.setInterval(function () {
-        if (!window.localStorage.getItem("closable"))
-            window.location.reload();
-    }, 200);
-}
-
 function doComment() {
     var content = vue.commentContent.trim();
     if (content == "") {
-        alert("回复内容不可为空，请输入后再回复");
+        layer.msg("回复内容不可为空，请输入后再回复");
         return false;
     }
     content = vue.commentContent;
@@ -219,17 +208,9 @@ function doComment() {
             window.location.reload();
         } else {
             if (jsonResult.code == 2004) { // 用户未进行登录操作
-                var flag = confirm("当前操作需用户登录后进行，点击确定自动登录");
-                if (flag) {
-                    window.open("https://github.com/login/oauth/authorize?client_id=332735b1b85bfbb88779&scope=user&state=1");
-                    window.localStorage.setItem("closable", true);
-                    window.setInterval(function () {
-                        if (!window.localStorage.getItem("closable"))
-                            window.location.reload();
-                    }, 200);
-                }
+                window.location.href = "/login";
             } else {
-                alert(jsonResult.message);
+                layer.msg(jsonResult.message);
             }
         }
     });
@@ -255,6 +236,8 @@ function subComment(commentId) {
             if (jsonResult.success) {
                 vue.subComments = jsonResult.data;
                 vue.loadedSubComments = true;
+            } else {
+                layer.msg(jsonResult.message);
             }
         });
     }
@@ -269,7 +252,7 @@ function closeSubcomment(commentId) {
 function doSubcomment(commentId) {
     var content = $("#subcomment-content-" + commentId).val();
     if (!content) {
-        alert("回复内容不可为空，请输入！");
+        layer.msg("回复内容不可为空，请输入！");
         return false;
     }
     var url = "/comment/subComment";
@@ -290,17 +273,9 @@ function doSubcomment(commentId) {
             subComment(commentId);
         } else {
             if (jsonResult.code == 2004) { // 用户未进行登录操作
-                var flag = confirm("当前操作需用户登录后进行，点击确定自动登录");
-                if (flag) {
-                    window.open("https://github.com/login/oauth/authorize?client_id=332735b1b85bfbb88779&scope=user&state=1");
-                    window.localStorage.setItem("closable", true);
-                    window.setInterval(function () {
-                        if (!window.localStorage.getItem("closable"))
-                            window.location.reload();
-                    }, 200);
-                }
+                window.location.href = "/login";
             } else {
-                alert(jsonResult.message);
+                layer.msg(jsonResult.message);
             }
         }
     });

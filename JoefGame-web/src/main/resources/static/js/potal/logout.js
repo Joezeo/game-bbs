@@ -7,7 +7,7 @@ $(function () {
             if(jsonResult.success){
                 window.location.href = window.location.href;
             } else {
-                alert(jsonResult.message);
+                layer.msg(jsonResult.message);
             }
         })
     });

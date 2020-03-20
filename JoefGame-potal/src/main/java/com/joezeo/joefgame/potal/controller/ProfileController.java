@@ -44,7 +44,7 @@ public class ProfileController {
     }
 
     @PostMapping("/profile/getNotify")
-    public JsonResult<NotificationDTO> getNotify(HttpSession session,
+    public JsonResult<PaginationDTO<NotificationDTO>> getNotify(HttpSession session,
                                                  @RequestBody PaginationDTO<?> pagination) {
         UserDTO user = (UserDTO) session.getAttribute("user");
         if (user == null) {

@@ -11,7 +11,6 @@ var vue = new Vue({
         data: forumDTO,
         mounted: function () { // 表示这个vue对象加载成功了
             this.removeStorage();
-            this.closable();
             this.getUser();
             this.list(1);
         },
@@ -38,14 +37,6 @@ var vue = new Vue({
                     }
                 })
             },
-            closable: function () {
-                // 判断此index页面是否是由自动登录功能打开的页面，如是则需关闭
-                var closable = window.localStorage.getItem("closable");
-                if (closable) {
-                    window.localStorage.removeItem("closable");
-                    window.close();
-                }
-            },
             list: function (page, tab) {
                 var url = "/list";
                 if (!tab) {
@@ -64,7 +55,7 @@ var vue = new Vue({
                         vue.tab = indexdto.tab;
                         vue.loaded = true;
                     } else {
-                        alert(jsonResult.message);
+                        layer.msg(jsonResult.message);
                     }
                 })
             },

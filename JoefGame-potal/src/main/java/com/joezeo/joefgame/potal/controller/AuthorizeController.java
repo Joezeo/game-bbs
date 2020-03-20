@@ -143,7 +143,7 @@ public class AuthorizeController {
     }
 
     @PostMapping("/getTmpSteamUser")
-    JsonResult<GithubUser> getTmpSteamUser(HttpSession session) {
+    JsonResult<SteamUser> getTmpSteamUser(HttpSession session) {
         SteamUser steamUser = (SteamUser) session.getAttribute("tempSteamUser");
 
         return JsonResult.okOf(steamUser);

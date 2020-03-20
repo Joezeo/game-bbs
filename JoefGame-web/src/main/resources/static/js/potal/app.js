@@ -6,7 +6,7 @@ if (url.lastIndexOf("?") != -1) {
     appid = url.substring(url.lastIndexOf("/") + 1);
 }
 if(isNaN(appid)){
-    alert("很抱歉参数异常，将导航至主页");
+    layer.msg("很抱歉参数异常，将导航至主页");
     window.location.href = "/";
 }
 var type = "0";
@@ -14,7 +14,7 @@ if (url.lastIndexOf("type=") != -1) {
     type = url.substr(url.lastIndexOf("=") + 1);
 }
 if(isNaN(type) || type < 0 || type > 7){
-    alert("很抱歉参数异常，将导航至主页");
+    layer.msg("很抱歉参数异常，将导航至主页");
     window.location.href = "/";
 }
 
@@ -75,7 +75,7 @@ var vue = new Vue({
                     vue.loaded = true;
                     vue.resolvAppType();
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             })
         },
@@ -89,7 +89,7 @@ var vue = new Vue({
                     vue.prices = priceDto;
                     loadPriceChart(vue.prices);
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             })
         },
@@ -106,7 +106,7 @@ var vue = new Vue({
                         vue.favoriteList = jsonResult.data.favorites;
                         checkFavorites(vue.favoriteList, vue.appid);
                     } else {
-                        alert(jsonResult.success);
+                        layer.msg(jsonResult.message);
                     }
                 })
             } else { // 用户没有登录
@@ -126,7 +126,7 @@ var vue = new Vue({
                     vue.favoriteList = jsonResult.data.favorites;
                     vue.favorite = true;
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             });
         },
@@ -143,7 +143,7 @@ var vue = new Vue({
                     vue.favoriteList = jsonResult.data.favorites;
                     vue.favorite = false;
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             });
         }

@@ -21,7 +21,7 @@ var vue = new Vue({
                     vue.processes = vue.pagination.datas;
                     vue.loadedProcess = true;
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             })
         },
@@ -35,7 +35,7 @@ var vue = new Vue({
                     if (jsonResult.success) {
                         window.location.reload();
                     } else {
-                        alert(jsonResult.message);
+                        layer.msg(jsonResult.message);
                     }
                 }
             };
@@ -54,7 +54,7 @@ var vue = new Vue({
                 if (jsonResult.success) {
                     window.location.reload();
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             })
         },

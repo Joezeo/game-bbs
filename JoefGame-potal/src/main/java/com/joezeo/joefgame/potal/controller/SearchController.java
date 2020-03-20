@@ -23,7 +23,7 @@ public class SearchController {
     private SearchService searchService;
 
     @PostMapping("/steam")
-    public JsonResult<PaginationDTO<SteamAppDTO>> steam(@RequestBody PaginationDTO paginationDTO){
+    public JsonResult<?> steam(@RequestBody PaginationDTO paginationDTO){
         try {
             String condition = URLDecoder.decode(paginationDTO.getCondition(), "UTF-8");
             PaginationDTO<SteamAppDTO> steams = searchService.searchSteamBySolr(condition, paginationDTO.getPage());
@@ -35,7 +35,7 @@ public class SearchController {
     }
 
     @PostMapping("/topic")
-    public JsonResult<PaginationDTO<TopicDTO>> topic(@RequestBody PaginationDTO paginationDTO){
+    public JsonResult<?> topic(@RequestBody PaginationDTO paginationDTO){
         try {
             String condition = URLDecoder.decode(paginationDTO.getCondition(), "UTF-8");
             PaginationDTO<TopicDTO> topics = searchService.searchTopicBySolr(condition, paginationDTO.getPage());
@@ -47,7 +47,7 @@ public class SearchController {
     }
 
     @PostMapping("/user")
-    public JsonResult<PaginationDTO<UserDTO>> user(@RequestBody PaginationDTO paginationDTO){
+    public JsonResult<?> user(@RequestBody PaginationDTO paginationDTO){
         try {
             String condition = URLDecoder.decode(paginationDTO.getCondition(), "UTF-8");
             PaginationDTO<UserDTO> users = searchService.searchUserBySolr(condition, paginationDTO.getPage());

@@ -28,24 +28,24 @@ public class JsonResult<T> implements Serializable {
     private JsonResult() {
     }
 
-    public static JsonResult errorOf(IExceptionErrorCode errorCode){
-        JsonResult jsonResult = new JsonResult();
+    public static JsonResult<?> errorOf(IExceptionErrorCode errorCode){
+        JsonResult<?> jsonResult = new JsonResult<>();
         jsonResult.setMessage(errorCode.getMessage());
         jsonResult.setCode(errorCode.getCode());
         jsonResult.setSuccess(false);
         return jsonResult;
     }
 
-    public static JsonResult errorOf(CustomizeException ex) {
-        JsonResult jsonResult = new JsonResult();
+    public static JsonResult<?> errorOf(CustomizeException ex) {
+        JsonResult<?> jsonResult = new JsonResult<>();
         jsonResult.setSuccess(false);
         jsonResult.setMessage(ex.getMessage());
         jsonResult.setCode(ex.getCode());
         return jsonResult;
     }
 
-    public static <T>JsonResult errorOf(T data){
-        JsonResult jsonResult = new JsonResult();
+    public static <T>JsonResult<T> errorOf(T data){
+        JsonResult<T> jsonResult = new JsonResult<>();
         jsonResult.setSuccess(false);
         jsonResult.setMessage("标签存在非法项");
         jsonResult.setData(data);
@@ -53,8 +53,8 @@ public class JsonResult<T> implements Serializable {
         return jsonResult;
     }
 
-    public static <T>JsonResult okOf(T data){
-        JsonResult jsonResult = new JsonResult();
+    public static <T>JsonResult<T> okOf(T data){
+        JsonResult<T> jsonResult = new JsonResult<>();
         jsonResult.setSuccess(true);
         jsonResult.setMessage("OK");
         jsonResult.setData(data);

@@ -16,7 +16,7 @@ var vue = new Vue({
                 if (jsonResult.success) {
 
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             })
         },
@@ -27,7 +27,7 @@ var vue = new Vue({
                 if (jsonResult.success) {
 
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             })
         },
@@ -38,7 +38,7 @@ var vue = new Vue({
                 if (jsonResult.success) {
 
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             })
         },
@@ -49,7 +49,7 @@ var vue = new Vue({
                 if (jsonResult.success) {
 
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             })
         },
@@ -60,7 +60,7 @@ var vue = new Vue({
                 if (jsonResult.success) {
 
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             })
         },
@@ -71,7 +71,7 @@ var vue = new Vue({
                 if (jsonResult.success) {
 
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             })
         }

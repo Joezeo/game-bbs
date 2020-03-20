@@ -42,7 +42,7 @@ var vue = new Vue({
                     vue.apps = vue.pagination.datas;
                     vue.loaded = true;
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             })
         },

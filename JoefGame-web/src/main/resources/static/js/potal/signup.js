@@ -41,7 +41,7 @@ var vue = new Vue({
                 if(jsonResult.success){
                     window.location.href = "/home";
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             });
         },
@@ -51,9 +51,9 @@ var vue = new Vue({
             axios.post(url, params).then(function (result) {
                 var jsonResult = result.data;
                 if(jsonResult.success){
-                    alert("验证码已发送至你的邮箱!")
+                    layer.msg("验证码已发送至你的邮箱!");
                 } else {
-                    alert(jsonResult.message)
+                    layer.msg(jsonResult.message);
                 }
             })
         },

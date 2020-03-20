@@ -95,15 +95,7 @@ function doPublish() {
             }
         } else {
             if (jsonResult.code == 2004) { // 用户未进行登录操作
-                var flag = confirm("当前操作需用户登录后进行，点击确定自动登录");
-                if (flag) {
-                    window.open("https://github.com/login/oauth/authorize?client_id=332735b1b85bfbb88779&scope=user&state=1");
-                    window.localStorage.setItem("closable", true);
-                    window.setInterval(function () {
-                        if (!window.localStorage.getItem("closable"))
-                            window.location.reload();
-                    }, 200);
-                }
+                window.location.href = "/login";
             } else {
                 if (jsonResult.code == 2006) { // 标签存在非法项目
                     var msg = "存在非法的标签：[";
@@ -113,9 +105,9 @@ function doPublish() {
                         else
                             msg += jsonResult.data[i] + "]";
                     }
-                    alert(msg);
+                    layer.msg(msg);
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             }
         }

@@ -51,7 +51,7 @@ var vue = new Vue({
                     vue.pagination = jsonResult.data;
                     vue.loadedSubscribe = true;
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             });
         },

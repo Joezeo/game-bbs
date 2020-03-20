@@ -14,7 +14,7 @@ public class IndexController {
 
     @PostMapping("/getUser")
     @ResponseBody
-    public JsonResult<User> getUser(HttpSession session) {
+    public JsonResult<UserDTO> getUser(HttpSession session) {
         UserDTO user = (UserDTO) session.getAttribute("user");
 
         return JsonResult.okOf(user);

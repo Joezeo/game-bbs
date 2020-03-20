@@ -28,7 +28,7 @@ var vue = new Vue({
                 if(jsonResult.success){
                     window.location.href = "/home";
                 } else {
-                    alert(jsonResult.message);
+                    layer.msg(jsonResult.message);
                 }
             });
         },
