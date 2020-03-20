@@ -1,6 +1,6 @@
 package com.joezeo.joefgame.web.interceptor;
 
-import com.joezeo.joefgame.potal.dto.UserDTO;
+import com.joezeo.joefgame.common.dto.UserDTO;
 import com.joezeo.joefgame.potal.service.NotificationService;
 import com.joezeo.joefgame.potal.service.UserService;
 import org.apache.shiro.SecurityUtils;

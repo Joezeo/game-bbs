@@ -1,8 +1,8 @@
 package com.joezeo.joefgame.potal.service;
 
-import com.joezeo.joefgame.potal.dto.CommentDTO;
+import com.joezeo.joefgame.common.dto.CommentDTO;
 import com.joezeo.joefgame.common.enums.CommentTypeEnum;
-import com.joezeo.joefgame.potal.dto.UserDTO;
+import com.joezeo.joefgame.common.dto.UserDTO;
 
 import java.util.List;
 

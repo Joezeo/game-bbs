@@ -1,17 +1,23 @@
 package com.joezeo.joefgame.manager.spider;
 
+import com.joezeo.joefgame.common.dto.SteamAppDTO;
+import com.joezeo.joefgame.common.enums.SolrCoreNameEnum;
 import com.joezeo.joefgame.common.enums.SteamAppTypeEnum;
 import com.joezeo.joefgame.common.mq.MessageSupplier;
 import com.joezeo.joefgame.dao.mapper.*;
 import com.joezeo.joefgame.dao.pojo.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +41,8 @@ public class PageResolver {
 
     @Autowired
     private MessageSupplier messageSupplier;
+    @Autowired
+    private SolrClient solrClient;
 
     /**
      * 解析获取Steam各个搜索页的总页数
@@ -201,6 +209,25 @@ public class PageResolver {
         // 使用 messageSupplier 存储消息至消息队列
         for (UserFavoriteApp userApp : list) {
             messageSupplier.putMessage("" + appid, "" + userApp.getId(), steamAppInfo);
+        }
+
+        /*
+        将降价的app信息存入Solr中
+         */
+        SteamAppDTO steamAppDTO = new SteamAppDTO();
+        BeanUtils.copyProperties(steamAppInfo, steamAppDTO);
+        String coreName = SolrCoreNameEnum.nameOf(steamAppDTO.getAppType());
+        try {
+            solrClient.addBean(steamAppDTO);
+            solrClient.commit(coreName);
+        } catch (IOException e) {
+            log.error("更新Solr数据失败：[core name:"+coreName+"]" +
+                    "[steamApp:+"+steamAppDTO.toString()+"+]");
+            log.error("StackTrace:" + e.getStackTrace());
+        } catch (SolrServerException e) {
+            log.error("更新Solr数据失败：[core name:"+coreName+"]" +
+                    "[steamApp:+"+steamAppDTO.toString()+"+]");
+            log.error("StackTrace:" + e.getStackTrace());
         }
     }
 
@@ -458,6 +485,23 @@ public class PageResolver {
                 log.error("存储app信息失败,appid=" + appid);
             } else {
                 log.info("存储app信息成功,appid=" + appid);
+            }
+
+            // 将App信息存入Solr中
+            SteamAppDTO steamAppDTO = new SteamAppDTO();
+            BeanUtils.copyProperties(steamAppInfo, steamAppDTO);
+            String coreName = SolrCoreNameEnum.nameOf(type);
+            try {
+                solrClient.addBean(steamAppDTO);
+                solrClient.commit(coreName);
+            } catch (IOException e) {
+                log.error("新增Solr数据失败：[core name:"+coreName+"]" +
+                        "[steamApp:+"+steamAppDTO.toString()+"+]");
+                log.error("StackTrace:" + e.getStackTrace());
+            } catch (SolrServerException e) {
+                log.error("新增Solr数据失败：[core name:"+coreName+"]" +
+                        "[steamApp:+"+steamAppDTO.toString()+"+]");
+                log.error("StackTrace:" + e.getStackTrace());
             }
         }
     }

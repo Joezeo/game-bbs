@@ -7,7 +7,7 @@ import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
 import com.joezeo.joefgame.common.exception.CustomizeException;
 import com.joezeo.joefgame.common.provider.GithubProvider;
 import com.joezeo.joefgame.common.provider.SteamProvider;
-import com.joezeo.joefgame.potal.dto.UserDTO;
+import com.joezeo.joefgame.common.dto.UserDTO;
 import com.joezeo.joefgame.potal.service.SteamService;
 import com.joezeo.joefgame.potal.service.TopicService;
 import com.joezeo.joefgame.potal.service.UserService;

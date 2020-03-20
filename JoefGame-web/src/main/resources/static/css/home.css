@@ -25,18 +25,20 @@
     color: rgb(36, 30, 18) !important;
 }
 /* 左侧区域结束 */
-
 .middle {
     border: solid #d7cedb 1px;
     border-radius: 5px;
     height: 500px;
     width: 552px;
 }
-
 .right {
     border: solid #d7cedb 1px;
     border-radius: 5px;
     height: 500px;
     width: 266px;
 }
-
+.followed-uesr-avatar{
+    width: 36px;
+    height: 36px;
+    border-radius: 36px;
+}

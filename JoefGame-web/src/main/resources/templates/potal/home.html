@@ -26,19 +26,28 @@
                     <span><h4>关注的</h4></span>
                     <ul class="nav nav-tabs">
                         <li role="presentation" class="active"><a @click="listUser()">用户</a></li>
-                        <li role="presentation"><a @click="listApp()">Steam 应用</a></li>
+                        <li role="presentation"><a @click="listSteam()">Steam 应用</a></li>
                     </ul>
 
                     <!--            关注的用户/steam应用-->
                     <div v-if="loadedSubscribe" v-cloak>
                         <div v-if="subscribeType=='user'">
-
+                            <table>
+                                <tr v-for="user in pagination.datas">
+                                    <td><img :src="user.avatarUrl" class="followed-uesr-avatar"></td>
+                                    <td><a :href="'/user/' + user.id" v-text="user.name"></a></td>
+                                </tr>
+                            </table>
                         </div>
                         <div v-if="subscribeType=='steam'">
                             <table>
                                 <tr v-for="app in pagination.datas">
-                                    <!--TODO:改成链接的形式-->
-                                    <td v-text="app.name"></td>
+                                    <td><a :href="'/steam/app/' + app.appid" v-text="app.name"></a></td>
+                                    <td>
+                                        <span v-if="app.originalPrice==0">免费</span>
+                                        <span v-else-if="app.finalPrice!=app.originalPrice">原价</span>
+                                        <span v-else>特惠</span>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -74,7 +83,6 @@
                         </nav>
                         <!--            分页条结束-->
                     </div>
-
                 </div>
             </div>
 

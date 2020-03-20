@@ -1,12 +1,13 @@
 package com.joezeo.joefgame.potal.service.impl;
 
 import com.joezeo.joefgame.common.dto.PaginationDTO;
+import com.joezeo.joefgame.common.enums.SolrCoreNameEnum;
 import com.joezeo.joefgame.common.enums.TopicTypeEnum;
 import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
 import com.joezeo.joefgame.common.exception.CustomizeException;
 import com.joezeo.joefgame.common.exception.ServiceException;
 import com.joezeo.joefgame.common.utils.RedisUtil;
-import com.joezeo.joefgame.potal.dto.TopicDTO;
+import com.joezeo.joefgame.common.dto.TopicDTO;
 import com.joezeo.joefgame.dao.mapper.TopicExtMapper;
 import com.joezeo.joefgame.dao.mapper.TopicLikeUserMapper;
 import com.joezeo.joefgame.dao.mapper.TopicMapper;
@@ -16,6 +17,8 @@ import com.joezeo.joefgame.common.provider.UCloudProvider;
 import com.joezeo.joefgame.potal.service.TopicService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +28,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +49,8 @@ public class TopicServiceImpl implements TopicService {
 
     @Autowired
     private UCloudProvider uCloudProvider;
+    @Autowired
+    private SolrClient solrClient;
 
     /*
     * Forum页面的分页查询
@@ -103,7 +107,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     /*
-        用于profile页面的分页查询
+        用于profile页面的'我的帖子'分页查询
      */
     @Override
     public PaginationDTO<TopicDTO> listPage(Long userid, Integer page, Integer size) {
@@ -242,6 +246,26 @@ public class TopicServiceImpl implements TopicService {
                 log.error("函数createOrUpdate：发布新帖子失败");
                 throw new ServiceException("发布新帖子失败");
             }
+
+            /*
+            将新发布的帖子上传至Solr
+             */
+            TopicDTO topicDTO = new TopicDTO();
+            BeanUtils.copyProperties(topic, topicDTO);
+            String coreName = SolrCoreNameEnum.TOPIC.getName();
+            try {
+                solrClient.addBean(topicDTO);
+                solrClient.commit(coreName);
+            } catch (IOException e) {
+                log.error("新增Solr数据失败：[core name:"+coreName+"]" +
+                        "[steamApp:+"+topicDTO.toString()+"+]");
+                log.error("StackTrace:" + e.getStackTrace());
+            } catch (SolrServerException e) {
+                log.error("新增Solr数据失败：[core name:"+coreName+"]" +
+                        "[steamApp:+"+topicDTO.toString()+"+]");
+                log.error("StackTrace:" + e.getStackTrace());
+            }
+
         } else { // 进行更新帖子操作
             // 获取贴子存储在UCloud的url地址
             Topic memtopic = topicMapper.selectByPrimaryKey(topic.getId());
@@ -260,6 +284,25 @@ public class TopicServiceImpl implements TopicService {
             if (count != 1) {
                 log.error("函数createOrUpdate：编辑帖子失败");
                 throw new RuntimeException("编辑帖子失败");
+            }
+
+            /*
+            将编辑后的帖子上传至Solr
+             */
+            TopicDTO topicDTO = new TopicDTO();
+            BeanUtils.copyProperties(topic, topicDTO);
+            String coreName = SolrCoreNameEnum.TOPIC.getName();
+            try {
+                solrClient.addBean(topicDTO);
+                solrClient.commit(coreName);
+            } catch (IOException e) {
+                log.error("更新Solr数据失败：[core name:"+coreName+"]" +
+                        "[steamApp:+"+topicDTO.toString()+"+]");
+                log.error("StackTrace:" + e.getStackTrace());
+            } catch (SolrServerException e) {
+                log.error("更新Solr数据失败：[core name:"+coreName+"]" +
+                        "[steamApp:+"+topicDTO.toString()+"+]");
+                log.error("StackTrace:" + e.getStackTrace());
             }
         }
 

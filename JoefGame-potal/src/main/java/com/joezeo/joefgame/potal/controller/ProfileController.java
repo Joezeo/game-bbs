@@ -4,15 +4,14 @@ import com.joezeo.joefgame.common.dto.JsonResult;
 import com.joezeo.joefgame.common.dto.PaginationDTO;
 import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
 import com.joezeo.joefgame.common.exception.CustomizeException;
-import com.joezeo.joefgame.potal.dto.NotificationDTO;
-import com.joezeo.joefgame.potal.dto.TopicDTO;
-import com.joezeo.joefgame.potal.dto.UserDTO;
+import com.joezeo.joefgame.common.dto.NotificationDTO;
+import com.joezeo.joefgame.common.dto.TopicDTO;
+import com.joezeo.joefgame.common.dto.UserDTO;
 import com.joezeo.joefgame.potal.service.NotificationService;
 import com.joezeo.joefgame.potal.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;

@@ -1,4 +1,4 @@
-package com.joezeo.joefgame.potal.dto;
+package com.joezeo.joefgame.common.dto;
 
 import lombok.Data;
 import org.apache.solr.client.solrj.beans.Field;

@@ -1,6 +1,6 @@
 package com.joezeo.joefgame.potal.cache;
 
-import com.joezeo.joefgame.potal.dto.TagDTO;
+import com.joezeo.joefgame.common.dto.TagDTO;
 import com.joezeo.joefgame.common.enums.TagCategoryEnum;
 import com.joezeo.joefgame.dao.pojo.Tag;
 import com.joezeo.joefgame.potal.service.TagService;

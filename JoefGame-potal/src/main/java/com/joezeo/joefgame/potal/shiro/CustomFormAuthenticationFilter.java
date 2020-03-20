@@ -1,6 +1,6 @@
 package com.joezeo.joefgame.potal.shiro;
 
-import com.joezeo.joefgame.potal.dto.UserDTO;
+import com.joezeo.joefgame.common.dto.UserDTO;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;

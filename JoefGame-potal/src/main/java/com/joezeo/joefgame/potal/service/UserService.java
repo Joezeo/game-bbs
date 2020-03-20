@@ -1,11 +1,9 @@
 package com.joezeo.joefgame.potal.service;
 
-import com.joezeo.joefgame.common.dto.GithubUser;
 import com.joezeo.joefgame.common.dto.PaginationDTO;
-import com.joezeo.joefgame.common.dto.SteamUser;
 import com.joezeo.joefgame.dao.pojo.User;
-import com.joezeo.joefgame.potal.dto.SteamAppDTO;
-import com.joezeo.joefgame.potal.dto.UserDTO;
+import com.joezeo.joefgame.common.dto.SteamAppDTO;
+import com.joezeo.joefgame.common.dto.UserDTO;
 
 public interface UserService{
     UserDTO queryUserByEmail(String email);

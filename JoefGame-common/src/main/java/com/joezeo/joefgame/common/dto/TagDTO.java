@@ -1,4 +1,4 @@
-package com.joezeo.joefgame.potal.dto;
+package com.joezeo.joefgame.common.dto;
 
 import com.joezeo.joefgame.common.enums.TagCategoryEnum;
 import com.joezeo.joefgame.dao.pojo.Tag;

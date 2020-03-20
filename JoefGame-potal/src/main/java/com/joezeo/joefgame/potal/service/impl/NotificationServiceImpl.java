@@ -1,6 +1,6 @@
 package com.joezeo.joefgame.potal.service.impl;
 
-import com.joezeo.joefgame.potal.dto.NotificationDTO;
+import com.joezeo.joefgame.common.dto.NotificationDTO;
 import com.joezeo.joefgame.common.dto.PaginationDTO;
 import com.joezeo.joefgame.common.enums.NotificationStatusEnum;
 import com.joezeo.joefgame.common.enums.NotificationTypeEnum;

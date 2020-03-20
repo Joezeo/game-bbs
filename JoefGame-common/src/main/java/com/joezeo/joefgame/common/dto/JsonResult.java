@@ -18,6 +18,8 @@ import java.io.Serializable;
 public class JsonResult<T> implements Serializable {
     private static final long serialVersionUID = 5426736252370302612L;
 
+    // 用于存储消息队列中是否含有该用户的消息
+    private Boolean hasMessage;
     private Integer code;
     private Boolean success;
     private String message;

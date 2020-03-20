@@ -1,4 +1,4 @@
-package com.joezeo.joefgame.potal.dto;
+package com.joezeo.joefgame.common.dto;
 
 import com.joezeo.joefgame.dao.pojo.Topic;
 import com.joezeo.joefgame.dao.pojo.User;

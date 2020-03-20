@@ -8,7 +8,7 @@ import com.joezeo.joefgame.common.utils.AuthUtils;
 import com.joezeo.joefgame.common.utils.TimeUtils;
 import com.joezeo.joefgame.dao.pojo.User;
 import com.joezeo.joefgame.potal.activiti.AuthPassListener;
-import com.joezeo.joefgame.potal.dto.UserDTO;
+import com.joezeo.joefgame.common.dto.UserDTO;
 import com.joezeo.joefgame.potal.service.UserService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -18,7 +18,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;

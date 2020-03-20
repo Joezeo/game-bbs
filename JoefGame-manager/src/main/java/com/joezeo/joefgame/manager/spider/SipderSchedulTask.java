@@ -2,7 +2,6 @@ package com.joezeo.joefgame.manager.spider;
 
 import com.joezeo.joefgame.common.enums.SpiderJobTypeEnum;
 import com.joezeo.joefgame.common.enums.SteamAppTypeEnum;
-import com.joezeo.joefgame.common.mq.MessageSupplier;
 import com.joezeo.joefgame.common.utils.TimeUtils;
 import com.joezeo.joefgame.dao.mapper.SteamAppInfoMapper;
 import com.joezeo.joefgame.dao.mapper.SteamHistoryPriceMapper;

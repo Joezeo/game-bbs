@@ -1,7 +1,7 @@
 package com.joezeo.joefgame.potal.service;
 
 import com.joezeo.joefgame.common.dto.PaginationDTO;
-import com.joezeo.joefgame.potal.dto.TopicDTO;
+import com.joezeo.joefgame.common.dto.TopicDTO;
 import com.joezeo.joefgame.dao.pojo.Topic;
 
 public interface TopicService {

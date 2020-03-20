@@ -5,7 +5,7 @@ import com.joezeo.joefgame.dao.mapper.UserRoleMapper;
 import com.joezeo.joefgame.dao.pojo.Role;
 import com.joezeo.joefgame.dao.pojo.User;
 import com.joezeo.joefgame.dao.pojo.UserExample;
-import com.joezeo.joefgame.potal.dto.UserDTO;
+import com.joezeo.joefgame.common.dto.UserDTO;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;

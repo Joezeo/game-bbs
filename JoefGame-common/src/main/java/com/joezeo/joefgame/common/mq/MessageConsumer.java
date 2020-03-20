@@ -19,6 +19,29 @@ public class MessageConsumer {
     @Autowired
     private RedisUtil redisUtil;
 
+    public boolean hasMessage(String consumerID, Class<?> contentType){
+        if (!ContentEnum.hasType(contentType)) {
+            log.error("请检查程序代码，使用了暂不支持的消息队列内容类型：[支持的类型：" + ContentEnum.listType() + "]" +
+                    "[使用的类型：" + contentType + "]");
+            return false;
+        }
+
+        String queueid = "";
+        if(contentType.equals(SteamAppInfo.class)){
+            queueid = "mq-steam-" + consumerID;
+        }
+
+        if (!redisUtil.hasKey(queueid)) {
+            return false;
+        }
+
+        if(redisUtil.lGetListSize(queueid) > 0){
+            return true;
+        }
+
+        return false;
+    }
+
     /*
     每一个用户只会访问各自的消息队列所以不存在线程安全的问题
      */

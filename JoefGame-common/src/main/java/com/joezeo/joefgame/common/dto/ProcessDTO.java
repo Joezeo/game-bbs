@@ -1,4 +1,4 @@
-package com.joezeo.joefgame.manager.dto;
+package com.joezeo.joefgame.common.dto;
 
 import lombok.Data;
 

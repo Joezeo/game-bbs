@@ -2,8 +2,8 @@ package com.joezeo.joefgame.potal.service;
 
 import com.joezeo.joefgame.common.dto.PaginationDTO;
 import com.joezeo.joefgame.dao.pojo.UserFavoriteApp;
-import com.joezeo.joefgame.potal.dto.HistoryPriceDTO;
-import com.joezeo.joefgame.potal.dto.SteamAppDTO;
+import com.joezeo.joefgame.common.dto.HistoryPriceDTO;
+import com.joezeo.joefgame.common.dto.SteamAppDTO;
 
 import java.util.List;
 
