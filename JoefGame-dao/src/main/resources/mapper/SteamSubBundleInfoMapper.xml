@@ -7,7 +7,7 @@
         and `type`=#{type}
     </select>
 
-    <insert id="insert" parameterType="SteamSubBundleInfo">
+    <insert id="insert" parameterType="SteamSubBundleInfo" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
         insert into t_steam_sub_bundle_info
         values (default, #{appid}, #{name}, #{devloper} ,#{publisher},#{releaseDate}, #{originalPrice}, #{finalPrice},
         #{contains}, #{gmtCreate},#{gmtModify},#{imgUrl},#{type},#{appType})

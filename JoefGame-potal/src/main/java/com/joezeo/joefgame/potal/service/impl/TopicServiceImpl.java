@@ -252,10 +252,12 @@ public class TopicServiceImpl implements TopicService {
              */
             TopicDTO topicDTO = new TopicDTO();
             BeanUtils.copyProperties(topic, topicDTO);
+            topicDTO.setTopicid(topic.getId()+"");
+
             String coreName = SolrCoreNameEnum.TOPIC.getName();
             try {
                 solrClient.addBean(topicDTO);
-                solrClient.commit(coreName);
+                solrClient.commit("/" + coreName);
             } catch (IOException e) {
                 log.error("新增Solr数据失败：[core name:"+coreName+"]" +
                         "[steamApp:+"+topicDTO.toString()+"+]");
@@ -291,10 +293,12 @@ public class TopicServiceImpl implements TopicService {
              */
             TopicDTO topicDTO = new TopicDTO();
             BeanUtils.copyProperties(topic, topicDTO);
+            topicDTO.setTopicid(topic.getId()+"");
+
             String coreName = SolrCoreNameEnum.TOPIC.getName();
             try {
                 solrClient.addBean(topicDTO);
-                solrClient.commit(coreName);
+                solrClient.commit("/" + coreName);
             } catch (IOException e) {
                 log.error("更新Solr数据失败：[core name:"+coreName+"]" +
                         "[steamApp:+"+topicDTO.toString()+"+]");

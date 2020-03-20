@@ -15,29 +15,34 @@
         </jdbcConnection>
 
         <javaModelGenerator targetPackage="com.joezeo.joefgame.dao.pojo" targetProject="src/main/java">
-            <property name="enableSubPackages" value="true" />
-            <property name="trimStrings" value="true" />
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="mapper"  targetProject="src/main/resources">
-            <property name="enableSubPackages" value="true" />
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.joezeo.joefgame.dao.mapper" targetProject="src/main/java">
-            <property name="enableSubPackages" value="true" />
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.joezeo.joefgame.dao.mapper"
+                             targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="t_user" domainObjectName="User" ></table>
-        <table tableName="t_role" domainObjectName="Role" ></table>
-        <table tableName="t_topic" domainObjectName="Topic" ></table>
-        <table tableName="t_comment" domainObjectName="Comment" ></table>
-        <table tableName="t_tag" domainObjectName="Tag" ></table>
-        <table tableName="t_notification" domainObjectName="Notification" ></table>
-        <table tableName="t_proxy_ip" domainObjectName="ProxyIP" ></table>
-        <table tableName="t_topic_like_user" domainObjectName="TopicLikeUser" ></table>
-        <table tableName="t_comment_like_user" domainObjectName="CommentLikeUser" ></table>
-        <table tableName="t_spider_failed_url" domainObjectName="SpiderFailedUrl" ></table>
-        <table tableName="t_user_favorite_app" domainObjectName="UserFavoriteApp" ></table>
-        <table tableName="t_user_follow" domainObjectName="UserFollow" ></table>
+        <table tableName="t_user" domainObjectName="User">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_role" domainObjectName="Role"></table>
+        <table tableName="t_topic" domainObjectName="Topic">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_comment" domainObjectName="Comment"></table>
+        <table tableName="t_tag" domainObjectName="Tag"></table>
+        <table tableName="t_notification" domainObjectName="Notification"></table>
+        <table tableName="t_proxy_ip" domainObjectName="ProxyIP"></table>
+        <table tableName="t_topic_like_user" domainObjectName="TopicLikeUser"></table>
+        <table tableName="t_comment_like_user" domainObjectName="CommentLikeUser"></table>
+        <table tableName="t_spider_failed_url" domainObjectName="SpiderFailedUrl"></table>
+        <table tableName="t_user_favorite_app" domainObjectName="UserFavoriteApp"></table>
+        <table tableName="t_user_follow" domainObjectName="UserFollow"></table>
     </context>
 </generatorConfiguration>

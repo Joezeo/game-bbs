@@ -51,7 +51,7 @@
         where name=""
     </delete>
 
-    <insert id="insert">
+    <insert id="insert"  keyProperty="id" keyColumn="id" useGeneratedKeys="true">
         insert into
         <choose>
             <when test="type == 'game'">t_steam_game_info</when>

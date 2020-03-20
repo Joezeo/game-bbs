@@ -99,17 +99,19 @@ public class UserServiceImpl implements UserService {
          */
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(user, userDTO);
+        userDTO.setUserid(user.getId() + "");
+
         String coreName = SolrCoreNameEnum.USER.getName();
         try {
             solrClient.addBean(userDTO);
-            solrClient.commit(coreName);
+            solrClient.commit("/" + coreName);
         } catch (IOException e) {
-            log.error("新增Solr数据失败：[core name:"+coreName+"]" +
-                    "[steamApp:+"+userDTO.toString()+"+]");
+            log.error("新增Solr数据失败：[core name:" + coreName + "]" +
+                    "[steamApp:+" + userDTO.toString() + "+]");
             log.error("StackTrace:" + e.getStackTrace());
         } catch (SolrServerException e) {
-            log.error("新增Solr数据失败：[core name:"+coreName+"]" +
-                    "[steamApp:+"+userDTO.toString()+"+]");
+            log.error("新增Solr数据失败：[core name:" + coreName + "]" +
+                    "[steamApp:+" + userDTO.toString() + "+]");
             log.error("StackTrace:" + e.getStackTrace());
         }
 
@@ -251,7 +253,7 @@ public class UserServiceImpl implements UserService {
 
         paginationDTO.setPagination(page, 5, count); // 每页展示5个关注的用户
         page = paginationDTO.getPage(); // 防止page参数不合法
-        int index = (page-1)*5;
+        int index = (page - 1) * 5;
 
         List<UserFollow> userFollows = userFollowMapper.selectByExampleWithRowbounds(example, new RowBounds(index, 5));
 
@@ -281,7 +283,7 @@ public class UserServiceImpl implements UserService {
         paginationDTO.setPagination(page, 5, count); // 每页展示5个关注的Steam应用
         page = paginationDTO.getPage(); // 防止page参数不合法
 
-        int index = (page-1) * 5;
+        int index = (page - 1) * 5;
 
         List<UserFavoriteApp> favoriteApps = userFavoriteAppMapper.selectByExampleWithRowbounds(example, new RowBounds(index, 5));
 

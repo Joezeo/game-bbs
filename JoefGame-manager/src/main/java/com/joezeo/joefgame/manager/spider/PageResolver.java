@@ -216,10 +216,12 @@ public class PageResolver {
          */
         SteamAppDTO steamAppDTO = new SteamAppDTO();
         BeanUtils.copyProperties(steamAppInfo, steamAppDTO);
+        steamAppDTO.setId("" + steamAppInfo.getId());
+
         String coreName = SolrCoreNameEnum.nameOf(steamAppDTO.getAppType());
         try {
             solrClient.addBean(steamAppDTO);
-            solrClient.commit(coreName);
+            solrClient.commit("/" + coreName);
         } catch (IOException e) {
             log.error("更新Solr数据失败：[core name:"+coreName+"]" +
                     "[steamApp:+"+steamAppDTO.toString()+"+]");
@@ -490,10 +492,12 @@ public class PageResolver {
             // 将App信息存入Solr中
             SteamAppDTO steamAppDTO = new SteamAppDTO();
             BeanUtils.copyProperties(steamAppInfo, steamAppDTO);
+            steamAppDTO.setId("" + steamAppDTO.getId());
+
             String coreName = SolrCoreNameEnum.nameOf(type);
             try {
                 solrClient.addBean(steamAppDTO);
-                solrClient.commit(coreName);
+                solrClient.commit("/" + coreName);
             } catch (IOException e) {
                 log.error("新增Solr数据失败：[core name:"+coreName+"]" +
                         "[steamApp:+"+steamAppDTO.toString()+"+]");
@@ -669,6 +673,25 @@ public class PageResolver {
             int index = steamSubBundleInfoMapper.insert(steamSubBundleInfo);
             if (index != 1) {
                 log.error("插入steam礼包信息失败,appid" + appid);
+            }
+
+            // 将App信息存入Solr中
+            SteamAppDTO steamAppDTO = new SteamAppDTO();
+            BeanUtils.copyProperties(steamSubBundleInfo, steamAppDTO);
+            steamAppDTO.setId("" + steamSubBundleInfo.getId());
+
+            String coreName = SolrCoreNameEnum.STEAMAPP_SUBBUNDLE.getName();
+            try {
+                solrClient.addBean(steamAppDTO);
+                solrClient.commit("/" + coreName);
+            } catch (IOException e) {
+                log.error("新增Solr数据失败：[core name:"+coreName+"]" +
+                        "[steamApp:+"+steamAppDTO.toString()+"+]");
+                log.error("StackTrace:" + e.getStackTrace());
+            } catch (SolrServerException e) {
+                log.error("新增Solr数据失败：[core name:"+coreName+"]" +
+                        "[steamApp:+"+steamAppDTO.toString()+"+]");
+                log.error("StackTrace:" + e.getStackTrace());
             }
         }
 
