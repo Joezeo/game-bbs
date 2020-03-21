@@ -25,8 +25,8 @@
 ---
 
 ### ![](http://www.joefgame.com/imgs/notify.png) 模块划分
-[公共（common）模块](https://github.com/Joezeo/JOEF-GAME/tree/master/JoefGame-common)：提供公用DTO类，Enum，工具类...  
 [持久层（dao）模块](https://github.com/Joezeo/JOEF-GAME/tree/master/JoefGame-dao)：与数据库交互，提供POJO对象，MyBatis Mapper  
+[公共（common）模块](https://github.com/Joezeo/JOEF-GAME/tree/master/JoefGame-common)：提供公用DTO类，Enum，工具类...  
 [后台管理（manager）模块](https://github.com/Joezeo/JOEF-GAME/tree/master/JoefGame-manager)：网站后台管理系统，需求管理员权限，提供爬虫管理、流程管理等功能  
 [前台（potal）模块](https://github.com/Joezeo/JOEF-GAME/tree/master/JoefGame-potal)：网站主要用户页面的服务器模块  
 [WEB 模块](https://github.com/Joezeo/JOEF-GAME/tree/master/JoefGame-web)：程序入口，提供Html5页面、JS、CSS、图片等静态资源，SpringBoot Configuration，异常处理  

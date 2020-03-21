@@ -20,45 +20,52 @@
                 <div class="left">
                     <div class="user-info">
                         <img :src="user.avatarUrl" :alt="user.name"><br>
+                        <br>
                         <span v-text="user.name"></span>
+                        <br>
+                        <span v-text="user.bio" class="user-bio"></span>
                     </div>
                     <hr>
                     <span><h4>关注的</h4></span>
-                    <ul class="nav nav-tabs">
-                        <li role="presentation" class="active"><a @click="listUser()">用户</a></li>
-                        <li role="presentation"><a @click="listSteam()">Steam 应用</a></li>
-                    </ul>
+                    <table class="home-left-subscribe-table">
+                        <tr>
+                            <td :class="leftUserClass" @click="listUser()"><h5>用户</h5></td>
+                            <td :class="leftSteamClass" @click="listSteam()"><h5>Steam 应用</h5></td>
+                        </tr>
+                    </table>
 
                     <!--            关注的用户/steam应用-->
                     <div v-if="loadedSubscribe" v-cloak>
                         <div v-if="subscribeType=='user'">
-                            <table>
-                                <tr v-for="user in pagination.datas">
+                            <span v-if="subsribeNum==0" class="common-span">您还未关注用户...</span>
+                            <table class="user-steam-common-table">
+                                <tr v-for="user in pagination.datas" class="user-tr user-steam-common-tr">
                                     <td><img :src="user.avatarUrl" class="followed-uesr-avatar"></td>
                                     <td><a :href="'/user/' + user.id" v-text="user.name"></a></td>
                                 </tr>
                             </table>
                         </div>
                         <div v-if="subscribeType=='steam'">
-                            <table>
-                                <tr v-for="app in pagination.datas">
+                            <span v-if="subsribeNum==0" class="common-span">您还未收藏Steam应用...</span>
+                            <table class="user-steam-common-table">
+                                <tr v-for="app in pagination.datas" class="steam-tr user-steam-common-tr">
                                     <td><a :href="'/steam/app/' + app.appid" v-text="app.name"></a></td>
                                     <td>
                                         <span v-if="app.originalPrice==0">免费</span>
-                                        <span v-else-if="app.finalPrice!=app.originalPrice">原价</span>
+                                        <span v-else-if="app.finalPrice==app.originalPrice">原价</span>
                                         <span v-else>特惠</span>
                                     </td>
                                 </tr>
                             </table>
                         </div>
                         <!--            分页条开始-->
-                        <nav aria-label="Page navigation">
+                        <nav aria-label="Page navigation" class="page-pos">
                             <ul class="pagination">
-                                <li v-if="pagination.hasFirst">
-                                    <a @click="listSubscribe(1,subscribeType)" aria-label="First">
-                                        <span aria-hidden="true">&lt;&lt;</span>
-                                    </a>
-                                </li>
+<!--                                <li v-if="pagination.hasFirst">-->
+<!--                                    <a @click="listSubscribe(1,subscribeType)" aria-label="First">-->
+<!--                                        <span aria-hidden="true">&lt;&lt;</span>-->
+<!--                                    </a>-->
+<!--                                </li>-->
                                 <li v-if="pagination.hasPrevious">
                                     <a @click="listSubscribe(pagination.page-1,subscribeType)"
                                        aria-label="Previous">
@@ -66,19 +73,19 @@
                                     </a>
                                 </li>
 
-                                <li v-for="page in pagination.pages" :class="[page==pagination.page?'active':'']"><a
-                                        @click="listSubscribe(page,subscribeType)" v-text="page"></a></li>
+<!--                                <li v-for="page in pagination.pages" :class="[page==pagination.page?'active':'']"><a-->
+<!--                                        @click="listSubscribe(page,subscribeType)" v-text="page"></a></li>-->
 
                                 <li v-if="pagination.hasNext">
                                     <a @click="listSubscribe(pagination.page+1,subscribeType)" aria-label="Next">
                                         <span aria-hidden="true">&gt;</span>
                                     </a>
                                 </li>
-                                <li v-if="pagination.hasLast">
-                                    <a @click="listSubscribe(pagination.totalPage,subscribeType)" aria-label="Last">
-                                        <span aria-hidden="true">&gt;&gt;</span>
-                                    </a>
-                                </li>
+<!--                                <li v-if="pagination.hasLast">-->
+<!--                                    <a @click="listSubscribe(pagination.totalPage,subscribeType)" aria-label="Last">-->
+<!--                                        <span aria-hidden="true">&gt;&gt;</span>-->
+<!--                                    </a>-->
+<!--                                </li>-->
                             </ul>
                         </nav>
                         <!--            分页条结束-->
@@ -87,13 +94,21 @@
             </div>
 
             <div class="col-lg-6 .col-md-12 .col-sm-12 .col-xs-12">
+                <table class="home-middle-select-table">
+                    <tr>
+                        <td :class="middleUserClass"><h4>关注动态</h4></td>
+                        <td :class="middleSteamClass"><h4>STEAM新闻速递</h4></td>
+                    </tr>
+                </table>
                 <div class="middle">
-
                 </div>
             </div>
             <!--        右侧信息条-->
             <div class="col-lg-3 .col-md-12 .col-sm-12 .col-xs-12">
-                <div class="right">
+                <div class="right-up">
+
+                </div>
+                <div class="right-down">
 
                 </div>
             </div>

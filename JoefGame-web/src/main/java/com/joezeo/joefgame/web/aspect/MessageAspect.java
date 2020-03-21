@@ -4,15 +4,11 @@ import com.joezeo.joefgame.common.dto.JsonResult;
 import com.joezeo.joefgame.common.dto.UserDTO;
 import com.joezeo.joefgame.common.mq.MessageConsumer;
 import com.joezeo.joefgame.dao.pojo.SteamAppInfo;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * 消息队列切面

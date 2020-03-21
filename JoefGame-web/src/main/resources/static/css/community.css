@@ -380,6 +380,7 @@ a {
     background: #e7513b !important;
     color: white;
     border-radius: 10px;
+    border: 1px solid #e7513b;
 }
 
 .pixel-btn:hover {
@@ -558,4 +559,16 @@ a {
 }
 .search-panel a :hover{
     color: black;
+}
+
+/* 右下角 消息弹窗 */
+.right-bottom-message{
+    width: 330px;
+    text-align: center;
+}
+.right-bottom-message img{
+    weidth:120px;
+    height: 70px;
+    border-radius: 10px;
+    float: left;
 }

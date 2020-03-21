@@ -21,11 +21,10 @@ public class MessageController {
     private MessageConsumer messageConsumer;
 
     @PostMapping("/doGet")
-    public JsonResult<String> doGet(@RequestBody UserDTO userDTO){
+    public JsonResult<SteamAppInfo> doGet(@RequestBody UserDTO userDTO){
         // 获取Steam应用降价消息
         IJoefMessage<SteamAppInfo> message = messageConsumer.getMessage(userDTO.getUserid(), SteamAppInfo.class);
         SteamAppInfo steamAppInfo = message.getContent();
-        // TODO:消息用何种形式展示？？
-        return JsonResult.okOf(null);
+        return JsonResult.okOf(steamAppInfo);
     }
 }

@@ -5,10 +5,19 @@ var condition = "";
 var subscribeType = "user"; // user-左侧信息条展示用户关注用户列表 steam-左侧信息条展示用户收藏steam应用列表
 var pagination = {};
 var loadedSubscribe = false;
+var subsribeNum = 0;
+
+// 控制左侧关注列表，选择样式class
+var leftUserClass = "my-active";
+var leftSteamClass = "";
+
+// 中部选择样式
+var middleUserClass = "my-active"; // 控制中部显示 '关注动态'
+var middleSteamClass = ""; // 控制中部显示 'STEAM新闻速递'
 
 var vue = new Vue({
     el:"#home",
-    data:{user,loadedUser, condition, subscribeType, pagination, loadedSubscribe},
+    data:{user,loadedUser, condition, subscribeType, pagination, loadedSubscribe, leftUserClass, leftSteamClass, subsribeNum},
     mounted:function () {
         this.removeStorage();
         this.getUser();
@@ -53,6 +62,7 @@ var vue = new Vue({
                 var jsonResult = result.data;
                 if(jsonResult.success){
                     vue.pagination = jsonResult.data;
+                    vue.subsribeNum = jsonResult.data.datas.length;
                     vue.loadedSubscribe = true;
                 } else {
                     layer.msg(jsonResult.message);
@@ -60,10 +70,22 @@ var vue = new Vue({
             });
         },
         listUser:function () {
+            if(this.leftSteamClass == "my-active") {
+                this.leftSteamClass = "";
+            }
+            if(this.leftUserClass == ""){
+                this.leftUserClass = "my-active";
+            }
             this.subscribeType = "user";
             this.listSubscribe(1, this.subscribeType);
         },
         listSteam:function () {
+            if(this.leftUserClass == "my-active") {
+                this.leftUserClass = "";
+            }
+            if(this.leftSteamClass == ""){
+                this.leftSteamClass = "my-active";
+            }
             this.subscribeType = "steam";
             this.listSubscribe(1, this.subscribeType);
         }
