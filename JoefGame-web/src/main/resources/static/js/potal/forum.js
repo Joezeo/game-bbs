@@ -4,7 +4,7 @@ var forumDTO = {
     condition: "",
     tab: 'square',
     loaded: false, // 页面是否异步加载完毕
-    loadedUser: false
+    loadedUser: false,
 };
 var vue = new Vue({
         el: "#forum",
@@ -29,6 +29,10 @@ var vue = new Vue({
                         if (getedUser) {
                             vue.user = getedUser;
                             vue.loadedUser = true;
+                            if(jsonResult.hasMessage){
+                                // 消息队列中存在未读消息
+                                getMessage(vue.user.id); // 函数在文件message.js中定义
+                            }
                         } else {
                             vue.loadedUser = false;
                         }

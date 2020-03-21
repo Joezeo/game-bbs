@@ -169,7 +169,7 @@
 
                     <div v-if="!loadedUser" style="text-align: center; margin-bottom: 20px" v-cloak>
                         <hr>
-                        <a @click="autoLogin" id="auto-login">需登录后才能回复，点击此处登录</a>
+                        <a href="/login" id="auto-login">需登录后才能回复，点击此处登录</a>
                     </div>
                 </div>
             </div>
@@ -219,5 +219,6 @@
 <script src="/js/potal/topic.js"></script>
 <script src="/js/potal/logout.js"></script>
 <script src="/layer/layer.js"></script>
+<script src="/js/potal/message.js"></script>
 </body>
 </html>

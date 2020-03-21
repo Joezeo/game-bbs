@@ -4,15 +4,39 @@ var type = 1;
 var page = 1;
 var loaded = false;
 var condition = "";
+var user = {};
+var loadedUser = false;
 
 var vue = new Vue({
     el: "#apps",
-    data: {pagination, apps, type, loaded, page, condition},
+    data: {pagination, apps, type, loaded, page, condition, user, loadedUser},
     mounted: function () {
         this.getMem();
         this.list(this.page, this.type);
+        this.getUser();
     },
     methods: {
+        getUser: function () {
+            var url = "/getUser";
+            axios.post(url).then(function (response) {
+                var jsonResult = response.data;
+                if (jsonResult.success) {
+                    var getedUser = jsonResult.data;
+                    if (getedUser) {
+                        vue.user = getedUser;
+                        vue.loadedUser = true;
+                        if(jsonResult.hasMessage){
+                            // 消息队列中存在未读消息
+                            getMessage(vue.user.id); // 函数在文件message.js中定义
+                        }
+                    } else {
+                        vue.loadedUser = false;
+                    }
+                } else {
+                    vue.loadedUser = false;
+                }
+            })
+        },
         getMem:function(){
             var page = window.sessionStorage.getItem("page");
             var type = window.sessionStorage.getItem("type");

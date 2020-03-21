@@ -29,6 +29,10 @@ var vue = new Vue({
                     if (getedUser) {
                         vue.user = getedUser;
                         vue.loadedUser = true;
+                        if(jsonResult.hasMessage){
+                            // 消息队列中存在未读消息
+                            getMessage(vue.user.id); // 函数在文件message.js中定义
+                        }
                     } else {
                         vue.loadedUser = false;
                     }

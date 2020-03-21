@@ -35,6 +35,27 @@ var vue = new Vue({
         this.getUnreadCount();
     },
     methods: {
+        getUser:function () {
+            var url = "/getUser";
+            axios.post(url).then(function (response) {
+                var jsonResult = response.data;
+                if (jsonResult.success) {
+                    var getedUser = jsonResult.data;
+                    if (getedUser) {
+                        vue.user = getedUser;
+                        vue.loadedUser = true;
+                        if(jsonResult.hasMessage){
+                            // 消息队列中存在未读消息
+                            getMessage(vue.user.id); // 函数在文件message.js中定义
+                        }
+                    } else {
+                        vue.loadedUser = false;
+                    }
+                } else {
+                    vue.loadedUser = false;
+                }
+            })
+        },
         // 移除apps页面存储的page、type信息
         removeStorage:function(){
             window.sessionStorage.removeItem("page");
