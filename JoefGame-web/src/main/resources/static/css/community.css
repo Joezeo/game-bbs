@@ -467,6 +467,7 @@ a {
 .btn-blue-white {
     background: #004c81;
     color: white;
+    border: 1px solid #004c81;
     border-radius: 20px;
     width: 90px;
     height: 30px;

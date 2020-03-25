@@ -4,6 +4,8 @@ import com.joezeo.joefgame.common.dto.PaginationDTO;
 import com.joezeo.joefgame.common.dto.TopicDTO;
 import com.joezeo.joefgame.dao.pojo.Topic;
 
+import java.util.List;
+
 public interface TopicService {
 
     PaginationDTO<TopicDTO> listPage(Integer page, Integer size, String tab);
@@ -21,4 +23,6 @@ public interface TopicService {
     TopicDTO likeTopic(Long topicid, Long userid);
 
     TopicDTO unlikeTopic(Long topicid, Long userid);
+
+    List<Topic> queryByUserdAndTime(Long userid);
 }

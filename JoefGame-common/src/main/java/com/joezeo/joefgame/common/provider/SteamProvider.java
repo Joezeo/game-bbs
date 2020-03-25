@@ -1,8 +1,12 @@
 package com.joezeo.joefgame.common.provider;
 
 import com.alibaba.fastjson.JSON;
+import com.joezeo.joefgame.common.dto.SteamAppNew;
+import com.joezeo.joefgame.common.dto.SteamGame;
 import com.joezeo.joefgame.common.dto.SteamResponse;
 import com.joezeo.joefgame.common.dto.SteamUser;
+import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
+import com.joezeo.joefgame.common.exception.CustomizeException;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -26,21 +30,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Slf4j
 public class SteamProvider {
+    /*
+    OkHttpClient
+     */
+    private static OkHttpClient okHttpClient;
+    static {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        okHttpClient = builder.connectTimeout(60, TimeUnit.SECONDS)
+                        .readTimeout(60, TimeUnit.SECONDS)
+                        .writeTimeout(60, TimeUnit.SECONDS)
+                        .retryOnConnectionFailure(true)
+                        .build();
+    }
+
     /*
     Openid Manager
      */
     @Autowired
     private ConsumerManager consumerManager;
 
-    /*
-    OkHttpClient
-     */
-    @Autowired
-    private OkHttpClient okHttpClient;
 
     @Value("${steam.api.private.key}")
     private String steamApiPrivateKey;
@@ -53,13 +66,15 @@ public class SteamProvider {
             AuthRequest authRequest = consumerManager.authenticate(associate, returnToUrl);
             return authRequest.getDestinationUrl(true);
         } catch (DiscoveryException e) {
-            e.printStackTrace();
+            log.error("使用Steam三方认证失败:StackTrace="+e.getStackTrace());
+            throw new CustomizeException(CustomizeErrorCode.STEAM_AUTH_FAILD);
         } catch (ConsumerException e) {
-            e.printStackTrace();
+            log.error("使用Steam三方认证失败:StackTrace="+e.getStackTrace());
+            throw new CustomizeException(CustomizeErrorCode.STEAM_AUTH_FAILD);
         } catch (MessageException e) {
-            e.printStackTrace();
+            log.error("使用Steam三方认证失败:StackTrace="+e.getStackTrace());
+            throw new CustomizeException(CustomizeErrorCode.STEAM_AUTH_FAILD);
         }
-        return null;
     }
 
     public String getSteamid(HttpServletRequest request) {
@@ -78,11 +93,14 @@ public class SteamProvider {
         try {
             verification = consumerManager.verify(url.toString(), params, discovered);
         } catch (MessageException e) {
-            e.printStackTrace();
+            log.error("获取SteamID失败:StackTrace="+e.getStackTrace());
+            throw new CustomizeException(CustomizeErrorCode.STEAM_AUTH_FAILD);
         } catch (DiscoveryException e) {
-            e.printStackTrace();
+            log.error("获取SteamID失败:StackTrace="+e.getStackTrace());
+            throw new CustomizeException(CustomizeErrorCode.STEAM_AUTH_FAILD);
         } catch (AssociationException e) {
-            e.printStackTrace();
+            log.error("获取SteamID失败:StackTrace="+e.getStackTrace());
+            throw new CustomizeException(CustomizeErrorCode.STEAM_AUTH_FAILD);
         }
 
         // 获取用户属性steam id
@@ -114,7 +132,48 @@ public class SteamProvider {
                 return players.get(0).getPersonaname();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("获取Steam Name失败:StackTrace="+e.getStackTrace());
+            throw new CustomizeException(CustomizeErrorCode.STEAM_CONNECTION_FAILD);
+        }
+        return null;
+    }
+
+    public SteamResponse getOwnedGames(String steamId) {
+        String url = "http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" + steamApiPrivateKey + "&steamids=" + steamId;
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+
+        try {
+            Response response = okHttpClient.newCall(request).execute();
+            String jsonResult = response.body().string();
+            SteamResponse steamResponse = JSON.parseObject(jsonResult, SteamResponse.class);
+            return steamResponse.getResponse();
+        } catch (IOException e) {
+            log.error("获取Steam Name失败:StackTrace="+e.getStackTrace());
+        } catch (Exception e){ // 服务器在本地时无法连接至Steam api
+            log.error("服务器在本地时无法连接至Steam api");
+        }
+        return null;
+    }
+
+    public List<SteamAppNew> getAppNews(Integer appid) {
+        String url = "http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?appid="+appid+"&count=3&maxlength=300&format=json";
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+
+        try {
+            Response response = okHttpClient.newCall(request).execute();
+            String jsonResult = response.body().string();
+            SteamResponse steamResponse = JSON.parseObject(jsonResult, SteamResponse.class);
+            return steamResponse.getAppnews().getNewsitems();
+        } catch (IOException e) {
+            log.error("获取Steam App News失败:StackTrace="+e.getStackTrace());
+        } catch (Exception e){ // 服务器在本地时无法连接至Steam api
+            log.error("服务器在本地时无法连接至Steam api");
         }
         return null;
     }

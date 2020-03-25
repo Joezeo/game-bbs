@@ -27,4 +27,5 @@ public class UserDTO implements Serializable {
 
     /*用户拥有的权限*/private List<String> roles;
     /*用户收藏的游戏*/private List<UserFavoriteApp> favorites;
+    /*用户在Steam拥有的游戏appid集合*/private List<Integer> ownedGames;
 }

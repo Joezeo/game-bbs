@@ -258,7 +258,7 @@ public class UserServiceImpl implements UserService {
         List<UserFollow> userFollows = userFollowMapper.selectByExampleWithRowbounds(example, new RowBounds(index, 5));
 
         List<UserDTO> list = new ArrayList<>();
-        list.stream().forEach(item -> {
+        userFollows.stream().forEach(item -> {
             User user = userMapper.selectByPrimaryKey(item.getId());
             UserDTO userDTO = new UserDTO();
             BeanUtils.copyProperties(user, userDTO);
@@ -298,5 +298,21 @@ public class UserServiceImpl implements UserService {
         paginationDTO.setDatas(list);
 
         return paginationDTO;
+    }
+
+    @Override
+    public List<UserDTO> listAllFollowUser(Long userid) {
+        UserFollowExample example = new UserFollowExample();
+        List<UserFollow> userFollows = userFollowMapper.selectByExample(example);
+
+        List<UserDTO> list = new ArrayList<>();
+        userFollows.stream().forEach(item -> {
+            User user = userMapper.selectByPrimaryKey(item.getId());
+            UserDTO userDTO = new UserDTO();
+            BeanUtils.copyProperties(user, userDTO);
+            userDTO.setPassword(null);
+            list.add(userDTO);
+        });
+        return list;
     }
 }

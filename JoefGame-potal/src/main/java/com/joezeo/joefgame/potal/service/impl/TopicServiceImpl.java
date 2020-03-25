@@ -8,6 +8,7 @@ import com.joezeo.joefgame.common.exception.CustomizeException;
 import com.joezeo.joefgame.common.exception.ServiceException;
 import com.joezeo.joefgame.common.utils.RedisUtil;
 import com.joezeo.joefgame.common.dto.TopicDTO;
+import com.joezeo.joefgame.common.utils.TimeUtils;
 import com.joezeo.joefgame.dao.mapper.TopicExtMapper;
 import com.joezeo.joefgame.dao.mapper.TopicLikeUserMapper;
 import com.joezeo.joefgame.dao.mapper.TopicMapper;
@@ -27,6 +28,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -403,5 +405,19 @@ public class TopicServiceImpl implements TopicService {
         topicDTO.setLikeUsersId(userids);
 
         return topicDTO;
+    }
+
+    @Override
+    public List<Topic> queryByUserdAndTime(Long userid) {
+        try {
+            Long time = TimeUtils.getZeroAtThirtyDaysAgo();
+            TopicExample example = new TopicExample();
+            example.createCriteria().andUseridEqualTo(userid).andGmtCreateGreaterThan(time);
+            List<Topic> topics = topicMapper.selectByExample(example);
+            return  topics;
+        } catch (ParseException e) {
+            log.error("解析时间失败,stackTrace=" + e.getStackTrace());
+            throw new CustomizeException(CustomizeErrorCode.FETCH_POSTS_FAILD);
+        }
     }
 }

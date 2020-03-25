@@ -61,11 +61,11 @@
                         <!--            分页条开始-->
                         <nav aria-label="Page navigation" class="page-pos">
                             <ul class="pagination">
-<!--                                <li v-if="pagination.hasFirst">-->
-<!--                                    <a @click="listSubscribe(1,subscribeType)" aria-label="First">-->
-<!--                                        <span aria-hidden="true">&lt;&lt;</span>-->
-<!--                                    </a>-->
-<!--                                </li>-->
+                                <!--                                <li v-if="pagination.hasFirst">-->
+                                <!--                                    <a @click="listSubscribe(1,subscribeType)" aria-label="First">-->
+                                <!--                                        <span aria-hidden="true">&lt;&lt;</span>-->
+                                <!--                                    </a>-->
+                                <!--                                </li>-->
                                 <li v-if="pagination.hasPrevious">
                                     <a @click="listSubscribe(pagination.page-1,subscribeType)"
                                        aria-label="Previous">
@@ -73,19 +73,19 @@
                                     </a>
                                 </li>
 
-<!--                                <li v-for="page in pagination.pages" :class="[page==pagination.page?'active':'']"><a-->
-<!--                                        @click="listSubscribe(page,subscribeType)" v-text="page"></a></li>-->
+                                <!--                                <li v-for="page in pagination.pages" :class="[page==pagination.page?'active':'']"><a-->
+                                <!--                                        @click="listSubscribe(page,subscribeType)" v-text="page"></a></li>-->
 
                                 <li v-if="pagination.hasNext">
                                     <a @click="listSubscribe(pagination.page+1,subscribeType)" aria-label="Next">
                                         <span aria-hidden="true">&gt;</span>
                                     </a>
                                 </li>
-<!--                                <li v-if="pagination.hasLast">-->
-<!--                                    <a @click="listSubscribe(pagination.totalPage,subscribeType)" aria-label="Last">-->
-<!--                                        <span aria-hidden="true">&gt;&gt;</span>-->
-<!--                                    </a>-->
-<!--                                </li>-->
+                                <!--                                <li v-if="pagination.hasLast">-->
+                                <!--                                    <a @click="listSubscribe(pagination.totalPage,subscribeType)" aria-label="Last">-->
+                                <!--                                        <span aria-hidden="true">&gt;&gt;</span>-->
+                                <!--                                    </a>-->
+                                <!--                                </li>-->
                             </ul>
                         </nav>
                         <!--            分页条结束-->
@@ -96,11 +96,52 @@
             <div class="col-lg-6 .col-md-12 .col-sm-12 .col-xs-12">
                 <table class="home-middle-select-table">
                     <tr>
-                        <td :class="middleUserClass"><h4>关注动态</h4></td>
-                        <td :class="middleSteamClass"><h4>STEAM新闻速递</h4></td>
+                        <td :class="middleUserClass" @click="listUserPosts()"><h4>关注动态</h4></td>
+                        <td :class="middleSteamClass" @click="listSteamAppNews()"><h4>STEAM新闻速递</h4></td>
                     </tr>
                 </table>
                 <div class="middle">
+                    <div v-if="middleUserClass=='my-active'" v-cloak>
+                        <!--当前为'关注动态'-->
+                        <template v-if="userPosts.length!=0">
+                            <div class="media" v-for="post in userPosts">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object" :src="post.avatarUrl">
+                                    </a>
+                                </div>
+                                <!--发表帖子-->
+                                <div class="media-body" v-if="post.type == 1">
+                                    <h4 class="media-heading" v-text="post.posterName + ' 发表了帖子'"></h4>
+                                    <h5 v-text="post.postTitle"></h5>
+                                    <span v-text="timestampToTime(post.postTime)"></span>
+                                </div>
+                                <!--发表动态-->
+                                <div class="media-body" v-if="post.type == 2">
+                                    <h4 class="media-heading" v-text="post.posterName + ' 发布了动态'"></h4>
+                                    <h5 v-text="post.postContent"></h5>
+                                    <span v-text="timestampToTime(post.postTime)"></span>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <span>暂无更多动态...</span>
+                        </template>
+                    </div>
+                    <div v-if="middleSteamClass=='my-active'" v-cloak>
+                        <!--当前为'Steam新闻速递'-->
+                        <template v-if="appNews.length!=0">
+                            <div v-for="snew in appNews">
+                                <h4 v-text="snew.title"></h4>
+                                <span v-if="snew.author" v-text="snew.author"></span><br>
+                                <span v-html="snew.contents"></span><br>
+                                <span v-text="timestampToTime(snew.date)"></span><br>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <span>暂无更多新闻...</span>
+                        </template>
+                    </div>
                 </div>
             </div>
             <!--        右侧信息条-->

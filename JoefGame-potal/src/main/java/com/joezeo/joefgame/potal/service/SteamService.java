@@ -1,6 +1,7 @@
 package com.joezeo.joefgame.potal.service;
 
 import com.joezeo.joefgame.common.dto.PaginationDTO;
+import com.joezeo.joefgame.common.dto.SteamAppNew;
 import com.joezeo.joefgame.dao.pojo.UserFavoriteApp;
 import com.joezeo.joefgame.common.dto.HistoryPriceDTO;
 import com.joezeo.joefgame.common.dto.SteamAppDTO;
@@ -21,4 +22,8 @@ public interface SteamService {
     List<UserFavoriteApp> favoriteApp(Long userid, Integer appid, Integer type);
 
     List<UserFavoriteApp> unFavoriteApp(Long userid, Integer appid, Integer type);
+
+    List<Integer> getOwnedGames(String steamId);
+
+    List<SteamAppNew> getAppNews(List<Integer> ownedGames);
 }

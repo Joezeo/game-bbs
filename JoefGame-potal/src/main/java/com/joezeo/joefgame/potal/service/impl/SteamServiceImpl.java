@@ -2,12 +2,11 @@ package com.joezeo.joefgame.potal.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.joezeo.joefgame.common.dto.*;
+import com.joezeo.joefgame.common.provider.SteamProvider;
 import com.joezeo.joefgame.common.utils.RedisUtil;
 import com.joezeo.joefgame.dao.mapper.UserFavoriteAppMapper;
 import com.joezeo.joefgame.dao.pojo.*;
-import com.joezeo.joefgame.common.dto.HistoryPriceDTO;
-import com.joezeo.joefgame.common.dto.PaginationDTO;
-import com.joezeo.joefgame.common.dto.SteamAppDTO;
 import com.joezeo.joefgame.common.enums.SteamAppTypeEnum;
 import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
 import com.joezeo.joefgame.common.exception.CustomizeException;
@@ -42,6 +41,8 @@ public class SteamServiceImpl implements SteamService {
     private UserFavoriteAppMapper userFavoriteAppMapper;
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    private SteamProvider steamProvider;
 
     @Override
     public PaginationDTO<?>
@@ -638,6 +639,26 @@ public class SteamServiceImpl implements SteamService {
 
         List<UserFavoriteApp> favorites = getFavorites(userid);
         return favorites;
+    }
+
+    @Override
+    public List<Integer> getOwnedGames(String steamId) {
+        SteamResponse response = steamProvider.getOwnedGames(steamId);
+        List<Integer> appids = null;
+        if(response != null){
+            List<SteamGame> games = response.getGames();
+            appids = games.stream().map(game -> game.getAppid()).collect(Collectors.toList());
+        }
+        return appids;
+    }
+
+    @Override
+    public List<SteamAppNew> getAppNews(List<Integer> ownedGames) {
+        List<SteamAppNew> appNews = new ArrayList<>();
+        if(ownedGames!=null){
+            ownedGames.stream().forEach(appid -> appNews.addAll(steamProvider.getAppNews(appid)));
+        }
+        return appNews;
     }
 
 }

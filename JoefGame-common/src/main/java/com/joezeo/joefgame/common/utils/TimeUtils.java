@@ -145,4 +145,26 @@ public class TimeUtils {
 
         return date + 1;
     }
+
+    /**
+     * 获取当前时间7天前的零点时间戳
+     * @return
+     * @throws ParseException
+     */
+    public static Long getZeroAtSevenDaysAgo() throws ParseException {
+        long timestampAtZero = getTimestampAtZero();
+
+        return timestampAtZero-(7*24*60*60*1000);
+    }
+
+    /**
+     * 获取当前时间30天前零点时间戳
+     * @return
+     * @throws ParseException
+     */
+    public static Long getZeroAtThirtyDaysAgo() throws ParseException {
+        long timestampAtZero = getTimestampAtZero();
+
+        return timestampAtZero-(30*24*60*60*1000);
+    }
 }

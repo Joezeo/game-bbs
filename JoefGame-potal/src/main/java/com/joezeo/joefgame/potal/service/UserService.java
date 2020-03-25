@@ -5,6 +5,8 @@ import com.joezeo.joefgame.dao.pojo.User;
 import com.joezeo.joefgame.common.dto.SteamAppDTO;
 import com.joezeo.joefgame.common.dto.UserDTO;
 
+import java.util.List;
+
 public interface UserService{
     UserDTO queryUserByEmail(String email);
 
@@ -31,4 +33,6 @@ public interface UserService{
     PaginationDTO<UserDTO> listFollowUser(Long userid, Integer page);
 
     PaginationDTO<SteamAppDTO> listFavoriteApp(Long userid, Integer page);
+
+    List<UserDTO> listAllFollowUser(Long userid);
 }
