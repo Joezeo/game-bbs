@@ -18,4 +18,7 @@ public class SteamResponse {
     /*api：GetNewsForApp (v0002) 相关属性*/
     private SteamResponse appnews;
     private List<SteamAppNew> newsitems;
+
+    /*api：GetNumberOfCurrentPlayers (v0001) 相关属性*/
+    private Integer player_count;
 }

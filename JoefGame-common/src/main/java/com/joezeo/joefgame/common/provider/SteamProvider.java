@@ -139,7 +139,7 @@ public class SteamProvider {
     }
 
     public SteamResponse getOwnedGames(String steamId) {
-        String url = "http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" + steamApiPrivateKey + "&steamids=" + steamId;
+        String url = "http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" + steamApiPrivateKey + "&steamid=" + steamId + "&format=json";
         Request request = new Request.Builder()
                 .url(url)
                 .get()
@@ -153,7 +153,7 @@ public class SteamProvider {
         } catch (IOException e) {
             log.error("获取Steam Name失败:StackTrace="+e.getStackTrace());
         } catch (Exception e){ // 服务器在本地时无法连接至Steam api
-            log.error("服务器在本地时无法连接至Steam api");
+            log.error("服务器异常无法连接至Steam api");
         }
         return null;
     }
@@ -176,5 +176,25 @@ public class SteamProvider {
             log.error("服务器在本地时无法连接至Steam api");
         }
         return null;
+    }
+
+    public Integer getPlayers(Integer appid) {
+        String url = "http://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1?appid="+appid;
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+
+        try {
+            Response response = okHttpClient.newCall(request).execute();
+            String jsonResult = response.body().string();
+            SteamResponse steamResponse = JSON.parseObject(jsonResult, SteamResponse.class);
+            return steamResponse.getResponse().getPlayer_count();
+        } catch (IOException e) {
+            log.error("获取Steam App News失败:StackTrace="+e.getStackTrace());
+        } catch (Exception e){ // 服务器在本地时无法连接至Steam api
+            log.error("服务器在本地时无法连接至Steam api");
+        }
+        return 0;
     }
 }

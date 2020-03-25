@@ -65,4 +65,10 @@ public class SteamController {
         user.setFavorites(favorites);
         return JsonResult.okOf(user);
     }
+
+    @PostMapping("/getPlayers")
+    public JsonResult<Integer> getPlayers(@RequestBody SteamAppDTO steamAppDTO){
+        Integer players = steamService.getPlayers(steamAppDTO.getAppid());
+        return JsonResult.okOf(players);
+    }
 }

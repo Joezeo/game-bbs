@@ -29,15 +29,17 @@ var condition = "";
 var favorite = false; // 用户是否收藏该Steam 应用
 var favoriteList = {};
 var typeStrs = ["游戏","软件","DLC","试玩游戏","捆绑包","原声带","礼包"];
+var players = 0; // 当前Steam在线人数
 
 var vue = new Vue({
     el: "#app",
     data: {user, loadedUser, appid, type, typeStr, app, loaded, prices, chartTitle,
-        condition, favorite,favoriteList},
+        condition, favorite,favoriteList, players},
     mounted: function () {
         this.getApp();
         this.getPrice();
         this.getUser();
+        this.getPlayer(this.appid);
     },
     methods: {
         getUser: function () {
@@ -92,6 +94,18 @@ var vue = new Vue({
                     var priceDto = jsonResult.data;
                     vue.prices = priceDto;
                     loadPriceChart(vue.prices);
+                } else {
+                    layer.msg(jsonResult.message);
+                }
+            })
+        },
+        getPlayer:function (appid) {
+            var url = "/steam/getPlayers";
+            var params = {appid:appid};
+            axios.post(url, params).then(function (result) {
+                var jsonResult = result.data;
+                if(jsonResult.success){
+                    vue.players = jsonResult.data;
                 } else {
                     layer.msg(jsonResult.message);
                 }

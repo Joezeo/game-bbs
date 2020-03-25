@@ -36,3 +36,10 @@ h3{
     box-sizing: border-box;
     text-align: right;
 }
+
+.player-count{
+    color: #e7513b;
+    float: right;
+    margin-right: 390px;
+    margin-top: -31px;
+}

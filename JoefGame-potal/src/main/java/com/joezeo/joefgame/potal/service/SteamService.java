@@ -26,4 +26,6 @@ public interface SteamService {
     List<Integer> getOwnedGames(String steamId);
 
     List<SteamAppNew> getAppNews(List<Integer> ownedGames);
+
+    Integer getPlayers(Integer appid);
 }

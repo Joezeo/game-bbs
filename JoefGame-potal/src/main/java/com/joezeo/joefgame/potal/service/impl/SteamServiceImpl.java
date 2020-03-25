@@ -661,4 +661,9 @@ public class SteamServiceImpl implements SteamService {
         return appNews;
     }
 
+    @Override
+    public Integer getPlayers(Integer appid) {
+        return steamProvider.getPlayers(appid);
+    }
+
 }

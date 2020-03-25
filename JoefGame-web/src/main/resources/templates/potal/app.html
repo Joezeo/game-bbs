@@ -21,7 +21,10 @@
             <div class="col-lg-7 .col-md-12 .col-sm-12 .col-xs-12 left-zone" v-if="loaded" v-cloak>
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h3 v-text="app.name"></h3>
+                        <div>
+                            <h3 v-text="app.name"></h3>
+                            <span v-text="'当前Steam在线' + players + '人'" class="player-count"></span>
+                        </div>
                         <a @click="favoriteApp(appid,type,loadedUser)" v-if="!favorite" title="点击收藏应用">
                             <img src="/imgs/star-black.png">
                         </a>
@@ -101,8 +104,8 @@
             <hr>
             <div class="list-group left-nav">
                 <a href="#info" class="list-group-item">软件信息</a>
-                <a href="#chart" class="list-group-item" @click="getPrice">历史价格</a>
-                <a href="#chart" class="list-group-item">Steam 图表</a>
+                <a href="#chart" class="list-group-item" @click="getPrice()">历史价格</a>
+<!--                <a href="#chart" class="list-group-item" >Steam 图表</a>-->
             </div>
             <a href="" name="chart"></a>
             <div class="col-lg-12 .col-md-11 .col-sm-11 .col-xs-11 col-center-block">

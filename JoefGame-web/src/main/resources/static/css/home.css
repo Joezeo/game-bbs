@@ -33,8 +33,22 @@
 .middle {
     border: solid #d7cedb 1px;
     border-radius: 5px;
-    height: 550px;
+    height: 100%;
     width: 552px;
+}
+.middle a{
+    color:#d13d2a;
+}
+.non-span{
+    margin-top: 20px;
+    height: 550px !important;
+    text-align: center;
+    font-size: 16px;
+    color: #666666;
+}
+.app-new{
+    border-bottom: 2px #efefef solid;
+    padding: 10px;
 }
 .right-up {
     border: solid #d7cedb 1px;
@@ -128,3 +142,4 @@
 .home-middle-select-table td:hover{
     border-bottom: 3px #999999 solid;
 }
+

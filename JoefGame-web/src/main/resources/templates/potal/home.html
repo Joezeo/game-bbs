@@ -125,13 +125,15 @@
                             </div>
                         </template>
                         <template v-else>
-                            <span>暂无更多动态...</span>
+                            <div class="non-span">
+                                <span >暂无更多动态...</span>
+                            </div>
                         </template>
                     </div>
                     <div v-if="middleSteamClass=='my-active'" v-cloak>
                         <!--当前为'Steam新闻速递'-->
                         <template v-if="appNews.length!=0">
-                            <div v-for="snew in appNews">
+                            <div v-for="snew in appNews" class="app-new">
                                 <h4 v-text="snew.title"></h4>
                                 <span v-if="snew.author" v-text="snew.author"></span><br>
                                 <span v-html="snew.contents"></span><br>
@@ -139,7 +141,9 @@
                             </div>
                         </template>
                         <template v-else>
-                            <span>暂无更多新闻...</span>
+                            <div class="non-span">
+                                <span>暂无更多新闻...</span>
+                            </div>
                         </template>
                     </div>
                 </div>
