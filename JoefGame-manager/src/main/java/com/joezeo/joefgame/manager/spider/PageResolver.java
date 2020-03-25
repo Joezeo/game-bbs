@@ -220,8 +220,8 @@ public class PageResolver {
 
         String coreName = SolrCoreNameEnum.nameOf(steamAppDTO.getAppType());
         try {
-            solrClient.addBean(steamAppDTO);
-            solrClient.commit("/" + coreName);
+            solrClient.addBean(coreName, steamAppDTO);
+            solrClient.commit(coreName);
         } catch (IOException e) {
             log.error("更新Solr数据失败：[core name:"+coreName+"]" +
                     "[steamApp:+"+steamAppDTO.toString()+"+]");
@@ -496,8 +496,8 @@ public class PageResolver {
 
             String coreName = SolrCoreNameEnum.nameOf(type);
             try {
-                solrClient.addBean(steamAppDTO);
-                solrClient.commit("/" + coreName);
+                solrClient.addBean(coreName, steamAppDTO);
+                solrClient.commit(coreName);
             } catch (IOException e) {
                 log.error("新增Solr数据失败：[core name:"+coreName+"]" +
                         "[steamApp:+"+steamAppDTO.toString()+"+]");
@@ -682,8 +682,8 @@ public class PageResolver {
 
             String coreName = SolrCoreNameEnum.STEAMAPP_SUBBUNDLE.getName();
             try {
-                solrClient.addBean(steamAppDTO);
-                solrClient.commit("/" + coreName);
+                solrClient.addBean(coreName, steamAppDTO);
+                solrClient.commit(coreName);
             } catch (IOException e) {
                 log.error("新增Solr数据失败：[core name:"+coreName+"]" +
                         "[steamApp:+"+steamAppDTO.toString()+"+]");

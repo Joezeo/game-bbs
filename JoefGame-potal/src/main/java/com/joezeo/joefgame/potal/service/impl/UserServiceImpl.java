@@ -73,7 +73,6 @@ public class UserServiceImpl implements UserService {
         return (memUser == null || memUser.size() == 0) ? false : true;
     }
 
-
     @Override
     public void signup(User user) {
         passwordHelper.encryptPassword(user); // 密码加密
@@ -103,8 +102,8 @@ public class UserServiceImpl implements UserService {
 
         String coreName = SolrCoreNameEnum.USER.getName();
         try {
-            solrClient.addBean(userDTO);
-            solrClient.commit("/" + coreName);
+            solrClient.addBean(coreName, userDTO);
+            solrClient.commit(coreName);
         } catch (IOException e) {
             log.error("新增Solr数据失败：[core name:" + coreName + "]" +
                     "[steamApp:+" + userDTO.toString() + "+]");

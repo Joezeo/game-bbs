@@ -43,7 +43,8 @@ public enum CustomizeErrorCode implements IExceptionErrorCode {
     UNFAVORITE_APP_FAILED(2036, "取消收藏应用失败，请稍后重试"),
     STEAM_AUTH_FAILD(2037, "Steam三方认证失败"),
     STEAM_CONNECTION_FAILD(2038, "连接Steam服务失败"),
-    FETCH_POSTS_FAILD(2039, "获取动态信息失败");
+    FETCH_POSTS_FAILD(2039, "获取动态信息失败"),
+    UPLOAD_TOPIC_FIILED(2040, "上传帖子内容至UCloud失败");
 
     private Integer code;
     private String message;

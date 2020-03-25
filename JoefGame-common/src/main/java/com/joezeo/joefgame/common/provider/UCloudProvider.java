@@ -95,10 +95,10 @@ public class UCloudProvider{
             return url;
         } catch (UfileClientException e) {
             log.error("UCloud:上传帖子内容失败,stackTrace=" + e.getStackTrace());
-            throw new CustomizeException(CustomizeErrorCode.UPLOAD_IMG_FIILED);
+            throw new CustomizeException(CustomizeErrorCode.UPLOAD_TOPIC_FIILED);
         } catch (UfileServerException e) {
             log.error("UCloud:上传帖子内容失败,stackTrace=" + e.getStackTrace());
-            throw new CustomizeException(CustomizeErrorCode.UPLOAD_IMG_FIILED);
+            throw new CustomizeException(CustomizeErrorCode.UPLOAD_TOPIC_FIILED);
         }
     }
 
@@ -117,10 +117,10 @@ public class UCloudProvider{
             return url;
         } catch (UfileClientException e) {
             log.error("UCloud:上传帖子内容失败,stackTrace=" + e.getStackTrace());
-            throw new CustomizeException(CustomizeErrorCode.UPLOAD_IMG_FIILED);
+            throw new CustomizeException(CustomizeErrorCode.UPLOAD_TOPIC_FIILED);
         } catch (UfileServerException e) {
             log.error("UCloud:上传帖子内容失败,stackTrace=" + e.getStackTrace());
-            throw new CustomizeException(CustomizeErrorCode.UPLOAD_IMG_FIILED);
+            throw new CustomizeException(CustomizeErrorCode.UPLOAD_TOPIC_FIILED);
         }
     }
     /**
