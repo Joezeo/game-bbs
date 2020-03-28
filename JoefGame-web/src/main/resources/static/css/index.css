@@ -38,7 +38,7 @@ h3{
 }
 .content{
     position: absolute;
-    right: 35%;
+    right: 39%;
     top: 290px;
     text-align: center;
 }
@@ -54,6 +54,7 @@ h3{
     border: #e7513b solid 1px;
     text-align: center;
     font-size: 18px;
+    outline: none;
 }
 .index-joinus-btn:hover{
     background: #c94634;

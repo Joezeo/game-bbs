@@ -133,7 +133,16 @@ var vue = new Vue({
         // search相关函数，函数从文件conmmonSearch.js中引入
         searchUser:searchUser,
         searchSteam:searchSteam,
-        searchTopic:searchTopic
+        searchTopic:searchTopic,
+        clickUploadBtn:function () {
+            $("#avatar-uploader").modal('show');
+        },
+        changeAvatar:function () {
+            $("#avatar-uploader").modal('hide');
+        },
+        openAvatarSelection:function () {
+            $("#avatar-input-btn").click();
+        }
     }
 });
 

@@ -21,10 +21,8 @@
 
                     <div class="col-lg-9 .col-md-9 .col-sm-9 .col-xs-9">
                         <h2><img v-if="section=='personal'" src="/imgs/personal.png" alt="" style="margin-top: -10px;">
-                            <img v-if="section=='topics'" v-cloak src="/imgs/mytopic.png" alt=""
-                                 style="margin-top: -10px;">
-                            <img v-if="section=='notify'" v-cloak src="/imgs/notify.png" alt=""
-                                 style="margin-top: -10px;">
+                            <img v-if="section=='topics'" v-cloak src="/imgs/mytopic.png" style="margin-top: -10px;">
+                            <img v-if="section=='notify'" v-cloak src="/imgs/notify.png" style="margin-top: -10px;">
                             <span v-text="sectionName"></span></h2>
                     </div>
 
@@ -46,10 +44,45 @@
                                 用户名: <span v-text="user.name"></span>
                             </div>
 
-                            <div class="panel-body">
-                                头像: <img :src="user.avatarUrl" class="avatar">
-                                <input type="button" class="btn-blue-white" value="更换头像" style="margin-top: 20px;"/>
-                            </div>
+                            <form method="post" enctype="multipart/form-data" id="user-avatar-form">
+                                <div class="panel-body">
+                                    头像: <img :src="user.avatarUrl" class="avatar">
+                                    <input @click="clickUploadBtn()" type="button" class="btn-blue-white" value="更换头像"
+                                           style="margin-top: 20px;"/>
+                                </div>
+                            </form>
+
+                            <!-- 上传头像 start-->
+                            <div class="modal fade my-modal" tabindex="-1" role="dialog" id="avatar-uploader">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title">更换头像</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="file" style="display: none;" id="avatar-input-btn" name="avatar" accept="image/png,image/gif,image/jpg,image/jpeg">
+                                            <table class="avatar-table">
+                                                <tr>
+                                                    <td class="td-left">
+                                                        <img @click="openAvatarSelection()" src="/imgs/upload_avatar.png" class="avatar-quarter">
+                                                    </td>
+                                                    <td class="td-right">
+                                                        <img :src="user.avatarUrl" class="avatar-circle">
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button @click="changeAvatar()" type="button"
+                                                    class="btn btn-primary pixel-btn">更换
+                                            </button>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
+                            <!-- 上传头像 end -->
 
                             <div class="panel-body">
                                 个性签名: <span v-text="user.bio"></span>
@@ -176,8 +209,8 @@
                         </template>
                     </div>
                 </div>
-
             </div>
+
             <div class="list-group section">
                 <a href="/profile/personal" type="button" class="list-group-item">个人资料</a>
                 <a href="/profile/topics" type="button" class="list-group-item">我的帖子</a>
@@ -194,6 +227,7 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="/jquery/jquery-3.4.1.js"></script>
+<script src="/jquery/jquery-form.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <script src="/js/potal/commonSearch.js"></script>
 <script src="/js/potal/profile.js"></script>

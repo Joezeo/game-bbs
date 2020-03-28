@@ -1,33 +1,36 @@
-body{
-    font-family: "幼圆",sans-serif;
+body {
+    font-family: "幼圆", sans-serif;
 }
-h3{
+
+h3 {
 
 }
-.left-zone{
+
+.left-zone {
     margin-top: 23px;
 }
-.left-zone .app-table tr{
+
+.left-zone .app-table tr {
     height: 53px;
-    border-top: 1px solid rgba(240,240,240,.9);
+    border-top: 1px solid rgba(240, 240, 240, .9);
 }
-.left-zone .table-zone{
+
+.left-zone .table-zone {
     /*background-color: rgba(227,227,227,.6);*/
     font-size: 17px;
 }
 
-.right-zone{
+.right-zone {
     margin-top: 23px;
 }
 
-.right-zone img{
+.right-zone img {
     width: 99%;
     border-radius: 7px;
     margin-bottom: 10px;
 }
 
-
-.bottom-zone .left-nav{
+.bottom-zone .left-nav {
     position: fixed;
     top: 50px;
     left: 0;
@@ -37,9 +40,6 @@ h3{
     text-align: right;
 }
 
-.player-count{
+.player-count {
     color: #e7513b;
-    float: right;
-    margin-right: 390px;
-    margin-top: -31px;
 }

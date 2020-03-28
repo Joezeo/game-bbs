@@ -22,8 +22,8 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div>
-                            <h3 v-text="app.name"></h3>
                             <span v-text="'当前Steam在线' + players + '人'" class="player-count"></span>
+                            <h3 v-text="app.name"></h3>
                         </div>
                         <a @click="favoriteApp(appid,type,loadedUser)" v-if="!favorite" title="点击收藏应用">
                             <img src="/imgs/star-black.png">

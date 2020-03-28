@@ -125,6 +125,7 @@ a {
 .btn-publish {
     float: right;
     margin-bottom: 15px;
+    outline: none;
 }
 
 .text-desc {
@@ -381,6 +382,7 @@ a {
     color: white;
     border-radius: 10px;
     border: 1px solid #e7513b;
+    outline: none !important;
 }
 
 .pixel-btn:hover {
@@ -457,6 +459,7 @@ a {
 .avatar {
     width: 64px;
     height: 64px;
+    border-radius: 64px;
 }
 
 .panel-heading {
@@ -472,6 +475,7 @@ a {
     width: 90px;
     height: 30px;
     float: right;
+    outline: none;
 }
 
 .login-with-logo {
@@ -572,4 +576,30 @@ a {
     height: 70px;
     border-radius: 10px;
     float: left;
+}
+.my-modal{
+    margin-top: 150px;
+}
+.avatar-quarter{
+    margin: 50px;
+    width: 164px;
+    height: 164px;
+    border: 1px solid #efefef;
+    cursor: pointer;
+}
+.avatar-circle{
+    margin: 50px;
+    width: 98px;
+    height: 98px;
+    border-radius: 164px;
+    border: 1px solid #efefef;
+}
+.avatar-table td{
+    width: 350px;
+}
+.td-left{
+    border-right: solid 2px #efefef;
+}
+.td-right{
+    border-left: solid 2px #efefef;
 }
