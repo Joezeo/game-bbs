@@ -10,6 +10,7 @@ import cn.ucloud.ufile.exception.UfileClientException;
 import cn.ucloud.ufile.exception.UfileServerException;
 import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
 import com.joezeo.joefgame.common.exception.CustomizeException;
+import com.joezeo.joefgame.common.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +23,7 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-public class UCloudProvider{
+public class UCloudProvider {
     @Autowired
     private ObjectAuthorization objectAuthorization;
 
@@ -32,6 +33,13 @@ public class UCloudProvider{
     @Value("${ucloud.ufile.bucketname}")
     private String bucketname;
 
+    /**
+     * 上传图片
+     * @param fileInputStream
+     * @param mimeType
+     * @param fileName 带.jpg等后缀的原始文件名称
+     * @return
+     */
     public String uploadImg(InputStream fileInputStream, String mimeType, String fileName) {
         String[] split = fileName.split("\\.");
         if (split.length <= 1) {
@@ -103,7 +111,7 @@ public class UCloudProvider{
     }
 
     public String updateTopic(String description, String mimetype, String oldurl) {
-        String filename = oldurl.substring(oldurl.lastIndexOf("/")+1);
+        String filename = oldurl.substring(oldurl.lastIndexOf("/") + 1);
         try {
             PutObjectResultBean response = UfileClient.object(objectAuthorization, objectConfig)
                     .putObject(new ByteArrayInputStream(description.getBytes()), mimetype)
@@ -123,6 +131,7 @@ public class UCloudProvider{
             throw new CustomizeException(CustomizeErrorCode.UPLOAD_TOPIC_FIILED);
         }
     }
+
     /**
      * 从UCloud获取帖子
      *
@@ -144,18 +153,32 @@ public class UCloudProvider{
         }
     }
 
-    public void deleteTopic(String url){
-        String keyName = url.substring(url.lastIndexOf("/")+1);
+    public void deleteTopic(String url) {
         try {
-            BaseObjectResponseBean response = UfileClient.object(objectAuthorization, objectConfig)
-                    .deleteObject(keyName, bucketname)
-                    .execute();
+            deleteObject(url);
         } catch (UfileClientException e) {
-            log.error("UCloud:删除帖子内容失败,stackTrace=" + e.getStackTrace());
+            log.error("UCloud:删除帖子内容失败,url=" + url);
             throw new CustomizeException(CustomizeErrorCode.SERVER_ERROR);
         } catch (UfileServerException e) {
-            log.error("UCloud:删除帖子内容失败,stackTrace=" + e.getStackTrace());
+            log.error("UCloud:删除帖子内容失败,url=" + url);
             throw new CustomizeException(CustomizeErrorCode.SERVER_ERROR);
         }
+    }
+
+    public void deleteAvatar(String url) {
+        try {
+            deleteObject(url);
+        } catch (UfileClientException e) {
+            log.error("UCloud:删除头像失败,url=" + url);
+        } catch (UfileServerException e) {
+            log.error("UCloud:删除头像失败,url=" + url);
+        }
+    }
+
+    private void deleteObject(String url) throws UfileServerException, UfileClientException {
+        String keyName = url.substring(url.lastIndexOf("/") + 1);
+        BaseObjectResponseBean response = UfileClient.object(objectAuthorization, objectConfig)
+                .deleteObject(keyName, bucketname)
+                .execute();
     }
 }

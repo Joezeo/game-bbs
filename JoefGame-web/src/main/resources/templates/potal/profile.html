@@ -44,44 +44,48 @@
                                 用户名: <span v-text="user.name"></span>
                             </div>
 
-                            <form method="post" enctype="multipart/form-data" id="user-avatar-form">
-                                <div class="panel-body">
-                                    头像: <img :src="user.avatarUrl" class="avatar">
-                                    <input @click="clickUploadBtn()" type="button" class="btn-blue-white" value="更换头像"
-                                           style="margin-top: 20px;"/>
-                                </div>
-                            </form>
+                            <div class="panel-body">
+                                头像: <img :src="user.avatarUrl" class="avatar">
+                                <input @click="clickUploadBtn()" type="button" class="btn-blue-white" value="更换头像"
+                                       style="margin-top: 20px;"/>
+                            </div>
 
                             <!-- 上传头像 start-->
-                            <div class="modal fade my-modal" tabindex="-1" role="dialog" id="avatar-uploader">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title">更换头像</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <input type="file" style="display: none;" id="avatar-input-btn" name="avatar" accept="image/png,image/gif,image/jpg,image/jpeg">
-                                            <table class="avatar-table">
-                                                <tr>
-                                                    <td class="td-left">
-                                                        <img @click="openAvatarSelection()" src="/imgs/upload_avatar.png" class="avatar-quarter">
-                                                    </td>
-                                                    <td class="td-right">
-                                                        <img :src="user.avatarUrl" class="avatar-circle">
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button @click="changeAvatar()" type="button"
-                                                    class="btn btn-primary pixel-btn">更换
-                                            </button>
-                                        </div>
-                                    </div><!-- /.modal-content -->
-                                </div><!-- /.modal-dialog -->
-                            </div><!-- /.modal -->
+                            <form method="post" enctype="multipart/form-data" id="user-avatar-form">
+                                <div class="modal fade my-modal" tabindex="-1" role="dialog" id="avatar-uploader">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title">更换头像</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <input @change="avatarReview()" type="file" style="display: none;"
+                                                       id="avatar-input-btn" name="avatar"
+                                                       accept="image/png,image/gif,image/jpg,image/jpeg">
+                                                <table class="avatar-table">
+                                                    <tr>
+                                                        <td class="td-left">
+                                                            <img @click="openAvatarSelection()"
+                                                                 src="/imgs/upload_avatar.png" class="avatar-quarter">
+                                                        </td>
+                                                        <td class="td-right">
+                                                            <img :src="avatarUrl" class="avatar-circle">
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button @click="uploadNewAvatar()" type="button"
+                                                        class="btn btn-primary pixel-btn">更换
+                                                </button>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
+                            </form>
                             <!-- 上传头像 end -->
 
                             <div class="panel-body">

@@ -25,6 +25,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -313,5 +314,35 @@ public class UserServiceImpl implements UserService {
             list.add(userDTO);
         });
         return list;
+    }
+
+    @Override
+    public String updateAvatar(MultipartFile avatar, Long userid) {
+        InputStream inputStream = null;
+        try {
+            inputStream = avatar.getInputStream();
+        } catch (IOException e) {
+            log.error("从MultipartFile获取用户上传的新头像失败");
+            throw new CustomizeException(CustomizeErrorCode.UPLOAD_AVATAR_FAILED);
+        }
+
+        String randomName = "avatar-" + UUID.randomUUID().toString();
+        String avatarUrl = uCloudProvider.uploadAvatar(inputStream, "image/png", randomName);
+
+        // 获取原来的头像地址，从uCloud中删除
+        User storedUser = userMapper.selectByPrimaryKey(userid);
+        uCloudProvider.deleteAvatar(storedUser.getAvatarUrl());
+
+        User user = new User();
+        user.setId(userid);
+        user.setAvatarUrl(avatarUrl);
+        user.setGmtModify(System.currentTimeMillis());
+
+        int res = userMapper.updateByPrimaryKeySelective(user);
+        if(res != 1){
+            log.error("存储用户新头像至数据库失败:user=" + user);
+            throw new CustomizeException(CustomizeErrorCode.UPLOAD_AVATAR_FAILED);
+        }
+        return avatarUrl;
     }
 }

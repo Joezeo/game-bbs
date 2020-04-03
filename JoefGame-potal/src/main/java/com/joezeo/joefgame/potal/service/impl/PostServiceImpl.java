@@ -27,7 +27,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<UserPostDTO> getUserPosts(Long userid) {
         // 获取当前用户关注的用户集合
-
         List<UserPostDTO> userPostDTOS = new ArrayList<>();
         //获取关注的用户
         List<UserDTO> userDTOS = userService.listAllFollowUser(userid);

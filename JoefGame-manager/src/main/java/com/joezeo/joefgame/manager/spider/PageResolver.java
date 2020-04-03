@@ -2,7 +2,6 @@ package com.joezeo.joefgame.manager.spider;
 
 import com.joezeo.joefgame.common.dto.SteamAppDTO;
 import com.joezeo.joefgame.common.enums.SolrCoreNameEnum;
-import com.joezeo.joefgame.common.enums.SteamAppTypeEnum;
 import com.joezeo.joefgame.common.mq.MessageSupplier;
 import com.joezeo.joefgame.dao.mapper.*;
 import com.joezeo.joefgame.dao.pojo.*;

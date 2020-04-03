@@ -8,6 +8,9 @@ var user = {};
 var loadedUser = false;
 var condition = "";
 
+// 在修改用户头像时需要的avatarUrl
+var avatarUrl = "";
+
 var vue = new Vue({
     el: "#profile",
     data: {
@@ -16,7 +19,7 @@ var vue = new Vue({
         pagination,
         loaded,
         unreadCount,
-        user, loadedUser,condition
+        user, loadedUser,condition, avatarUrl
     },
     mounted: function () {
         this.removeStorage();
@@ -33,6 +36,7 @@ var vue = new Vue({
         }
         this.getDatas(this.section, 1);
         this.getUnreadCount();
+        this.getUser();
     },
     methods: {
         getUser:function () {
@@ -44,6 +48,7 @@ var vue = new Vue({
                     if (getedUser) {
                         vue.user = getedUser;
                         vue.loadedUser = true;
+                        vue.avatarUrl = vue.user.avatarUrl;
                         if(jsonResult.hasMessage){
                             // 消息队列中存在未读消息
                             getMessage(vue.user.id); // 函数在文件message.js中定义
@@ -134,15 +139,47 @@ var vue = new Vue({
         searchUser:searchUser,
         searchSteam:searchSteam,
         searchTopic:searchTopic,
-        clickUploadBtn:function () {
+        /*上传头像相关*/
+        clickUploadBtn:function () { // 点击个人中心->更换头像按钮
             $("#avatar-uploader").modal('show');
-        },
-        changeAvatar:function () {
-            $("#avatar-uploader").modal('hide');
         },
         openAvatarSelection:function () {
             $("#avatar-input-btn").click();
+        },
+        avatarReview:function () { // 用户选择的头像回显示
+            var f = document.getElementById('avatar-input-btn').files[0];
+
+            var url = null;
+            if (window.createObjectURL != undefined) { // basic
+                url = window.createObjectURL(f);
+            } else if (window.URL != undefined) { // mozilla(firefox)
+                url = window.URL.createObjectURL(f);
+            } else if (window.webkitURL != undefined) { // webkit or chrome
+                url = window.webkitURL.createObjectURL(f);
+            }
+            this.avatarUrl = url;
+        },
+        uploadNewAvatar:function () { // 上传新的头像
+            $("#avatar-uploader").modal('hide');
+            var options = {
+                url: "/profile/uploadAvatar",
+                success: function (jsonResult) {
+                    if (jsonResult.success) {
+                        layer.msg("更改头像成功");
+                    } else {
+                        alert("上传失败");
+                        layer.msg("更改头像失败");
+                        // 当前端向后台传文件时，content-type=multipart/form-data; boundary=----WebKitFormBoundaryVYh9jgAuwmuEaJ5b
+                        // 后台在解析异常时，只对content-type=application/json形式的请求才返回json结果
+                        // 故此处不能使用 layer.msg(jsonResult.message);
+                    }
+                }
+            };
+
+            $("#user-avatar-form").ajaxSubmit(options); //异步提交表单
+            return false;
         }
+        /*上传头像 end*/
     }
 });
 
