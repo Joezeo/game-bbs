@@ -317,7 +317,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String updateAvatar(MultipartFile avatar, Long userid) {
+    public String updateAvatar(MultipartFile avatar, Long userid, String oldAvatarUrl) {
         InputStream inputStream = null;
         try {
             inputStream = avatar.getInputStream();
@@ -329,9 +329,8 @@ public class UserServiceImpl implements UserService {
         String randomName = "avatar-" + UUID.randomUUID().toString();
         String avatarUrl = uCloudProvider.uploadAvatar(inputStream, "image/png", randomName);
 
-        // 获取原来的头像地址，从uCloud中删除
-        User storedUser = userMapper.selectByPrimaryKey(userid);
-        uCloudProvider.deleteAvatar(storedUser.getAvatarUrl());
+        // 从uCloud中删除原来的头像地址
+        uCloudProvider.deleteAvatar(oldAvatarUrl);
 
         User user = new User();
         user.setId(userid);

@@ -107,7 +107,9 @@ public interface UserService{
     /**
      * 更新用户的头像
      * @param avatar MultipartFile
+     * @param userid
+     * @param oldAvatarUrl 用户原来的头像地址
      * @return 返回上传的头像的新的url地址
      */
-    String updateAvatar(MultipartFile avatar, Long userid);
+    String updateAvatar(MultipartFile avatar, Long userid, String oldAvatarUrl);
 }

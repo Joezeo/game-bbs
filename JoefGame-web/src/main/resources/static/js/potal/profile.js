@@ -149,6 +149,7 @@ var vue = new Vue({
         avatarReview:function () { // 用户选择的头像回显示
             var f = document.getElementById('avatar-input-btn').files[0];
 
+            // 从文件对象获取url地址
             var url = null;
             if (window.createObjectURL != undefined) { // basic
                 url = window.createObjectURL(f);

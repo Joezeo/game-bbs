@@ -70,7 +70,7 @@ public class ProfileController {
         MultipartFile avatar = mReq.getFile("avatar");
 
         UserDTO user = (UserDTO) session.getAttribute("user");
-        String newAvatarUrl = userService.updateAvatar(avatar, user.getId());
+        String newAvatarUrl = userService.updateAvatar(avatar, user.getId(), user.getAvatarUrl());
 
         // Session中修改头像地址至新的头像地址
         user.setAvatarUrl(newAvatarUrl);
