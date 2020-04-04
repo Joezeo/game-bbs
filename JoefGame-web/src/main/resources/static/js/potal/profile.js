@@ -10,6 +10,7 @@ var condition = "";
 
 // 在修改用户头像时需要的avatarUrl
 var avatarUrl = "";
+var avatarFile = null;
 
 var vue = new Vue({
     el: "#profile",
@@ -19,7 +20,7 @@ var vue = new Vue({
         pagination,
         loaded,
         unreadCount,
-        user, loadedUser,condition, avatarUrl
+        user, loadedUser,condition, avatarUrl,avatarFile
     },
     mounted: function () {
         this.removeStorage();
@@ -161,7 +162,11 @@ var vue = new Vue({
             this.avatarUrl = url;
         },
         uploadNewAvatar:function () { // 上传新的头像
-            $("#avatar-uploader").modal('hide');
+            if(this.avatarFile == null){
+                layer.msg("请选择头像上传");
+                return;
+            }
+            $("#avatar-uploader").modal('hide'); // 关闭模态框
             var options = {
                 url: "/profile/uploadAvatar",
                 success: function (jsonResult) {
@@ -179,6 +184,18 @@ var vue = new Vue({
 
             $("#user-avatar-form").ajaxSubmit(options); //异步提交表单
             return false;
+        },
+        randomNewAvatar:function () {
+            $("#avatar-uploader").modal('hide'); // 关闭模态框
+            let url = '/profile/randomAvatar';
+            axios.post(url, {headers:{'content-type':'application/json;charset=utf-8'}}).then(function (result) {
+                let jsonResult = result.data;
+                if(jsonResult.success){
+                    layer.msg("生成随机头像成功");
+                } else {
+                    layer.msg(jsonResult.message);
+                }
+            });
         }
         /*上传头像 end*/
     }

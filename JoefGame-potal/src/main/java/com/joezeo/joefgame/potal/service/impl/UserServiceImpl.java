@@ -1,6 +1,8 @@
 package com.joezeo.joefgame.potal.service.impl;
 
 import com.joezeo.joefgame.common.dto.PaginationDTO;
+import com.joezeo.joefgame.common.dto.SteamAppDTO;
+import com.joezeo.joefgame.common.dto.UserDTO;
 import com.joezeo.joefgame.common.enums.CustomizeErrorCode;
 import com.joezeo.joefgame.common.enums.SolrCoreNameEnum;
 import com.joezeo.joefgame.common.enums.SteamAppTypeEnum;
@@ -11,8 +13,6 @@ import com.joezeo.joefgame.common.utils.AvatarGenerator;
 import com.joezeo.joefgame.common.utils.PasswordHelper;
 import com.joezeo.joefgame.dao.mapper.*;
 import com.joezeo.joefgame.dao.pojo.*;
-import com.joezeo.joefgame.common.dto.SteamAppDTO;
-import com.joezeo.joefgame.common.dto.UserDTO;
 import com.joezeo.joefgame.potal.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.RowBounds;
@@ -22,6 +22,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.opencv.core.Core;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,7 +63,7 @@ public class UserServiceImpl implements UserService {
         userExample.createCriteria().andGithubAccountIdEqualTo(githubID);
         List<User> memUser = userMapper.selectByExample(userExample);
 
-        return (memUser == null || memUser.size() == 0) ? false : true;
+        return (memUser != null && memUser.size() != 0);
     }
 
     @Override
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
         userExample.createCriteria().andSteamIdEqualTo(steamid);
         List<User> memUser = userMapper.selectByExample(userExample);
 
-        return (memUser == null || memUser.size() == 0) ? false : true;
+        return (memUser != null && memUser.size() != 0);
     }
 
     @Override
@@ -80,9 +81,14 @@ public class UserServiceImpl implements UserService {
         user.setGmtCreate(System.currentTimeMillis());
         user.setGmtModify(user.getGmtCreate());
 
-        // 随机生成头像
-        InputStream avatar = new AvatarGenerator().getARandomAvatar();
-        String avatarUrl = uCloudProvider.uploadAvatar(avatar, "image/jpeg", "avatar-" + UUID.randomUUID().toString() + ".jpg");
+        // 生成随机头像
+        String avatarUrl = null;
+        try{
+            avatarUrl = randomAvatar();
+        } catch (ServiceException e){
+            log.error(e.getMessage());
+            throw new CustomizeException(CustomizeErrorCode.GENERATE_RANDOM_AVATAR_FAILED);
+        }
         user.setAvatarUrl(avatarUrl);
 
         // 设置初始个性签名
@@ -329,8 +335,32 @@ public class UserServiceImpl implements UserService {
         String randomName = "avatar-" + UUID.randomUUID().toString();
         String avatarUrl = uCloudProvider.uploadAvatar(inputStream, "image/png", randomName);
 
+        User user = new User();
+        user.setId(userid);
+        user.setAvatarUrl(avatarUrl);
+        user.setGmtModify(System.currentTimeMillis());
+
+        int res = userMapper.updateByPrimaryKeySelective(user);
+        if(res != 1){
+            log.error("存储用户新头像至数据库失败:user=" + user);
+            throw new CustomizeException(CustomizeErrorCode.UPLOAD_AVATAR_FAILED);
+        }
+
         // 从uCloud中删除原来的头像地址
         uCloudProvider.deleteAvatar(oldAvatarUrl);
+
+        return avatarUrl;
+    }
+
+    @Override
+    public String updateAvatar(Long userid, String oldAvatarUrl) {
+        String avatarUrl = null;
+        try{
+            avatarUrl = randomAvatar();
+        } catch (ServiceException e){
+            log.error(e.getMessage());
+            throw new CustomizeException(CustomizeErrorCode.GENERATE_RANDOM_AVATAR_FAILED);
+        }
 
         User user = new User();
         user.setId(userid);
@@ -342,6 +372,26 @@ public class UserServiceImpl implements UserService {
             log.error("存储用户新头像至数据库失败:user=" + user);
             throw new CustomizeException(CustomizeErrorCode.UPLOAD_AVATAR_FAILED);
         }
+
+        // 从uCloud中删除原来的头像地址
+        uCloudProvider.deleteAvatar(oldAvatarUrl);
+
         return avatarUrl;
+    }
+
+    /*----------------------private methods------------------------*/
+    /**
+     * 生成一个随机的头像
+     * @return 头像存储在uCloud的url地址
+     */
+    private String randomAvatar() throws ServiceException{
+        try{ // openCV需要执行 System.loadLibrary(Core.NATIVE_LIBRARY_NAME); 与spring-boot-devtools冲突
+            // 随机生成头像
+            InputStream avatar = new AvatarGenerator().getARandomAvatar();
+            return uCloudProvider.uploadAvatar(avatar, "image/jpeg", "avatar-" + UUID.randomUUID().toString() + ".jpg");
+        } catch (Throwable e){
+            log.error("opencv生成随机头像失败，与spring-boot-devtools冲突");
+            throw new ServiceException("opencv生成随机头像失败，与spring-boot-devtools冲突");
+        }
     }
 }

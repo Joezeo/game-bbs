@@ -62,7 +62,7 @@
                                                 <h4 class="modal-title">更换头像</h4>
                                             </div>
                                             <div class="modal-body">
-                                                <input @change="avatarReview()" type="file" style="display: none;"
+                                                <input @change="avatarReview()" v-model="avatarFile" type="file" style="display: none;"
                                                        id="avatar-input-btn" name="avatar"
                                                        accept="image/png,image/gif,image/jpg,image/jpeg">
                                                 <table class="avatar-table">
@@ -78,6 +78,9 @@
                                                 </table>
                                             </div>
                                             <div class="modal-footer">
+                                                <button @click="randomNewAvatar()" type="button"
+                                                        class="btn btn-primary pixel-btn">生成随机头像
+                                                </button>
                                                 <button @click="uploadNewAvatar()" type="button"
                                                         class="btn btn-primary pixel-btn">更换
                                                 </button>

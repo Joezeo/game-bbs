@@ -39,11 +39,11 @@ public class ProfileController {
     }
 
     @PostMapping("/getTopics")
-    public JsonResult<PaginationDTO<TopicDTO>> getTopics(HttpSession session,
-                                                         @RequestBody PaginationDTO<?> pagination) {
+    public JsonResult<?> getTopics(HttpSession session,
+                                   @RequestBody PaginationDTO<?> pagination) {
         UserDTO user = (UserDTO) session.getAttribute("user");
         if (user == null) {
-            throw new CustomizeException(CustomizeErrorCode.USER_NOT_LOGIN);
+            return JsonResult.errorOf(CustomizeErrorCode.USER_NOT_LOGIN);
         }
         // 查询帖子
         PaginationDTO<TopicDTO> paginationDTO = topicService.listPage(user.getId(), pagination.getPage(), pagination.getSize());
@@ -52,11 +52,11 @@ public class ProfileController {
     }
 
     @PostMapping("/getNotify")
-    public JsonResult<PaginationDTO<NotificationDTO>> getNotify(HttpSession session,
-                                                 @RequestBody PaginationDTO<?> pagination) {
+    public JsonResult<?> getNotify(HttpSession session,
+                                   @RequestBody PaginationDTO<?> pagination) {
         UserDTO user = (UserDTO) session.getAttribute("user");
         if (user == null) {
-            throw new CustomizeException(CustomizeErrorCode.USER_NOT_LOGIN);
+            return JsonResult.errorOf(CustomizeErrorCode.USER_NOT_LOGIN);
         }
 
         // 查询通知
@@ -70,7 +70,26 @@ public class ProfileController {
         MultipartFile avatar = mReq.getFile("avatar");
 
         UserDTO user = (UserDTO) session.getAttribute("user");
+        if (user == null) {
+            return JsonResult.errorOf(CustomizeErrorCode.USER_NOT_LOGIN);
+        }
+
         String newAvatarUrl = userService.updateAvatar(avatar, user.getId(), user.getAvatarUrl());
+
+        // Session中修改头像地址至新的头像地址
+        user.setAvatarUrl(newAvatarUrl);
+        session.setAttribute("user", user);
+        return JsonResult.okOf(null);
+    }
+
+    @PostMapping("/randomAvatar")
+    public JsonResult<?> randomAvatar(HttpSession session){
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        if (user == null) {
+            return JsonResult.errorOf(CustomizeErrorCode.USER_NOT_LOGIN);
+        }
+
+        String newAvatarUrl = userService.updateAvatar(user.getId(), user.getAvatarUrl());
 
         // Session中修改头像地址至新的头像地址
         user.setAvatarUrl(newAvatarUrl);
