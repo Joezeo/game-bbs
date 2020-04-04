@@ -478,6 +478,17 @@ a {
     outline: none;
 }
 
+.btn-red-white{
+    background: #e7513b !important;
+    color: white;
+    border: 1px solid #e7513b;
+    border-radius: 20px;
+    width: 90px;
+    height: 30px;
+    float: right;
+    outline: none;
+}
+
 .login-with-logo {
     width: 32px;
     height: 32px;
@@ -577,8 +588,10 @@ a {
     border-radius: 10px;
     float: left;
 }
+
+/*模态框样式*/
 .my-modal{
-    margin-top: 150px;
+    margin-top: 160px;
 }
 .avatar-quarter{
     margin: 50px;
@@ -602,4 +615,8 @@ a {
 }
 .td-right{
     border-left: solid 2px #efefef;
+}
+.new-bio-td .form-control{
+    width: 555px !important;
+    margin-left: 5px !important;
 }

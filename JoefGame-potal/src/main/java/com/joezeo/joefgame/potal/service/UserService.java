@@ -120,4 +120,10 @@ public interface UserService{
      * @return 返回上传的头像的新的url地址
      */
     String updateAvatar(Long userid, String oldAvatarUrl);
+
+    /**
+     * 修改用户的个性签名
+     * @param userDTO user数据传输对象
+     */
+    void updateBio(UserDTO userDTO);
 }

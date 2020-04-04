@@ -78,7 +78,6 @@ public class ProfileController {
 
         // Session中修改头像地址至新的头像地址
         user.setAvatarUrl(newAvatarUrl);
-        session.setAttribute("user", user);
         return JsonResult.okOf(null);
     }
 
@@ -93,7 +92,19 @@ public class ProfileController {
 
         // Session中修改头像地址至新的头像地址
         user.setAvatarUrl(newAvatarUrl);
-        session.setAttribute("user", user);
+        return JsonResult.okOf(null);
+    }
+
+    @PostMapping("/updateBio")
+    public JsonResult<?> updateBio(@RequestBody UserDTO userDTO, HttpSession session){
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        if (user == null) {
+            return JsonResult.errorOf(CustomizeErrorCode.USER_NOT_LOGIN);
+        }
+        userDTO.setId(user.getId());
+        userService.updateBio(userDTO);
+
+        user.setBio(userDTO.getBio());
         return JsonResult.okOf(null);
     }
 }

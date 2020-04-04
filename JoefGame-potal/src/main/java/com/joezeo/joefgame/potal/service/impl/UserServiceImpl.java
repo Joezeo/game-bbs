@@ -22,7 +22,6 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.opencv.core.Core;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -379,17 +378,39 @@ public class UserServiceImpl implements UserService {
         return avatarUrl;
     }
 
+    @Override
+    public void updateBio(UserDTO userDTO) {
+        if(userDTO == null){
+            log.error("前端传来userDTO对象参数异常为null");
+            throw new CustomizeException(CustomizeErrorCode.UPDATE_BIO_FAILED);
+        }
+        if(userDTO.getBio() == null || "".equals(userDTO.getBio())){
+            log.error("前端传来userDTO对象参数异常" + userDTO);
+            throw new CustomizeException(CustomizeErrorCode.UPDATE_BIO_FAILED);
+        }
+
+        User user = new User();
+        user.setId(userDTO.getId());
+        user.setBio(userDTO.getBio());
+        user.setGmtModify(System.currentTimeMillis());
+        int idx = userMapper.updateByPrimaryKeySelective(user);
+        if(idx != 1){
+            log.error("user对象存入数据库失败：" + user);
+            throw new CustomizeException(CustomizeErrorCode.UPDATE_BIO_FAILED);
+        }
+    }
+
     /*----------------------private methods------------------------*/
     /**
      * 生成一个随机的头像
      * @return 头像存储在uCloud的url地址
      */
     private String randomAvatar() throws ServiceException{
-        try{ // openCV需要执行 System.loadLibrary(Core.NATIVE_LIBRARY_NAME); 与spring-boot-devtools冲突
+        try{ // openCV需要执行 System.loadLibrary(Core.NATIVE_LIBRARY_NAME); 与spring-boot-devtools冲突，线上环境上不会出现该error
             // 随机生成头像
             InputStream avatar = new AvatarGenerator().getARandomAvatar();
             return uCloudProvider.uploadAvatar(avatar, "image/jpeg", "avatar-" + UUID.randomUUID().toString() + ".jpg");
-        } catch (Throwable e){
+        } catch (Throwable e){ // 抛出的是error，用Throwable接取该错误
             log.error("opencv生成随机头像失败，与spring-boot-devtools冲突");
             throw new ServiceException("opencv生成随机头像失败，与spring-boot-devtools冲突");
         }

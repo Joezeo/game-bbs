@@ -50,51 +50,81 @@
                                        style="margin-top: 20px;"/>
                             </div>
 
-                            <!-- 上传头像 start-->
-                            <form method="post" enctype="multipart/form-data" id="user-avatar-form">
-                                <div class="modal fade my-modal" tabindex="-1" role="dialog" id="avatar-uploader">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span></button>
+                            <div class="panel-body">
+                                个性签名: <span v-text="user.bio"></span>
+                                <input @click="clickBioBtn()" type="button" class="btn-blue-white" value="更改"/>
+                            </div>
+
+                            <!-- 模态框(上传头像、更改个性签名) start-->
+                            <div class="modal fade my-modal" tabindex="-1" role="dialog" id="avatar-uploader">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                <span aria-hidden="true">&times;</span></button>
+
+                                            <template v-if="modalType == 1">
                                                 <h4 class="modal-title">更换头像</h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <input @change="avatarReview()" v-model="avatarFile" type="file" style="display: none;"
-                                                       id="avatar-input-btn" name="avatar"
-                                                       accept="image/png,image/gif,image/jpg,image/jpeg">
+                                            </template>
+                                            <template v-if="modalType == 2">
+                                                <h4 class="modal-title">更换个性签名</h4>
+                                            </template>
+                                        </div>
+                                        <div class="modal-body">
+                                            <template v-if="modalType == 1">
+                                                <form method="post" enctype="multipart/form-data" id="user-avatar-form">
+                                                    <input @change="avatarReview()" v-model="avatarFile" type="file"
+                                                           style="display: none;"
+                                                           id="avatar-input-btn" name="avatar"
+                                                           accept="image/png,image/gif,image/jpg,image/jpeg">
+                                                </form>
                                                 <table class="avatar-table">
                                                     <tr>
                                                         <td class="td-left">
                                                             <img @click="openAvatarSelection()"
-                                                                 src="/imgs/upload_avatar.png" class="avatar-quarter">
+                                                                 src="/imgs/upload_avatar.png"
+                                                                 class="avatar-quarter">
                                                         </td>
                                                         <td class="td-right">
                                                             <img :src="avatarUrl" class="avatar-circle">
                                                         </td>
                                                     </tr>
                                                 </table>
-                                            </div>
-                                            <div class="modal-footer">
+                                            </template>
+
+                                            <template v-if="modalType == 2">
+                                                <table>
+                                                    <tr>
+                                                        <td class="new-bio-td">
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control" v-model="newBio"
+                                                                       :placeholder="user.bio">
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </template>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <template v-if="modalType == 1">
                                                 <button @click="randomNewAvatar()" type="button"
                                                         class="btn btn-primary pixel-btn">生成随机头像
                                                 </button>
                                                 <button @click="uploadNewAvatar()" type="button"
                                                         class="btn btn-primary pixel-btn">更换
                                                 </button>
-                                            </div>
-                                        </div><!-- /.modal-content -->
-                                    </div><!-- /.modal-dialog -->
-                                </div><!-- /.modal -->
-                            </form>
-                            <!-- 上传头像 end -->
-
-                            <div class="panel-body">
-                                个性签名: <span v-text="user.bio"></span>
-                                <input type="button" class="btn-blue-white" value="更改"/>
-                            </div>
+                                            </template>
+                                            <template v-if="modalType == 2">
+                                                <button @click="updateBio(newBio)" type="button"
+                                                        class="btn btn-primary pixel-btn">更改
+                                                </button>
+                                            </template>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
+                            <!-- 模态框(上传头像、更改个性签名) end-->
                         </div>
 
                         <div class="panel panel-default">
@@ -102,17 +132,33 @@
                                 <h4>登录绑定 | Log In With</h4>
                             </div>
                             <div class="panel-body">
-                                <img src="/imgs/email-f.png" alt="" class="login-with-logo"/>
+                                <img src="/imgs/email-f.png" class="login-with-logo"/>
                                 邮箱: <span v-text="user.email"></span>
                                 <input type="button" class="btn-blue-white" value="更换邮箱"/>
                             </div>
                             <div class="panel-body">
-                                <img src="/imgs/github-f.png" alt="" class="login-with-logo"/>
+                                <img src="/imgs/github-f.png" class="login-with-logo"/>
                                 Github
-                                <span v-if="user.githubAccountId != null">已绑定</span>
+                                <span v-if="user.githubAccountId != null">
+                                    (已绑定)
+                                    <input type="button" class="btn-red-white" value="取消绑定"/>
+                                </span>
                                 <span v-if="user.githubAccountId == null">
-                            <input type="button" class="btn-blue-white" value="点击绑定"/>
-                        </span>
+                                    (未绑定)
+                                    <input type="button" class="btn-blue-white" value="点击绑定"/>
+                                </span>
+                            </div>
+                            <div class="panel-body">
+                                <img src="/imgs/steam_f.png" class="login-with-logo"/>
+                                Steam
+                                <span v-if="user.steamId != null">
+                                    (已绑定)
+                                    <input type="button" class="btn-red-white" value="取消绑定"/>
+                                </span>
+                                <span v-if="user.steamId == null">
+                                    (未绑定)
+                                    <input type="button" class="btn-blue-white" value="点击绑定"/>
+                                </span>
                             </div>
                         </div>
 

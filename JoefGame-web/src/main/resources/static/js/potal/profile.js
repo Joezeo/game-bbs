@@ -8,9 +8,14 @@ var user = {};
 var loadedUser = false;
 var condition = "";
 
+
+// 模态框相关参数
+var modalType = 0; // 1-更换头像，2-更改个性签名
 // 在修改用户头像时需要的avatarUrl
 var avatarUrl = "";
 var avatarFile = null;
+// 更改个性签名
+var newBio = "";
 
 var vue = new Vue({
     el: "#profile",
@@ -20,7 +25,7 @@ var vue = new Vue({
         pagination,
         loaded,
         unreadCount,
-        user, loadedUser,condition, avatarUrl,avatarFile
+        user, loadedUser, condition, avatarUrl, avatarFile, modalType, newBio
     },
     mounted: function () {
         this.removeStorage();
@@ -40,7 +45,7 @@ var vue = new Vue({
         this.getUser();
     },
     methods: {
-        getUser:function () {
+        getUser: function () {
             var url = "/getUser";
             axios.post(url).then(function (response) {
                 var jsonResult = response.data;
@@ -50,7 +55,7 @@ var vue = new Vue({
                         vue.user = getedUser;
                         vue.loadedUser = true;
                         vue.avatarUrl = vue.user.avatarUrl;
-                        if(jsonResult.hasMessage){
+                        if (jsonResult.hasMessage) {
                             // 消息队列中存在未读消息
                             getMessage(vue.user.id); // 函数在文件message.js中定义
                         }
@@ -63,7 +68,7 @@ var vue = new Vue({
             })
         },
         // 移除apps页面存储的page、type信息
-        removeStorage:function(){
+        removeStorage: function () {
             window.sessionStorage.removeItem("page");
             window.sessionStorage.removeItem("type");
         },
@@ -89,7 +94,7 @@ var vue = new Vue({
             axios.post(url, params).then(function (response) {
                 var jsonResult = response.data;
                 if (jsonResult.success) {
-                    if(vue.section == "personal"){
+                    if (vue.section == "personal") {
                         vue.user = jsonResult.data;
                         vue.loadedUser = true;
                     } else {
@@ -137,17 +142,18 @@ var vue = new Vue({
             return Y + M + D + h + m + s;
         },
         // search相关函数，函数从文件conmmonSearch.js中引入
-        searchUser:searchUser,
-        searchSteam:searchSteam,
-        searchTopic:searchTopic,
+        searchUser: searchUser,
+        searchSteam: searchSteam,
+        searchTopic: searchTopic,
         /*上传头像相关*/
-        clickUploadBtn:function () { // 点击个人中心->更换头像按钮
+        clickUploadBtn: function () { // 点击个人中心->更换头像按钮
+            this.modalType = 1;
             $("#avatar-uploader").modal('show');
         },
-        openAvatarSelection:function () {
+        openAvatarSelection: function () {
             $("#avatar-input-btn").click();
         },
-        avatarReview:function () { // 用户选择的头像回显示
+        avatarReview: function () { // 用户选择的头像回显示
             var f = document.getElementById('avatar-input-btn').files[0];
 
             // 从文件对象获取url地址
@@ -161,17 +167,21 @@ var vue = new Vue({
             }
             this.avatarUrl = url;
         },
-        uploadNewAvatar:function () { // 上传新的头像
-            if(this.avatarFile == null){
+        uploadNewAvatar: function () { // 上传新的头像
+            if (this.avatarFile == null) {
                 layer.msg("请选择头像上传");
                 return;
             }
+            this.modalType = 0;
             $("#avatar-uploader").modal('hide'); // 关闭模态框
             var options = {
                 url: "/profile/uploadAvatar",
                 success: function (jsonResult) {
                     if (jsonResult.success) {
                         layer.msg("更改头像成功");
+                        window.setTimeout(function () {
+                            window.location.reload();
+                        }, 2000);
                     } else {
                         alert("上传失败");
                         layer.msg("更改头像失败");
@@ -185,19 +195,49 @@ var vue = new Vue({
             $("#user-avatar-form").ajaxSubmit(options); //异步提交表单
             return false;
         },
-        randomNewAvatar:function () {
+        randomNewAvatar: function () {
+            this.modalType = 0;
             $("#avatar-uploader").modal('hide'); // 关闭模态框
             let url = '/profile/randomAvatar';
-            axios.post(url, {headers:{'content-type':'application/json;charset=utf-8'}}).then(function (result) {
+            axios.post(url, {headers: {'content-type': 'application/json;charset=utf-8'}}).then(function (result) {
+                let jsonResult = result.data;
+                if (jsonResult.success) {
+                    layer.msg("生成随机头像成功");
+                    window.setTimeout(function () {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    layer.msg(jsonResult.message);
+                }
+            });
+        },
+        /*上传头像 end*/
+        clickBioBtn:function () {
+            this.modalType = 2;
+            $("#avatar-uploader").modal('show');
+        },
+        updateBio:function (newBio) {
+            if(newBio == ""){
+                layer.msg("请输入个性签名！")
+                return;
+            }
+            this.modalType = 0;
+            $("#avatar-uploader").modal('hide');
+
+            let url = '/profile/updateBio';
+            let params = {bio: newBio};
+            axios.post(url, params).then(function (result) {
                 let jsonResult = result.data;
                 if(jsonResult.success){
-                    layer.msg("生成随机头像成功");
+                    layer.msg("修改个性签名成功");
+                    window.setTimeout(function () {
+                        window.location.reload();
+                    }, 2000);
                 } else {
                     layer.msg(jsonResult.message);
                 }
             });
         }
-        /*上传头像 end*/
     }
 });
 
