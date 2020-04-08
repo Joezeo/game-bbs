@@ -44,5 +44,6 @@
         <table tableName="t_spider_failed_url" domainObjectName="SpiderFailedUrl"></table>
         <table tableName="t_user_favorite_app" domainObjectName="UserFavoriteApp"></table>
         <table tableName="t_user_follow" domainObjectName="UserFollow"></table>
+        <table tableName="t_ip" domainObjectName="IP"></table>
     </context>
 </generatorConfiguration>

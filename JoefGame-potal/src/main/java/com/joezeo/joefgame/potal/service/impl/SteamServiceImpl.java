@@ -109,7 +109,7 @@ public class SteamServiceImpl implements SteamService {
                 int difftime = 60 * 60; // 如果获取时间差失败则默认保存1小时
                 try {
                     // 获取现在时间与下一天凌晨4点的时间差，单位秒
-                    difftime = TimeUtils.getDifftimeFromNextZero();
+                    difftime = TimeUtils.getDifftimeFromNextFour();
                 } catch (ParseException e) {
                     log.error("获取时间差失败,将默认保存1小时,stackTrace=" + e.getMessage());
                 }
@@ -155,7 +155,7 @@ public class SteamServiceImpl implements SteamService {
                 int difftime = 60 * 60; // 如果获取时间差失败则默认保存1小时
                 try {
                     // 获取现在时间与下一天凌晨4点的时间差，单位秒
-                    difftime = TimeUtils.getDifftimeFromNextZero();
+                    difftime = TimeUtils.getDifftimeFromNextFour();
                 } catch (ParseException e) {
                     log.error("获取时间差失败,将默认保存1小时,stackTrace=" + e.getMessage());
                 }
@@ -275,7 +275,7 @@ public class SteamServiceImpl implements SteamService {
             int difftime = 60 * 60; // 如果获取时间差失败则默认保存1小时
             try {
                 // 获取现在时间与下一天凌晨4点的时间差，单位秒
-                difftime = TimeUtils.getDifftimeFromNextZero();
+                difftime = TimeUtils.getDifftimeFromNextFour();
             } catch (ParseException e) {
                 log.error("获取时间差失败,将默认保存1小时,stackTrace=" + e.getMessage());
             }
@@ -348,7 +348,7 @@ public class SteamServiceImpl implements SteamService {
             int difftime = 60 * 60; // 如果获取时间差失败则默认保存1小时
             try {
                 // 获取现在时间与下一天凌晨4点的时间差，单位秒
-                difftime = TimeUtils.getDifftimeFromNextZero();
+                difftime = TimeUtils.getDifftimeFromNextFour();
             } catch (ParseException e) {
                 log.error("获取时间差失败,将默认保存1小时,stackTrace=" + e.getMessage());
             }
@@ -432,7 +432,7 @@ public class SteamServiceImpl implements SteamService {
             int difftime = 60 * 60; // 如果获取时间差失败则默认保存1小时
             try {
                 // 获取现在时间与下一天凌晨4点的时间差，单位秒
-                difftime = TimeUtils.getDifftimeFromNextZero();
+                difftime = TimeUtils.getDifftimeFromNextFour();
             } catch (ParseException e) {
                 log.error("获取时间差失败,将默认保存1小时,stackTrace=" + e.getMessage());
             }
@@ -460,7 +460,7 @@ public class SteamServiceImpl implements SteamService {
                 int difftime = 60 * 60; // 如果获取时间差失败则默认保存1小时
                 try {
                     // 获取现在时间与下一天凌晨4点的时间差，单位秒
-                    difftime = TimeUtils.getDifftimeFromNextZero();
+                    difftime = TimeUtils.getDifftimeFromNextFour();
                 } catch (ParseException e) {
                     log.error("获取时间差失败,将默认保存1小时,stackTrace=" + e.getMessage());
                 }
@@ -541,7 +541,7 @@ public class SteamServiceImpl implements SteamService {
                 int difftime = 60 * 60; // 如果获取时间差失败则默认保存1小时
                 try {
                     // 获取现在时间与下一天凌晨4点的时间差，单位秒
-                    difftime = TimeUtils.getDifftimeFromNextZero();
+                    difftime = TimeUtils.getDifftimeFromNextFour();
                 } catch (ParseException e) {
                     log.error("获取时间差失败,将默认保存1小时,stackTrace=" + e.getMessage());
                 }

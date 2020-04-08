@@ -2,7 +2,6 @@ package com.joezeo.joefgame.potal.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.google.gson.JsonArray;
 import com.joezeo.joefgame.common.exception.ServiceException;
 import com.joezeo.joefgame.common.utils.TimeUtils;
 import com.joezeo.joefgame.dao.mapper.TagMapper;
@@ -48,7 +47,7 @@ public class TagServiceImpl implements TagService {
             // 存入redis中
             int diff = 60 * 60; // 如果获取时间差失败就存一个小时
             try {
-                diff = TimeUtils.getDifftimeFromNextZero();
+                diff = TimeUtils.getDifftimeFromNextFour();
             } catch (ParseException e) {
                 log.error("获取当前时间至第二天凌晨4点的时间差");
             }
