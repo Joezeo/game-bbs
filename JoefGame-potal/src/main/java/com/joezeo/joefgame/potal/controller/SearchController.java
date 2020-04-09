@@ -26,7 +26,7 @@ public class SearchController {
     public JsonResult<?> steam(@RequestBody PaginationDTO paginationDTO){
         try {
             String condition = URLDecoder.decode(paginationDTO.getCondition(), "UTF-8");
-            PaginationDTO<SteamAppDTO> steams = searchService.searchSteamBySolr(condition, paginationDTO.getPage());
+            PaginationDTO<SteamAppDTO> steams = searchService.searchSteam(condition, paginationDTO.getPage());
             return JsonResult.okOf(steams);
         } catch (UnsupportedEncodingException e) {
             log.error("解析前端传来的搜索条件异常，stackTrace：" + e.getStackTrace());
@@ -38,7 +38,7 @@ public class SearchController {
     public JsonResult<?> topic(@RequestBody PaginationDTO paginationDTO){
         try {
             String condition = URLDecoder.decode(paginationDTO.getCondition(), "UTF-8");
-            PaginationDTO<TopicDTO> topics = searchService.searchTopicBySolr(condition, paginationDTO.getPage());
+            PaginationDTO<TopicDTO> topics = searchService.searchTopic(condition, paginationDTO.getPage());
             return JsonResult.okOf(topics);
         } catch (UnsupportedEncodingException e) {
             log.error("解析前端传来的搜索条件异常，stackTrace：" + e.getStackTrace());
@@ -50,7 +50,7 @@ public class SearchController {
     public JsonResult<?> user(@RequestBody PaginationDTO paginationDTO){
         try {
             String condition = URLDecoder.decode(paginationDTO.getCondition(), "UTF-8");
-            PaginationDTO<UserDTO> users = searchService.searchUserBySolr(condition, paginationDTO.getPage());
+            PaginationDTO<UserDTO> users = searchService.searchUser(condition, paginationDTO.getPage());
             return JsonResult.okOf(users);
         } catch (UnsupportedEncodingException e) {
             log.error("解析前端传来的搜索条件异常，stackTrace：" + e.getStackTrace());
