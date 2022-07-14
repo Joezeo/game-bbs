@@ -1,4 +1,4 @@
-# ![](http://www.joefgame.com/imgs/personal.png) [Joefgame_bbs](http://www.joefgame.com)
+# ![](http://www.joefgame.com/imgs/personal.png) [game_bbs](http://www.joefgame.com)
 ![](https://img.shields.io/badge/Status-%E8%BF%90%E8%A1%8C%E4%B8%AD-green?style=for-the-badge&logo=appveyor)
 ---
 
